@@ -1,0 +1,4 @@
+#wpadminbar #wp-admin-bar-edit_question>.ab-item:before {
+    content: "\f464";
+    top: 2px;
+}

@@ -1,0 +1,18 @@
+{% set next_question = this.next_question() %}
+{% set prev_question = this.prev_question() %}
+
+<form name="form" method="post" action="{{ this.link() }}">
+    <input type="checkbox" id="form_count_double" name="count_twice" value="1" /> 
+    <label for="form_count_double">doppelt gewichten?</label> 
+    <br/>
+    <button type="submit" id="form_approve" name="vote" value="approve" class="small success">Stimme zu</button>
+    <button type="submit" id="form_neutral" name="vote" value="neutral" class="small">neutral</button>
+    <button type="submit" id="form_disapprove" name="vote" value="disapprove" class="small alert">Stimme nicht zu</button>
+    <br />
+    Frage <a href="{% if next_question %}{{ this.link() }}{% else %}{{ this.voting().result_link() }}{% endif %}" class="">überspringen</a>, direkt zum <a href="{{ this.voting().result_link() }}" class="">Ergebnis</a>.
+    
+    <input type="hidden" id="form_question" name="voting" value="{{ this.voting().get_id() }}" />
+    <input type="hidden" id="form_question" name="question" value="{{ this.get_id() }}" />
+    <input type="hidden" name="action" value="store_user_vote" />
+    <input type="hidden" id="form__token" name="nonce" value="{{ this.nonce_store_user_vote() }}" />
+</form>

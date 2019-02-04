@@ -1,0 +1,13 @@
+    <div class="row" style="margin-bottom: 20px; clear: both;">
+        <hr />
+        <div class="small-6 columns">
+            <ul class="inline-list">
+                {% for item in wpov_footer_menu.get_items() %}
+                <li class="{{ item.classes | join(' ') }}"><a href="{{ item.link }}">{{ item.title }}</a></li> 
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="small-4 medium-2 large-1 columns" style="position: relative; top: -5px;">
+
+        </div>
+    </div>

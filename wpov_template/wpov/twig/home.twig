@@ -1,0 +1,91 @@
+{% extends "base.twig" %}
+
+{% block header %}
+    <div class="row">
+
+        <div class="github-fork-ribbon-wrapper right">
+            <div class="github-fork-ribbon">
+                <a href="https://github.com/Madways/KommunalomatBundle">Fork me on GitHub</a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="medium-9 large-7 large-offset-2 columns" style="padding: 0px 20px; text-align:center;">
+                <img src="/images/kommunalomat-logo.jpg" alt="Kommunalomat Karlsruhe"/>
+            </div>
+            <div class="show-for-medium-up medium-3 columns" style="opacity: ;">
+                <img src="/images/jugend_ab_16_waehlt_logo_rot.jpg" />
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+
+    <div class="row" style="margin-bottom: 20px; clear: both;">
+        <div class="medium-9 large-7 large-offset-2 columns">
+
+            <h3>Erfolgreich beendet!</h3>
+            <p class="text-justify">Das Projekt „Kommunal-o-mat“ zur Gemeinderatswahl in Karlsruhe am 25. Mai 2014 ist abgeschlossen. Die Seite wurde bis dahin über 23.000 mal aufgerufen, über 12.000 Personen haben den Kommunal-o-maten vollständig genutzt.
+            </p><p>
+            Die <a target="_blank" href="https://github.com/Madways/KommunalomatBundle">Software</a> für den Kommunal-o-maten kann für nicht kommerzielle Zwecke genutzt werden und steht <a target="_blank" href="https://github.com/Madways/KommunalomatBundle">hier</a> zum Download bereit.<br/>
+            Wir freuen uns, wenn es zukünftig auch in anderen Städten Kommunal-o-maten geben wird.
+            Eine <a target="_blank" href="/images/checkliste_kommunalomat.pdf">Checkliste</a> für die Planung eines ähnlichen Projekts findet sich <a target="_blank" href="/images/checkliste_kommunalomat.pdf">hier</a>.</p>
+            <div class="text-center"><a href="/question" class="button alert">Befragung starten</a></div>
+        </div>
+        <div class="small-6 medium-3 columns">
+            <h3>Das Prinzip</h3>
+            <p>Hier findest du alle Informationen zum Kommunalomat. <br/> Wie deine Fragen beurteilt werden und wer daran überhaupt beteiligt ist.</p>
+            <a href="/info" class="button">Mehr erfahren</a>
+        </div>
+        <div class="small-6 show-for-small columns">
+            <img src="/images/jugend_ab_16_waehlt_logo_rot.jpg" />
+        </div>
+    </div>
+    <div class="row ">
+    <hr/>
+    <div class="small-12 columns">
+        <h3>Die beteiligten Organisationen</h3>
+        <div class="row">
+            <div class="columns small-12 medium-6">
+                <div class="row">
+                    <div class="columns small-4">
+                        <a href="http://www.stja.de" target="_blank">
+                            <img src="/images/STJA.png" alt="Stadt Jugend Ausschuss Karlsruhe"/>
+                        </a>
+                    </div>
+                    <div class="columns small-4">
+                        <a href="http://www.gruene-jugend-karlsruhe.de" target="_blank">
+                            <img src="/images/Gruene Jugend.png" alt="Grüne Jugend Karlsruhe"/>
+                        </a>
+                    </div>
+                    <div class="columns small-4">
+                        <a href="http://www.jusos-karlsruhe.de/" target="_blank">
+                            <img src="/images/Jusos.png" alt="Junge Soziakdemokraten Karlsruhe"/>
+                        </a>
+                    </div>
+                </div>  
+            </div>
+            <div class="columns small-12 medium-6">
+                <div class="columns small-4">
+                    <a href="http://solidka.wordpress.com" target="_blank">
+                        <img src="/images/LinksJugend.png" alt="Linksjugend Karlsruhe"/>
+                    </a>
+                </div>
+                <div class="columns small-4">
+                    <a href="http://www.julis-ka.de" target="_blank">
+                        <img src="/images/Julis.png" alt="Junge Liberale Karlsruhe"/>
+                    </a>
+                </div>
+                <div class="columns small-4">
+                    <a href="http://unionlive.de/homepages/ju-karlsruhe/" target="_blank">
+                        <img src="/images/JU.png" alt="Junge Union Karlsruhe"/>
+                    </a>
+                </div>
+            </div>  
+        </div>
+    </div>
+    </div>  
+
+
+{% endblock %}

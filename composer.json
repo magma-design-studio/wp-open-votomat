@@ -1,0 +1,18 @@
+{
+    "name": "magma/wp-open-votomat",
+    "require": {
+        "webdevstudios/cmb2": "*",
+        "timber/timber": "*"
+    },
+    "authors": [
+        {
+            "name": "Sebastian Tiede",
+            "email": "info@sebastiantiede.de"
+        }
+    ], 
+    "extra": {
+        "installer-paths": {
+            "vendor/{$name}/": ["type:wordpress-plugin", "type:wordpress-theme"]
+        }
+    }    
+}

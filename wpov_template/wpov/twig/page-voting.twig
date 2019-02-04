@@ -1,0 +1,29 @@
+{% extends "base.twig" %}
+
+{% block content %}
+    {% set question = post_voting.question() %}
+    {% set prev_question = post_question.prev_question() %}
+    {% set next_question = post_question.next_question() %}
+
+    <div class="row" style="margin-bottom: 20px; clear: both;">
+        <div class="medium-8 medium-offset-2 columns">
+            <h3>Frage {{ post_voting.question_index_readable() }}</h3>
+            <div class="panel" data-id="{{ post_voting.get_id() }}">
+                <h4>{{ post_question.content() }}</h4>
+                <p></p>
+                {{ post_question.html('components/voting-form.twig') }}
+            </div>
+            <div class="pagination-centered">
+                <ul class="pagination">
+                    
+                    <li class="arrow{% if not prev_question %} unavailable{% endif %}"><a{% if prev_question %} href="{{ prev_question.link() }}"{% endif %}>&laquo;</a></li>
+                    {% for question in post_voting.questions() %}
+                    <li{% if post_voting.question_index() == question.question_index() %} class="current"{% endif %} data-voting_question_index="{{post_voting.question_index()}}" data-question_index="{{question.question_index()}}"><a href="{{ question.link() }}">{{ question.question_index_readable() }}</a></li>
+                    {% endfor %}
+                    <li class="arrow{% if next_question %} unavailable{% endif %}"><a{% if next_question %} href="{{ next_question.link() }}"{% endif %}>&raquo;</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
