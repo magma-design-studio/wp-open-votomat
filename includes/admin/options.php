@@ -152,7 +152,7 @@ abstract class wpov_admin_options {
             return;
         }
 
-        add_settings_error( $object_id . '-notices', '', __( 'Settings updated.', 'wpov' ), 'updated' );
+        add_settings_error( $object_id . '-notices', '', __( 'Settings updated.', WPOV__PLUGIN_NAME_SLUG ), 'updated' );
         settings_errors( $object_id . '-notices' );
     }
 

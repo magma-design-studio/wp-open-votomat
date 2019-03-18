@@ -1,0 +1,77 @@
+{% extends "base.twig" %}
+
+{% block header %}
+    {% if admin_settings.logo %}
+        {{ fn('wp_get_attachment_image', admin_settings.logo_id, 'large', false, {
+            alt : admin_settings.app_name,
+            class : 'img-fluid'
+        }) }}
+    {% else %}
+    {{ admin_settings.app_name }}
+    {% endif %}   
+{% endblock %}
+
+{% block content %}
+    {% if admin_settings.text_intro %}
+    <div class="row mt-3">
+        <div class="alert alert-light" role="alert">
+            {{ fn('apply_filters', 'the_content', admin_settings.text_intro) }}
+        </div>        
+    </div>
+    {% endif %}
+
+    {% for post in posts %}
+        {% set status = post.publication_status_array() %}
+        {% if status.is_active or fn('is_user_logged_in') %}
+    <div class="row mb-3">
+        <div class="card w-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ post.title() }}</h5>
+                {% if status.is_live and fn('is_user_logged_in') %}
+                    <h6 class="card-subtitle mb-2 text-muted">{{ __('Visible for admins only!', WPOV__PLUGIN_NAME_SLUG) }}</h6>
+                {% endif %}
+                <p class="card-text">{{ post.the_content() }}</p>
+                {% if status.is_live or fn('is_user_logged_in') %}
+                <a href="{{ post.link() }}" class="btn btn-primary">Befragung starten</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+        {% endif %}
+    {% endfor %}
+
+    {% if admin_settings.sponsor %}
+            {% if admin_settings.sponsors_section_title %}
+                <h3>{{ admin_settings.sponsors_section_title }}</h3>
+            {% endif %}
+            {% set row_start %}
+            <div class="row">
+            {% endset %}
+
+            {% set row_end %}
+            </div>                        
+            {% endset %}
+            {% for sponsor in admin_settings.sponsor %}
+            {% if sponsor.seperator %}
+                {% if not loop.first %}{{ row_end }}{% endif %}
+            <h4 class="w-100">{{ sponsor.seperator }}</h4>
+                {{ row_start }}
+            {% endif %}
+            
+            {% set columns = sponsor.column_width ? sponsor.column_width : 1 %}
+            {% set columns_medium = (columns*2) %}
+            {% set columns_small = (columns*4) %}
+            
+            <div class="col-{{ columns_small }} col-sm-{{ columns_medium }}">
+                <a href="{{ sponsor.url }}" target="_blank">
+                    {{ fn('wp_get_attachment_image', sponsor.logo_id, 'large', false, {
+                        alt : sponsor.title,
+                        class : 'img-fluid'
+                    }) }}                    
+                </a>
+            </div>
+            {% endfor %}
+            {{ row_end }}
+    {% endif %}
+
+{% endblock %}

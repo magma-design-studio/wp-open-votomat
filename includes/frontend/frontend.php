@@ -3,33 +3,12 @@
 if(!class_exists('wpov_frontend')) :
 
 class wpov_frontend {
-    function __construct() {
-        add_action( 'wp_enqueue_scripts', array($this, 'assets'), 100 );
-        
+    function __construct() {        
         add_action( 'wp', array($this, 'provide_save_action') );
-        //add_action( 'wp', array($this, 'set_globals') );
+        //add_action( 'wp', array($this, 'set_globals') );        
         add_action( 'wp', array($this, 'maybe_complete_voter_voting') );
         
 		add_action( 'admin_bar_menu', array($this, 'add_admin_bar_edit_menu'), 90 );
-        
-    }
-    
-    function assets() {
-        if(is_admin_bar_showing()) {
-            wp_enqueue_style( 'wpov-admin-bar', WPOV__PLUGIN_DIR_URL . '/backend_assets/css/wpov-admin-bar.css' );
-        }
-        
-        wp_enqueue_style( 'foundation', WPOV__PLUGIN_THEME_DIR_URL . '/assets/css/foundation.css' );
-        wp_enqueue_style( 'normalize', WPOV__PLUGIN_THEME_DIR_URL . '/assets/css/normalize.css' );
-        
-        wp_enqueue_style( 'gh-fork-ribbon', '//cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.1.1/gh-fork-ribbon.min.css' );
-        
-        wp_enqueue_script( 'modernizr', '//cdnjs.cloudflare.com/ajax/libs/modernizr/2.7.1/modernizr.min.js', array(  ), '2.7.1', true );
-        wp_enqueue_script( 'wpov-jquery', '//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.0/jquery.js', array(  ), '2.1.0', true );
-        wp_enqueue_script( 'foundation', '//cdnjs.cloudflare.com/ajax/libs/foundation/5.2.2/js/foundation.min.js', array(  ), '5.2.2', true );
-        wp_enqueue_script( 'foundation-tooltip', '//cdnjs.cloudflare.com/ajax/libs/foundation/5.2.2/js/foundation/foundation.tooltip.js', array(  ), '5.2.2', true );
-        
-        wp_add_inline_script( 'foundation-tooltip', '<script> $(document).foundation(); </script>' );
         
     }
     
@@ -73,9 +52,13 @@ class wpov_frontend {
     }
     
     function maybe_complete_voter_voting() {
+        if(!in_array(get_query_var( 'post_type' ), array('wpov-voting', 'wpov-question')) or get_query_var( '_wpov_is_frontpage' )) {
+            return;
+        }
+
         global $wpov_post_voting;
         $current_voter = wpov_get_current_voter();
-        if($wpov_post_voting) {
+        if($wpov_post_voting and $current_voter) {
             if($wpov_post_voting->count_questions() == $current_voter->count_votes($wpov_post_voting->get_id(), false)) {
                 $current_voter->set_voting_completed($wpov_post_voting->get_id());
             }

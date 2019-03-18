@@ -18,7 +18,7 @@ class WPOV_Twig_Extensions {
             $config = wpov_get_method_object_attrs($this, $fn);
                         
             $trigger = isset($config['trigger'])?$config['trigger']:$match['fn'];
-
+            
             switch($match['type']) {
                 case 'filter':
                     $twig->addFilter(new Twig_Filter($trigger, array($this, $fn)));        
@@ -35,6 +35,14 @@ class WPOV_Twig_Extensions {
         return $twig;
 	}
     
+    function function__is_current_voter() {
+        return wpov()->current_voter;
+    }    
+    
+    function function__current_voter() {
+        return wpov_get_current_voter();
+    }
+    
     function function__wpov_home_url() {
         $settings = wpov_get_setting('admin_settings');
         
@@ -49,6 +57,14 @@ class WPOV_Twig_Extensions {
                 return '';
                 break;                   
         }
+    }
+    
+    function filter__var_dump($data) {
+        var_dump($data);
+    }
+    
+    function function__exit() {
+        exit;
     }
 }
 

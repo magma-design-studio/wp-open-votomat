@@ -9,8 +9,8 @@ class wpov_voter_current extends wpov_voter  {
             session_start();
         }
                 
-        $this->set('user_db_id', $_SESSION['user_db_id']);
-        
+        $this->set('user_db_id', isset($_SESSION['user_db_id']) ? $_SESSION['user_db_id'] : false);
+        $this->get_db_votes();
         //if($this->count_votes())
         
     }
@@ -56,7 +56,7 @@ class wpov_voter_current extends wpov_voter  {
         $post_id = wp_insert_post( array(
             'post_type' => 'wpov-user-vote',
             'post_title' => $this->unique_id(),
-            'post_status' => 'internal',
+            'post_status' => 'processing',
             'post_name' => $this->wpov_uniqid_real()
         ) );
         
@@ -82,21 +82,42 @@ class wpov_voter_current extends wpov_voter  {
         $votes[$voting][$question] = array(
             'vote' => $vote,
             'count_twice' => $count_twice,
-            'id' => sprintf('%d_%d_%s_%s', $voting, $question, $vote, ($count_twice ? 'twice' : null))
         );
 
         $this->set('votes', $votes);
+        $meta_key = "_wpov_voting_{$voting}_question_{$question}";
+        $meta_value = $vote;
+        if($count_twice) {
+            $meta_value .= ':twice';
+        }
         
+        if ( ! add_post_meta( $post_id, $meta_key, $meta_value, true ) ) { 
+           update_post_meta( $post_id, $meta_key, $meta_value );
+        }        
+        
+        delete_transient( $this->wpov_voter_votes_transient_key );        
+        
+        $meta_key = "_wpov_counter_question_{$question}_{$vote}";
+        $meta_value = intval(get_post_meta($voting, $meta_key));
+        $meta_value++;
+        
+        if ( ! add_post_meta( $voting, $meta_key, $meta_value, true ) ) { 
+           update_post_meta( $voting, $meta_key, $meta_value );
+        }             
+        
+        wp_update_post( array(
+            'ID' => $post_id,
+            'post_modified' => current_time( 'mysql' ),
+            'post_modified_gmt' => current_time( 'mysql', 1 )
+        ) );
+        /*
         wp_update_post(array(
             'ID' => $post_id,
             'post_content' => maybe_serialize($votes)
         ));
-        
+        */
     }    
     
 }
-
-wpov()->current_voter = new wpov_voter_current();
-
 
 endif;

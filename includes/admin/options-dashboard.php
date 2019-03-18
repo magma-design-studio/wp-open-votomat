@@ -15,112 +15,74 @@ class wpov_admin_options_dashboard {
     public function admin_enqueue_scripts() {
     }
     
-    function get_total_results_per_question($voting) {
-        global $wpdb;
-        $out = array();
-        foreach($voting->questions() as $question) {
-
-            $out[$question->get_id()] = array();
-            foreach(array('approve', 'neutral', 'disapprove') as $status) {
-                $id = sprintf('%d_%d_%s', $voting->get_id(), $question->get_id(), $status);
-                
-                $query_where = "
-                    SELECT 
-                        COUNT(ID) as count
-                    FROM $wpdb->posts
-                    WHERE 
-                        post_content LIKE '%\"{$id}%'
-                ";
-                                
-                $out[$question->get_id()][$status] = $wpdb->get_var($query_where);
-            }
-                 
-        }
-
-        return $out;
-    }
-    
     function get_total_results($voting) {
         global $wpdb;
         
         $party_scores = array();
         $results_per_question = array();
+        $total_voters = 0;
+
+        $voters = $wpdb->get_results("
+            SELECT post_id, meta_key, meta_value
+            FROM 
+                $wpdb->postmeta
+            WHERE 
+                post_id = {$voting->get_id()} AND
+                meta_key LIKE '%_wpov_counter_question_%'
+        ");
+        
+        $total_voters = 0;
+        $votings_per_question = array();
+
+        foreach($voters as $voter) {
+            //$total_voters += $voter->meta_value;
+            preg_match('/_wpov_counter_question_(?<question_id>\d+)_(?<vote>.*)/', $voter->meta_key, $match);
+
+            $question_id = intval($match['question_id']);
+            $vote = $match['vote'];
+            
+            if(empty($votings_per_question[$question_id])) $votings_per_question[$question_id] = array(
+                'approve' => 0,
+                'neutral' => 0,
+                'disapprove' => 0,
+            );
+            
+            $votings_per_question[$question_id][$vote] += $voter->meta_value;
+        }
+        
+        foreach($votings_per_question as $voting_per_question) {
+            $voting_per_question_sum = array_sum($voting_per_question);
+            
+            $total_voters = $voting_per_question_sum > $total_voters ? $voting_per_question_sum : $total_voters;
+        }
         
         foreach($voting->parties() as $party) {
-
-            $id_twice = '%d_%d_%s_twice';
-            
-            $query = "
-            SELECT 
-                ID as voter_id,
-            ";
-            
-            $query_count_sum = $query_count = array();
-            foreach($party->voting_answers($voting->get_id()) as $answer) {
-                
-                $id = sprintf('%d_%d_%s', $voting->get_id(), $answer->question()->get_id(), $answer->answer());
-                $id_twice = sprintf('%s_twice', $id);
-                
-                $query_count[] = "
-                    ROUND (   
-                        (
-                            LENGTH(post_content)
-                            - LENGTH( REPLACE ( post_content, \"{$id}\", \"\") ) 
-                        ) / LENGTH(\"{$id}\")        
-                    ) AS count_{$answer->question()->get_id()},
-                    ROUND (   
-                        (
-                            LENGTH(post_content)
-                            - LENGTH( REPLACE ( post_content, \"{$id_twice}\", \"\") ) 
-                        ) / LENGTH(\"{$id_twice}\")        
-                    ) AS count_{$answer->question()->get_id()}_twice                    
-                ";    
-                
-                //$query_set_vars[] = "SET @var_count_{$answer->question()->get_id()} = 1";
-                $query_count_sum[] = "count_{$answer->question()->get_id()}";
-                $query_count_sum[] = "count_{$answer->question()->get_id()}_twice";
-                //$id_twice = sprintf($id, $voting->get_id(), $answer->question()->get_id(), $answer->answer());
-            }
-            
-            
-            $query .= implode(', ', $query_count)."
-            FROM 
-                $wpdb->posts as p    
-                
-            WHERE post_type = 'wpov-user-vote' 
-            ORDER BY
-                (".implode("+", $query_count_sum).") DESC
-            "
-                ;
-            
-            //print_r($query);
-            
-            $voters = $wpdb->get_results($query, ARRAY_A);
+            $party_answers = $party->answers();
+            $total_question_votes = 0;
             $party_voter_score = 0;
-            $votes = 0;
             
-            foreach($voters as $i => &$voter) {
-                //$votes[$i]
-                $voter['sum'] = 0;                
-                foreach($voter as $type => $vote) {
-                    if(!preg_match('/^count_/', $type)) continue;
-                    $voter['sum'] += $vote;
-                    if(!preg_match('/twice$/', $type) or $vote) {
-                        $votes++;
-                    }
-                }
+            foreach($party_answers as $answer) {
                 
-                $voter['party_title'] = $party->title();
-                $party_voter_score += $voter['sum'];
+                $total_question_votes += array_sum($votings_per_question[$answer->get('question')]);
+                $party_voter_score += $votings_per_question[$answer->get('question')][$answer->value()];
+                
             }
                         
-            $party_scores[$party->title()] = ($party_voter_score/$votes)*100;
+            $party_scores[$party->title()] = ($party_voter_score and $total_question_votes) ? ($party_voter_score/$total_question_votes)*100 : 0; 
+            
+        }
+        
+        $total_party_scores = array_sum($party_scores);
+        
+        foreach($party_scores as &$party_score) {
+            $party_score = (($party_score/$total_party_scores)*100);
         }
         
         return array(
+            'votings_per_question' => $votings_per_question,
             'labels' => array_keys($party_scores),
             'data' => array_values($party_scores),
-            'count_voters' => count($voters),
+            'count_voters' => $total_voters,
         );
     }    
     
@@ -128,55 +90,109 @@ class wpov_admin_options_dashboard {
      * Add options page
      */
     public function add_page() {
-        $voting = wpov_get_voting(90);
+        $screen = get_current_screen();
+
+        $votings = wpov_get_votings();
         
-        $total_results = self::get_total_results($voting);
+        $current_voting = (isset($votings[0]) ? $votings[0] : false);
+        if(!empty($_GET['wpov-voting'])) {
+            foreach($votings as $voting) {
+                if($voting->get_id() == $_GET['wpov-voting']) {
+                    $current_voting = $voting;
+                }
+            }
+        }
         
-        $total_results_per_question = self::get_total_results_per_question($voting);
+        if($current_voting) {
+            //$voting = wpov_get_voting($current_voting->get_id());
+
+            $total_results = self::get_total_results($current_voting);
+
+            $total_results_per_question = $total_results['votings_per_question'];
+        }
+        
         ?>
         <div class="wrap">
-            <h1><?php _e('Dashboard', 'wpov'); ?></h1>
-            <div id="welcome-panel" class="welcome-panel">
-                <div class="welcome-panel-content">
-                    <h2>Sonntagsfrage</h2>
-                    <p class="about-description">Wenn am nächsten Sonntag wirklich Wahl wäre …</p>
-                    <canvas id="wpov_opinion_poll_chart" data-chart="opinion_poll" data-set="#wpov_opinion_poll_chart_data"></canvas>
-                    <script id="wpov_opinion_poll_chart_data" type="text/template">
-                        <?php
-                        echo json_encode($total_results);
-                        ?>
-                    </script>
+            <div class="dashboard-hgroup">
+                <h1>
+                    <?php _e('Dashboard', WPOV__PLUGIN_NAME_SLUG); ?>
+                </h1>       
+                <?php if(count($votings)) : ?>
+                <form action="<?php echo admin_url('admin.php?page=wpov-dashboard') ?>" method="get">
+                    <select name="wpov-voting">
+                        <?php foreach($votings as $voting) : ?>
+                        <option value="<?php echo $voting->get_id(); ?>" <?php selected($current_voting->get_id(), $voting->get_id()) ?>><?php echo $voting->title(); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <input type="hidden" name="page" value="wpov-dashboard" />
+                    <button class="button button-primary" type="submit"><?php _e('Select', WPOV__PLUGIN_NAME_SLUG) ?></button>
+                </form>
+                <?php endif; ?>
+            </div>
+            <?php if(count($votings)) : ?>
+                <?php if($total_results['count_voters']) : ?>
+                <div id="welcome-panel" class="welcome-panel">
+                    <div class="welcome-panel-content">
+                        <h2>Sonntagsfrage</h2>
+                        <p class="about-description">Wenn am nächsten Sonntag wirklich Wahl wäre, würden <?php echo $total_results['count_voters'] ?> Wähler*innen folgendes wählen …</p>
+                        <canvas id="wpov_opinion_poll_chart" data-chart="opinion_poll" data-set="#wpov_opinion_poll_chart_data"></canvas>
+                        <script id="wpov_opinion_poll_chart_data" type="text/template">
+                            <?php
+                            echo json_encode($total_results);
+                            ?>
+                        </script>
+                    </div>
                 </div>
-            </div>
-            <div class="welcome-panel">
-                <table>
-                    <thead>
+                <div class="welcome-panel">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Frage</th>
+                                <th>Umfrage</th>
+                                <th>Teilnehmer*innen</th>
+                            </tr>
+                        </thead>
+                        <?php foreach($current_voting->questions() as $i => $question) : ?>
                         <tr>
-                            <th>ID</th>
-                            <th>Frage</th>
-                            <th>Umfrage</th>
+                            <td>
+                                #<?php echo ($i+1); //echo $question->question_index_readable(); ?>
+                            </td>
+                            <td>
+                                <?php echo $question->question(); ?>
+                            </td>
+                            <td>
+                                <canvas data-chart="opinion_poll_questions"></canvas>
+                                <script type="text/template">
+                                    <?php
+                                    echo json_encode(array_values($total_results_per_question[$question->get_id()]));
+                                    ?>
+                                </script>                            
+                            </td>
+                            <td><?php echo array_sum($total_results_per_question[$question->get_id()]); ?></td>
                         </tr>
-                    </thead>
-                    <?php foreach($voting->questions() as $question) : ?>
-                    <tr>
-                        <td>
-                            #<?php //echo $question->question_index_readable(); ?>
-                        </td>
-                        <td>
-                            <?php echo $question->question(); ?>
-                        </td>
-                        <td>
-                            <canvas data-chart="opinion_poll_questions"></canvas>
-                            <script type="text/template">
-                                <?php
-                                echo json_encode(array_values($total_results_per_question[$question->get_id()]));
-                                ?>
-                            </script>                            
-                        </td>
-                    </tr>
+                        <?php endforeach; ?>
+                    </table>
+                </div>
+                <?php else: ?>
+                <div class="welcome-panel">
+                    <h2><?php _e('Too few data recorded!', WPOV__PLUGIN_NAME_SLUG) ?></h2>
+                    <p class="about-description"><?php _e('Wait a few more days until enough data is collected for a meaningful survey.', WPOV__PLUGIN_NAME_SLUG) ?></p>              
+                </div>            
+                <?php endif; ?>
+            <?php else: ?>
+            <div class="welcome-panel">
+                <h2><?php _e('You must first create elections, questions and parties.', WPOV__PLUGIN_NAME_SLUG) ?></h2>
+                <p class="about-description">The following page types are available.</p>
+                <ul>
+                    <?php foreach(wpov()->post_types as $post_type) : ?>
+                    <li><a href="<?php echo admin_url(sprintf('edit.php?post_type=%s', $post_type->name)); ?>"><?php echo $post_type->labels->name ?></a></li>
                     <?php endforeach; ?>
-                </table>
-            </div>
+                </ul>                     
+            </div>            
+            <?php endif; ?>
+            
+            
         </div>
         <?php
     }

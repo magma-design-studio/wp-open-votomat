@@ -82,44 +82,44 @@ function wpov_get_votings($args = array()) {
     return wpov_get_posts($args);
 }
 
-function wpov_get_party_answers($parties, $votings = array(), $questions = array()) {
+function wpov_get_party_answers($party, $votings = array(), $questions = array()) {
     global $wpdb;
-
-    $query_where_part_voting = !empty($votings) ? '('.implode(',', $votings).')' : '[0-9]+';
-    $query_where_part_questions = !empty($questions) ? '('.implode(',', $questions).')' : '[0-9]+';        
-
-    $party_ids = array();
-    if(!is_array($parties)) {
-        $parties = array($parties);
-    }
     
-    foreach($parties as $party) {
-        $party_ids[] = $party->get_id();
-    }
+    $do_cache = (empty($votings) and empty($questions));
+    $cache_key = "wpov_party_{$party->get_id()}_answers";
     
+    if($do_cache and false === ($answers = get_transient( $cache_key ))) {
+
+        $query_where_part_voting = !empty($votings) ? '('.implode(',', $votings).')' : '[0-9]+';
+        $query_where_part_questions = !empty($questions) ? '('.implode(',', $questions).')' : '[0-9]+';        
+
+        $query = "
+            SELECT
+                post_id,
+                meta_key,
+                meta_value
+            FROM
+                $wpdb->postmeta
+            WHERE
+                post_id = '{$party->get_ID()}' AND
+                meta_key REGEXP '^_party_answers_voting_{$query_where_part_voting}_question_{$query_where_part_questions}$'
+        ";
+
+        $answers = $wpdb->get_results($query);
+
+        if($do_cache) {
+            set_transient( $cache_key, $answers );
+        }
+    }        
     
-    $query = "
-        SELECT
-            post_id,
-            meta_key,
-            meta_value
-        FROM
-            $wpdb->postmeta
-        WHERE
-            post_id IN ('".implode(',', $party_ids)."') AND
-            meta_key REGEXP '^_party_answers_voting_{$query_where_part_voting}_question_{$query_where_part_questions}$'
-    ";
-
-    $answers = $wpdb->get_results($query);
-
     $out = array();
     foreach($answers as &$answer) {
         if(preg_match('/_party_answers_voting_(?<voting_id>\d+)_question_(?<question_id>\d+)/', $answer->meta_key, $matches)) {
             $out[] = new wpov_party_answer(
                 $answer->meta_value, 
-                wpov_get_post($answer->post_id),
-                wpov_get_post($matches['voting_id']),
-                wpov_get_post($matches['question_id'])
+                $answer->post_id,
+                $matches['voting_id'],
+                $matches['question_id']
             );
         }
     }
@@ -141,16 +141,14 @@ function wpov_get_voting($args = array()) {
 }
 
 function wpov_get_current_voter() {
+    if(!wpov()->current_voter) {
+        wpov()->current_voter = new wpov_voter_current();
+    }    
+        
     return wpov()->current_voter;
 }
 
 function wpov_get_voter($args = array()) {
-    $args = wp_parse_args( $args, array(
-
-    ) );  
-    
-    $args['post_type'] = 'wpov-user-vote';
-        
     return new wpov_voter($args);
 }
 
@@ -174,13 +172,13 @@ function wpov_get_voters($voting, $vote = null) {
 
 function wpov_ago( $start, $end ) {
     $interval = date_create( $start )->diff( $end );
-    $suffix = ( $interval->invert ? sprintf(' %s', __('ago', 'wpov')) : '' );
-    if ( $v = $interval->y >= 1 ) return sprintf( '%d %s', $interval->y, _n( 'year', 'years', $interval->y, 'wpov' )) . $suffix;
-    if ( $v = $interval->m >= 1 ) return sprintf( '%d %s', $interval->m, _n( 'month', 'months', $interval->m, 'wpov' )) . $suffix;
-    if ( $v = $interval->d >= 1 ) return sprintf( '%d %s', $interval->d, _n( 'day', 'days', $interval->d, 'wpov' )) . $suffix;
-    if ( $v = $interval->h >= 1 ) return sprintf( '%d %s', $interval->h, _n( 'hour', 'hours', $interval->h, 'wpov' )) . $suffix;
-    if ( $v = $interval->i >= 1 ) return sprintf( '%d %s', $interval->i, _n( 'minute', 'minutes', $interval->i, 'wpov' )) . $suffix;
-    return sprintf( '%d %s', $interval->s, _n( 'second', 'seconds', $interval->s, 'wpov' )) . $suffix;
+    $suffix = ( $interval->invert ? __('%s ago', WPOV__PLUGIN_NAME_SLUG) : '%s' );
+    if ( $v = $interval->y >= 1 ) return sprintf( '%d %s', $interval->y, _n( 'year', 'years', $interval->y, WPOV__PLUGIN_NAME_SLUG )) . $suffix;
+    if ( $v = $interval->m >= 1 ) return sprintf( '%d %s', $interval->m, _n( 'month', 'months', $interval->m, WPOV__PLUGIN_NAME_SLUG )) . $suffix;
+    if ( $v = $interval->d >= 1 ) return sprintf( '%d %s', $interval->d, _n( 'day', 'days', $interval->d, WPOV__PLUGIN_NAME_SLUG )) . $suffix;
+    if ( $v = $interval->h >= 1 ) return sprintf( '%d %s', $interval->h, _n( 'hour', 'hours', $interval->h, WPOV__PLUGIN_NAME_SLUG )) . $suffix;
+    if ( $v = $interval->i >= 1 ) return sprintf( '%d %s', $interval->i, _n( 'minute', 'minutes', $interval->i, WPOV__PLUGIN_NAME_SLUG )) . $suffix;
+    return sprintf($suffix, sprintf( '%d %s', $interval->s, _n( 'second', 'seconds', $interval->s, WPOV__PLUGIN_NAME_SLUG )));
 }
 
 function wpov_get_vote_symbol($vote) {
@@ -194,13 +192,13 @@ function wpov_get_vote_symbol($vote) {
 }
 
 function wpov_get_vote_class($vote) {
-    if( $vote == 'approve' ) {
-        return 'success';
-    } elseif( $vote == 'disapprove' ) {
-        return 'alert';
-    } 
+    $translations = apply_filters('wpov_vote_button_class', array(
+        'approve' => 'success',
+        'neutral' => '',
+        'disapprove' => 'alert',
+    ));
     
-    return '';
+    return $translations[$vote];
 }
 
 
@@ -233,4 +231,72 @@ function wpov_uniqid_real($lenght = 13) {
         throw new Exception("no cryptographically secure random function available");
     }
     return substr(bin2hex($bytes), 0, $lenght);
+}
+
+function wpov_fn($fn, $default) {
+    $args = func_get_args();
+    
+    unset($args[0], $args[1]);
+    $args = array_values($args);
+    
+    if(IS_MIGRATION_DEV) {
+        if(is_array($fn)) {
+            global $wpdb;
+            $fn = (($fn[0] == $wpdb) ? '$wbdb->' : '$class->' ).$fn[1];
+        }
+        
+        echo "$fn ".print_r($args, true);
+    } else {
+        $triggered_fn = call_user_func_array($fn, $args);
+        return $triggered_fn;
+    }
+    return $default;
+}
+
+function wpov_wpdb_voters() {
+    global $wpdb;
+    return sprintf('%s%s', $wpdb->prefix, apply_filters('wpov_wpdb_voters', 'wpov_voters'));
+}
+
+function wpov_wpdb_voters_votes() {
+    global $wpdb;
+    return sprintf('%s%s', $wpdb->prefix, apply_filters('wpov_wpdb_voters_votes', 'wpov_voters_votes'));
+}
+
+function wpov_plugin_theme_dir() {
+    return WPOV__PLUGIN_THEME_DIR;
+}
+
+function wpov_plugin_theme_dir_url() {
+    return WPOV__PLUGIN_THEME_DIR_URL;
+}
+
+function wpov_crop_pagination($questions, $current_question) {
+    $show_elems = 4;
+    $show_elems_half = $show_elems/2;
+    $placeholder = array(array('is_placeholder' => true));
+    
+    $_current_index = $current_question->question_index();
+    $current_index = $_current_index+1;
+    
+    if($_current_index > $show_elems_half) {
+        $first_end_index = ($_current_index-($show_elems_half+1));
+    } else {
+        $first_end_index = false;
+    }
+    
+    if($first_end_index) {
+        array_splice($questions, 1, $first_end_index, $placeholder);
+    }
+    
+    $total = count($questions);
+    $second_start_index = ($show_elems*2)-1;
+    $second_end_index = (($total-$second_start_index)-1);
+        
+    if($second_start_index < ($total-1)) {    
+        array_splice($questions, $second_start_index, $second_end_index, $placeholder);
+    }
+
+    return $questions;
+    
 }

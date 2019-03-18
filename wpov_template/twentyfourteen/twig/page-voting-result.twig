@@ -1,0 +1,63 @@
+{% extends "base.twig" %}
+
+{% block content %}
+
+<div class="row" style="margin-bottom: 20px; clear: both;">
+    <div class="row">
+        <h3>Das Ergebnis</h3>
+        <table class="small-12 columns">
+            <thead>
+                <tr>
+                    <th class="text-right"></th>
+                    <th>Übereinstimmung </th>
+                    <th>in % </th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                
+                {% for party in post_voting.parties() %}
+                {% set party_user_consensus = party.party_user_consensus(post_voting.get_id()) %}
+                {% set count_questions = current_voter().count_votes(post_voting.get_id()) %}
+
+                
+                {% set party_user_consensus_percentage = (party_user_consensus and count_questions ? ((party_user_consensus/count_questions)*100) : 0) %}
+
+                <tr>
+                    <td width="25%" class="text-right"> 
+                        {% set party_logo %}
+                        <a href="{{ party.url() }}" target="_blank">
+                            {% if party.logo() %}
+                            <img src="{{ party.logo() }}" alt="{{ party.title() }}" style="height: 40px; width: auto;"/>
+                            {% else %}
+                                {{ party.title() }}
+                            {% endif %}
+                        </a>
+                        {% endset %}                        
+                        {% if party.description() %}
+                        <span data-tooltip data-options="disable_for_touch:true" class="has-tip tip-bottom" 
+                        title="<div style='max-width: 50em; overflow: auto;'>{{ party.description() }}</div>">
+                            {{ party_logo }}
+                        </span> 
+                        {% else %}
+                            {{ party_logo }}
+                        {% endif %}
+                    </td>
+                    <td width="60%"> <div class="progress"> <span class="meter" style="width: {{ party_user_consensus_percentage }}%"></span> </div> </td>
+                    <td width="15%">{{ fn('round', party_user_consensus_percentage) }} </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <p class="text-center">
+        <a href="{{ post_voting.compare_link() }}">deine Antworten im direkten Vergleich mit den Parteien</a>
+        </p>
+        <p>
+        Durch klick auf die Logos kommst du auf die Webseiten der Parteien.
+        <br/>
+        Mit dem folgenden Link kannst du dein Ergebnis mit anderen teilen: <a href="{{ current_voter().result_public_link() }}" class="">{{ current_voter().result_public_link() }}</a> 
+        </p>
+    </div>
+</div>
+
+{% endblock %}

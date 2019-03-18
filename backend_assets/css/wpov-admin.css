@@ -1,0 +1,8 @@
+.dashboard-hgroup {
+    display: flex;
+    align-items: center;
+}
+
+.dashboard-hgroup h1 {
+    margin-right: 1em;
+}

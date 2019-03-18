@@ -22,7 +22,7 @@ var wpov_admin_dashboard = function() {
                     data: {
                         labels: dataset.labels,
                         datasets: [{
-                            label: "All voters " + dataset.count_voters,
+                            label: "Voters",
                             backgroundColor: 'rgb(255, 99, 132)',
                             borderColor: 'rgb(255, 99, 132)',
                             data: dataset.data,
@@ -42,7 +42,6 @@ var wpov_admin_dashboard = function() {
                     "data": {
                         "labels":["Approve","Neutral","Disapprove"], 
                         "datasets": [{
-                            "label":"My First Dataset",
                             "data":dataset,
                             "backgroundColor":["rgb(93, 164, 35)","rgb(255, 204, 1)","rgb(182, 1, 12)"]
                         }]

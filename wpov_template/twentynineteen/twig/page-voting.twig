@@ -1,0 +1,19 @@
+{% extends "base.twig" %}
+
+{% block content %}
+    {% set question = post_voting.question() %}
+    {% set prev_question = post_question.prev_question() %}
+    {% set next_question = post_question.next_question() %}
+
+    <div class="card mb-3">
+        <div class="card-body">
+
+            <h3 class="card-title">{{ __('Question', WPOV__PLUGIN_NAME_SLUG) }} {{ post_voting.question_index_readable() }}</h3>
+            <p class="card-text">{{ post_question.content() }}</p>
+            {{ post_question.html('components/voting-form.twig') }}
+        </div>
+    </div>
+
+    {% include 'components/page-voting-pagination.twig' %}
+
+{% endblock %}

@@ -15,7 +15,8 @@ abstract class wpov_admin_post_type {
     function get_posts_options($type) {
         $out = wpov_get_posts(array(
             'post_type' => 'wpov-'.$type,
-            'post_status' => 'publish'
+            'post_status' => 'publish',
+            'posts_per_page' => -1
         ));
         
         return $out;            

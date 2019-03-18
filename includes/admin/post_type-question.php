@@ -37,7 +37,7 @@ class wpov_admin_post_type_question extends wpov_admin_post_type {
     }
     
     function admin_column_header($columns) {
-        $columns['votings'] = __('In Voting', 'wpov');
+        $columns['votings'] = __('In Voting', WPOV__PLUGIN_NAME_SLUG);
         return $columns;
     }
     
@@ -72,7 +72,7 @@ class wpov_admin_post_type_question extends wpov_admin_post_type {
         
         $fields = wpov_fields( array(
             'id'            => 'question_description_metabox',
-            'title'         => __( 'Question', 'wpov' ),
+            'title'         => __( 'Question', WPOV__PLUGIN_NAME_SLUG ),
             'object_types'  => array( $this->post_type ), // Post type
             'context'       => 'normal',
             'priority'      => 'high',
@@ -82,7 +82,7 @@ class wpov_admin_post_type_question extends wpov_admin_post_type {
         do_action('wpov_admin_question_before_fields', $fields);
         
         $fields->add_field( array(
-            'name'         => __( 'Question', 'wpov' ),
+            'name'         => __( 'Question', WPOV__PLUGIN_NAME_SLUG ),
             'id'         => $prefix . 'content',
             'type'       => 'wysiwyg',
             // 'sanitization_cb' => 'my_custom_sanitization', // custom sanitization callback parameter
@@ -92,7 +92,7 @@ class wpov_admin_post_type_question extends wpov_admin_post_type {
         ) ); 
             
         /*$fields->add_field( array(
-            'name'         => __( 'Party Logo', 'wpov' ),
+            'name'         => __( 'Party Logo', WPOV__PLUGIN_NAME_SLUG ),
             'id'         => $prefix . 'logo',
             'type'       => 'file',
             'on_front'        => true, // Optionally designate a field to wp-admin only

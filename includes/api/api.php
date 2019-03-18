@@ -59,6 +59,10 @@ abstract class wpov_api
     function content() {
         return $this->atts['post_content'];
     } 
+    
+    function the_content() {
+        return apply_filters('the_content', $this->content());
+    }     
         
     function link() {
         return get_permalink($this->get_id());

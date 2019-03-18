@@ -1,50 +1,122 @@
 <?php
 /*
-Plugin Name: WP Open Votomat
-Description: This plugin allows you to use your website as a voting advice application.
-Author: Sebastian Tiede @ magma
-Version: 0.0.1
-Author URI: https://magmadesignstudio.de
-*/
-
-/*
-wpov
-    dashboard (statistics)
-    questions
-    parties
-    issues
-    settings
-*/
+ * Plugin Name: WP Open Votomat
+ * Description: This plugin allows you to use your website as a voting advice application.
+ * Author: Sebastian Tiede @ magma
+ * Version: 0.0.2
+ * Author URI: https://magmadesignstudio.de
+ * Text Domain: wpov
+ * License:     GPL2
+ 
+{Plugin Name} is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+any later version.
+ 
+{Plugin Name} is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+ 
+You should have received a copy of the GNU General Public License
+along with {Plugin Name}. If not, see {License URI}. 
+ 
+ */
 
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
-define( 'PLUGIN_NAME_SLUG', 'wpov' );
+define( 'WPOV__PLUGIN_NAME_SLUG', 'wp-open-votomat' );
 
-define( 'WPOV_VERSION', '0.0.1' );
+define( 'WPOV_VERSION', '0.0.2' );
 define( 'WPOV__MINIMUM_WP_VERSION', '4.0' );
 define( 'WPOV__PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WPOV__PLUGIN_DIR_URL', plugin_dir_url( __FILE__ ) );
 
-$wpov_template = 'wpov_template/wpov';
-define( 'WPOV__PLUGIN_THEME_DIR', WPOV__PLUGIN_DIR . $wpov_template );
-define( 'WPOV__PLUGIN_THEME_DIR_URL', WPOV__PLUGIN_DIR_URL . $wpov_template );
+define( 'WPOV__PLUGIN_THEMES_DIR', WPOV__PLUGIN_DIR . 'wpov_template' );
+define( 'WPOV__PLUGIN_THEMES_DIR_URL', WPOV__PLUGIN_DIR_URL . 'wpov_template' );
 
+$wpov_settings = get_option('wpov-settings', array());
+$theme_dir = ((isset($wpov_settings['wpov_theme']) and ($theme_dir = $wpov_settings['wpov_theme'])) ? $theme_dir : 'twentyfourteen');
+
+define( 'WPOV__PLUGIN_THEME_DIR', WPOV__PLUGIN_THEMES_DIR . '/' . $theme_dir );
+define( 'WPOV__PLUGIN_THEME_DIR_URL', WPOV__PLUGIN_THEMES_DIR_URL . '/' . $theme_dir );
 
 if(!class_exists('wpov')) :
 
     class wpov {
+        public $current_voter = false;
+        
         protected $settings = array(
             'capability' => 'manage_options',
             'admin_settings' => array(
-                'wpov_type' => 'standalone'
+                'wpov_type' => 'standalone',
+                'wpov_css_external' => false,
+                'wpov_css' => false,
             )
         );
         
+        public $post_types = array();
+        
+        function migrate() {
+            global $wpdb;
+            
+            ini_set('memory_limit', '1024M');
+            set_time_limit(0);      
+            
+            //$wpdb->query("UPDATE $wpdb->postmeta SET meta_value=0 WHERE meta_key REGEXP '^_wpov_counter_question_[0-9]+_.*$' ");
+            //die('reset');
+            
+            $_posts = $wpdb->get_results("
+            SELECT *, COUNT(*) as count
+            FROM $wpdb->postmeta 
+            WHERE 
+                meta_key REGEXP '^_wpov_voting_[0-9]+_question_[0-9]+$'
+            GROUP BY meta_key, meta_value
+            #LIMIT 10
+            ");
+            
+                        
+            foreach($_posts as $_post) {
+                
+                preg_match('/_wpov_voting_(?<voting_id>\d+)_question_(?<question_id>\d+)/', $_post->meta_key, $match);
+                
+                $answer = preg_replace('/^([^\:]+)(:)?(twice)$/', '$1', $_post->meta_value);
+                $meta_key = "_wpov_counter_question_{$match['question_id']}_{$answer}";
+                $meta_value = intval($_post->count);
+                
+                if($_meta_value = get_post_meta( $match['voting_id'], $meta_key, true )) {
+                    $meta_value += intval($_meta_value);
+                }
+                
+                print_r([$match['voting_id'], $meta_key, $meta_value]);
+                
+                if ( ! add_post_meta( $match['voting_id'], $meta_key, $meta_value, true ) ) { 
+                   update_post_meta( $match['voting_id'], $meta_key, $meta_value );
+                }                         
+
+
+            }
+            
+            echo 'finished!';
+            
+            exit;
+        }
+        
         function __construct() {
-            $this->set_setting('admin_settings', get_option('wpov-settings', array()));
+            //add_action('wp_loaded', array($this, 'migrate'));
+            global $wpov_settings;
+            $this->set_setting('admin_settings', $wpov_settings);
+        }
+        
+        function detect_plugin_activation_process() {
+            add_option( 'wpov_detect_plugin_activation_process', true );
         }
         
         function initialize() {
+            register_activation_hook( __FILE__, array($this, 'detect_plugin_activation_process') );
+            
+            add_action( 'init', array($this, 'wpov_textdomain'), 0 );  
+            add_action( 'admin_init', array($this, 'initial_plugin_setup'), 0 );  
             
             include_once( WPOV__PLUGIN_DIR . 'includes/helpers/helpers.php');
             wpov_include('/includes/helpers/twig_extensions.php');
@@ -58,7 +130,13 @@ if(!class_exists('wpov')) :
             wpov_include('/includes/api/wpov_question.php');
             wpov_include('/includes/api/wpov_voting.php');
             
+            
             add_action('init',	array($this, 'register_post_types'), 5);
+            
+            if($this->get_setting('admin_settings')['wpov_type'] == 'standalone') {
+                add_action( 'widgets_init', array( $this, 'wpov_widget_home_sidebar' ) );
+                add_filter( 'validate_current_theme', '__return_false' );
+            }             
             
             if(is_admin()) {
                 wpov_include('/includes/admin/admin.php');
@@ -111,11 +189,52 @@ if(!class_exists('wpov')) :
             add_filter( 'get_twig', array( $this, 'add_to_twig' ) );
             add_filter( 'timber_context', array( $this, 'add_to_context' ) );
             
-            add_action('init', array($this, 'rewrite_rules'));        
+            add_action( 'init', array($this, 'rewrite_rules'));     
+            
+            add_action( 'wp_enqueue_scripts', array($this, 'custom_assets'), 1000); 
+        }
+        
+        function custom_assets() {
+
+            wp_register_style( 'wpov-custom-css', false );
+            wp_enqueue_style( 'wpov-custom-css' );            
+            if($wpov_css_external = $this->get_setting('admin_settings')['wpov_css_external']) {
+                wp_enqueue_style( 'wpov-custom-css-external', $wpov_css_external );
+            }
+            if($wpov_css = $this->get_setting('admin_settings')['wpov_css']) {
+                wp_add_inline_style( 'wpov-custom-css', $wpov_css );
+            }            
+            
+            
+        }
+        
+        function initial_plugin_setup() {
+            if(get_option( 'wpov_detect_plugin_activation_process')) {
+                delete_option( 'wpov_detect_plugin_activation_process' );
+                
+                //$this->register_voter_db_tables();
+            }
+        }
+        
+        function wpov_textdomain() {
+            $locale = get_locale();
+            $domain = WPOV__PLUGIN_NAME_SLUG;
+            $locale = apply_filters( 'plugin_locale', $locale, $domain );
+            $path = WPOV__PLUGIN_DIR . '/languages';
+            // Load the textdomain according to the plugin first
+            $mofile = sprintf('%s-%s.mo', $domain, $locale);
+            $loaded = load_textdomain( $domain, $path . '/' . $mofile );
+
+            // If not loaded, load from the languages directory
+            if ( ! $loaded ) {
+                $mofile = WP_LANG_DIR . '/plugins/' . $mofile;
+                load_textdomain( $domain, $mofile );
+            }            
+            
         }
     
         function register_menu() {
-            register_nav_menu( 'wpov_footer', __( 'WPOV Footer Menu', 'wpov' ) );
+            register_nav_menu( 'wpov_footer', __( 'WPOV Footer Menu', WPOV__PLUGIN_NAME_SLUG ) );
         }        
         
         function rewrite_rules() {
@@ -147,9 +266,11 @@ if(!class_exists('wpov')) :
         
         function add_to_context($context) {
             
-            $context['current_voter'] = wpov_get_current_voter();
+            //$context['current_voter'] = wpov_get_current_voter();
             $context['admin_settings'] = $this->get_setting('admin_settings');   
             
+            $context['WPOV__PLUGIN_NAME_SLUG'] = WPOV__PLUGIN_NAME_SLUG;
+                        
             return $context;
         }
         
@@ -162,19 +283,18 @@ if(!class_exists('wpov')) :
             // vars
             $cap = wpov_get_setting('capability');
             
-            
-            register_post_type('wpov-party', array(
+            $this->post_types[] = register_post_type('wpov-party', array(
                 'labels'			=> array(
-                    'name'					=> __( 'Parties', 'wpov' ),
-                    'singular_name'			=> __( 'Party', 'wpov' ),
-                    'add_new'				=> __( 'Add New' , 'wpov' ),
-                    'add_new_item'			=> __( 'Add New Party' , 'wpov' ),
-                    'edit_item'				=> __( 'Edit Party' , 'wpov' ),
-                    'new_item'				=> __( 'New Party' , 'wpov' ),
-                    'view_item'				=> __( 'View Party', 'wpov' ),
-                    'search_items'			=> __( 'Search Parties', 'wpov' ),
-                    'not_found'				=> __( 'No Parties found', 'wpov' ),
-                    'not_found_in_trash'	=> __( 'No Parties found in Trash', 'wpov' ), 
+                    'name'					=> __( 'Parties', WPOV__PLUGIN_NAME_SLUG ),
+                    'singular_name'			=> __( 'Party', WPOV__PLUGIN_NAME_SLUG ),
+                    'add_new'				=> __( 'Add New' , WPOV__PLUGIN_NAME_SLUG ),
+                    'add_new_item'			=> __( 'Add New Party' , WPOV__PLUGIN_NAME_SLUG ),
+                    'edit_item'				=> __( 'Edit Party' , WPOV__PLUGIN_NAME_SLUG ),
+                    'new_item'				=> __( 'New Party' , WPOV__PLUGIN_NAME_SLUG ),
+                    'view_item'				=> __( 'View Party', WPOV__PLUGIN_NAME_SLUG ),
+                    'search_items'			=> __( 'Search Parties', WPOV__PLUGIN_NAME_SLUG ),
+                    'not_found'				=> __( 'No Parties found', WPOV__PLUGIN_NAME_SLUG ),
+                    'not_found_in_trash'	=> __( 'No Parties found in Trash', WPOV__PLUGIN_NAME_SLUG ), 
                 ),
                 'public'			=> false,
                 'show_ui'			=> true,
@@ -189,24 +309,25 @@ if(!class_exists('wpov')) :
                 'hierarchical'		=> true,
                 'rewrite'			=> false,
                 'query_var'			=> false,
-                'supports' 			=> array('title', 'thumbnail', 'revisions'),
-                'show_in_menu'		=> 'wpov-dashboard'
+                'supports' 			=> array('title', 'thumbnail', 'revisions', 'editor'),
+                'show_in_menu'		=> 'wpov-dashboard',
+                'menu_position'     => 50
             ));                
             
 
             // register post type 'acf-field-group'
-            register_post_type('wpov-question', array(
+            $this->post_types[] = register_post_type('wpov-question', array(
                 'labels'			=> array(
-                    'name'					=> __( 'Questions', 'wpov' ),
-                    'singular_name'			=> __( 'Question', 'wpov' ),
-                    'add_new'				=> __( 'Add New' , 'wpov' ),
-                    'add_new_item'			=> __( 'Add New Question' , 'wpov' ),
-                    'edit_item'				=> __( 'Edit Question' , 'wpov' ),
-                    'new_item'				=> __( 'New Question' , 'wpov' ),
-                    'view_item'				=> __( 'View Question', 'wpov' ),
-                    'search_items'			=> __( 'Search Questions', 'wpov' ),
-                    'not_found'				=> __( 'No Questions found', 'wpov' ),
-                    'not_found_in_trash'	=> __( 'No Questions found in Trash', 'wpov' ), 
+                    'name'					=> __( 'Questions', WPOV__PLUGIN_NAME_SLUG ),
+                    'singular_name'			=> __( 'Question', WPOV__PLUGIN_NAME_SLUG ),
+                    'add_new'				=> __( 'Add New' , WPOV__PLUGIN_NAME_SLUG ),
+                    'add_new_item'			=> __( 'Add New Question' , WPOV__PLUGIN_NAME_SLUG ),
+                    'edit_item'				=> __( 'Edit Question' , WPOV__PLUGIN_NAME_SLUG ),
+                    'new_item'				=> __( 'New Question' , WPOV__PLUGIN_NAME_SLUG ),
+                    'view_item'				=> __( 'View Question', WPOV__PLUGIN_NAME_SLUG ),
+                    'search_items'			=> __( 'Search Questions', WPOV__PLUGIN_NAME_SLUG ),
+                    'not_found'				=> __( 'No Questions found', WPOV__PLUGIN_NAME_SLUG ),
+                    'not_found_in_trash'	=> __( 'No Questions found in Trash', WPOV__PLUGIN_NAME_SLUG ), 
                 ),
                 'public'			=> false,
                 'show_ui'			=> true,
@@ -222,21 +343,22 @@ if(!class_exists('wpov')) :
                 'rewrite'			=> false,
                 'query_var'			=> false,
                 'supports' 			=> array('editor', 'revisions'),
-                'show_in_menu'		=> 'wpov-dashboard'             
+                'show_in_menu'		=> 'wpov-dashboard',
+                'menu_position'     => 100
             ));
                                 
             $wpov_voting = array(
                 'labels'			=> array(
-                    'name'					=> __( 'Votings', 'wpov' ),
-                    'singular_name'			=> __( 'Voting', 'wpov' ),
-                    'add_new'				=> __( 'Add New' , 'wpov' ),
-                    'add_new_item'			=> __( 'Add New Voting' , 'wpov' ),
-                    'edit_item'				=> __( 'Edit Voting' , 'wpov' ),
-                    'new_item'				=> __( 'New Voting' , 'wpov' ),
-                    'view_item'				=> __( 'View Voting', 'wpov' ),
-                    'search_items'			=> __( 'Search Votings', 'wpov' ),
-                    'not_found'				=> __( 'No Votings found', 'wpov' ),
-                    'not_found_in_trash'	=> __( 'No Votings found in Trash', 'wpov' ), 
+                    'name'					=> __( 'Votings', WPOV__PLUGIN_NAME_SLUG ),
+                    'singular_name'			=> __( 'Voting', WPOV__PLUGIN_NAME_SLUG ),
+                    'add_new'				=> __( 'Add New' , WPOV__PLUGIN_NAME_SLUG ),
+                    'add_new_item'			=> __( 'Add New Voting' , WPOV__PLUGIN_NAME_SLUG ),
+                    'edit_item'				=> __( 'Edit Voting' , WPOV__PLUGIN_NAME_SLUG ),
+                    'new_item'				=> __( 'New Voting' , WPOV__PLUGIN_NAME_SLUG ),
+                    'view_item'				=> __( 'View Voting', WPOV__PLUGIN_NAME_SLUG ),
+                    'search_items'			=> __( 'Search Votings', WPOV__PLUGIN_NAME_SLUG ),
+                    'not_found'				=> __( 'No Votings found', WPOV__PLUGIN_NAME_SLUG ),
+                    'not_found_in_trash'	=> __( 'No Votings found in Trash', WPOV__PLUGIN_NAME_SLUG ), 
                 ),
                 'public'			=> false,
                 'show_ui'			=> true,
@@ -251,8 +373,9 @@ if(!class_exists('wpov')) :
                 'hierarchical'		=> true,
                 'rewrite'			=> false,
                 'query_var'			=> false,
-                'supports' 			=> array('title', 'revisions'),
+                'supports' 			=> array('title', 'revisions', 'editor'),
                 'show_in_menu'		=> 'wpov-dashboard',
+                'menu_position'     => 150
             );
             
             if($this->get_setting('admin_settings')['wpov_type'] == 'standalone') {
@@ -260,7 +383,7 @@ if(!class_exists('wpov')) :
                 $wpov_voting['rewrite'] = array('slug' => 'voting');
             }
             
-            register_post_type('wpov-voting', $wpov_voting);            
+            $this->post_types[] = register_post_type('wpov-voting', $wpov_voting);            
             
 
         }
@@ -279,6 +402,38 @@ if(!class_exists('wpov')) :
             $this->settings[$key] = $value;
         }        
         
+        function wpov_widget_home_sidebar() {
+            register_sidebar( array(
+                'name'          => __('WP Open Votomat Sidebar', WPOV__PLUGIN_NAME_SLUG),
+                'id'            => 'wpov_home_sidebar',
+                'before_widget' => '<div>',
+                'after_widget'  => '</div>',
+                'before_title'  => '<h3>',
+                'after_title'   => '</h3>',
+            ) );            
+        }
+        
+        function register_voter_db_tables() {
+            /*global $wpdb;
+            
+            $charset_collate = $wpdb->get_charset_collate();
+            $table_name_voters = wpov_wpdb_voters();
+            $table_name_voters_vote = wpov_wpdb_voters_votes();
+            
+            $sql_table_creation = array();
+            $sql_table_creation[] = "CREATE TABLE $table_name_voters (
+              voter_id mediumint(9) NOT NULL AUTO_INCREMENT,
+              voter_session datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+              voter_ tinytext NOT NULL,
+              text text NOT NULL,
+              url varchar(55) DEFAULT '' NOT NULL,
+              PRIMARY KEY  (voter_id)
+            ) $charset_collate;";            
+            
+            
+            $sql_table_creation[] 
+            */
+        }
     }
     
     function wpov() {
@@ -297,5 +452,5 @@ if(!class_exists('wpov')) :
     wpov();
 
 else:
-    die(sprintf(__('Class »%s« exists!', PLUGIN_NAME_SLUG), 'wpov'));
+    die(sprintf(__('Class »%s« exists!', WPOV__PLUGIN_NAME_SLUG), WPOV__PLUGIN_NAME_SLUG));
 endif;

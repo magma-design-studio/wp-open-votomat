@@ -22,9 +22,9 @@ class wpov_admin_post_type_voting extends wpov_admin_post_type {
     }
     
     function admin_column_header($columns) {
-        $columns['parties'] = __('Parties', 'wpov');
-        $columns['questions'] = __('Questions', 'wpov');
-        $columns['period'] = __('Period', 'wpov');
+        $columns['parties'] = __('Parties', WPOV__PLUGIN_NAME_SLUG);
+        $columns['questions'] = __('Questions', WPOV__PLUGIN_NAME_SLUG);
+        $columns['period'] = __('Period', WPOV__PLUGIN_NAME_SLUG);
         return $columns;
     }
     
@@ -35,14 +35,15 @@ class wpov_admin_post_type_voting extends wpov_admin_post_type {
         switch ($column) {
             case "questions":
             case "parties":
+                
                 $translations = array(
                     'questions' => array(
-                        'Question',
-                        'Questions',
+                        __('Question', WPOV__PLUGIN_NAME_SLUG),
+                        __('Questions', WPOV__PLUGIN_NAME_SLUG),
                     ),
                     'parties' => array(
-                        'Party',
-                        'Parties',
+                        __('Party', WPOV__PLUGIN_NAME_SLUG),
+                        __('Parties', WPOV__PLUGIN_NAME_SLUG),
                     )           
                 );
                 
@@ -51,7 +52,7 @@ class wpov_admin_post_type_voting extends wpov_admin_post_type {
                     '<a href="%s">%d %s</a>',
                     '#',
                     $number,
-                    _n( $translations[$column][0], $translations[$column][1], $number, 'wpov' )
+                    _n( $translations[$column][0], $translations[$column][1], $number, WPOV__PLUGIN_NAME_SLUG )
                 );
             break;
             case "period":
@@ -62,31 +63,35 @@ class wpov_admin_post_type_voting extends wpov_admin_post_type {
                     printf(
                         $status_html, 
                         'green',
-                        __('Voting is live!', 'wpov')
+                        __('Voting is live!', WPOV__PLUGIN_NAME_SLUG)
                     );
                 } elseif($status['time_to_start'] > 0) {
                     printf(
                         $status_html, 
                         'orange',
-                        __('Voting is on hold!', 'wpov')
+                        __('Voting is on hold!', WPOV__PLUGIN_NAME_SLUG)
                     );
                 } elseif($status['time_to_end'] < 0) {
                     printf(
                         $status_html, 
                         'red',
-                        __('Voting has ended!', 'wpov')
+                        __('Voting has ended!', WPOV__PLUGIN_NAME_SLUG)
                     );
+                }
+                
+                if(!$status['is_live'] and $status['keep_online']) {
+                    _e('Voting has ended but is kept online!', WPOV__PLUGIN_NAME_SLUG);
                 }
                 
                 printf(
                     '<p>%s: <code>%s</code></p>',
-                    __('From', 'wpov'),
-                    date(__('d.m.Y H:i:s', 'wpov'), $voting->publication_period_from('U'))
+                    __('From', WPOV__PLUGIN_NAME_SLUG),
+                    date(__('d.m.Y H:i:s', WPOV__PLUGIN_NAME_SLUG), $voting->publication_period_from('U'))
                 );
                 printf(
                     '<p>%s: <code>%s</code></p>',
-                    __('To', 'wpov'),
-                    date(__('d.m.Y H:i:s', 'wpov'), $voting->publication_period_to('U'))
+                    __('To', WPOV__PLUGIN_NAME_SLUG),
+                    date(__('d.m.Y H:i:s', WPOV__PLUGIN_NAME_SLUG), $voting->publication_period_to('U'))
                 );                
             break;
         }        
@@ -94,7 +99,7 @@ class wpov_admin_post_type_voting extends wpov_admin_post_type {
     
     
     function enter_title_here($title) {
-        return __( 'Enter voting title here', 'wpov' );
+        return __( 'Enter voting title here', WPOV__PLUGIN_NAME_SLUG );
     }
     
     public $prefix = '_voting_';
@@ -102,6 +107,7 @@ class wpov_admin_post_type_voting extends wpov_admin_post_type {
     function fields() {
         do_action('wpov_admin_voting_before_fields', $fields);
         
+        $this->fields_core_descriptions();
         $this->fields_core_parties();
         $this->fields_core_questions();
         $this->fields_side_settings();
@@ -110,11 +116,37 @@ class wpov_admin_post_type_voting extends wpov_admin_post_type {
         
     }
     
+    function fields_core_descriptions() {
+        $fields = wpov_fields( array(
+            'id'            => 'voting_descriptions',
+            'title'         => __( 'Descriptions', WPOV__PLUGIN_NAME_SLUG ),
+            'object_types'  => array( 'wpov-voting', ), // Post type
+            'context'       => 'normal',
+            'priority'      => 'high',
+            'show_names'    => true,
+        ) );   
+        
+        $fields->add_field( array(
+            'name' => __('Description before publication', WPOV__PLUGIN_NAME_SLUG),
+            //'desc' => esc_html__( 'If this field is empty this voting will appear after expiration!', 'cmb2' ),
+            'id'   => $prefix . 'before_live_description',
+            'type' => 'wysiwyg',
+        ) );      
+        
+        $fields->add_field( array(
+            'name' => __('Description after expiry', WPOV__PLUGIN_NAME_SLUG),
+            'desc' => esc_html__( 'If this field is empty this voting will disappear after expiration!', 'cmb2' ),
+            'id'   => $prefix . 'after_live_description',
+            'type' => 'wysiwyg',
+        ) );           
+        
+    }
+    
     function fields_core_parties() {
         
         $fields = wpov_fields( array(
             'id'            => 'voting_parties',
-            'title'         => __( 'Parties', 'wpov' ),
+            'title'         => __( 'Parties', WPOV__PLUGIN_NAME_SLUG ),
             'object_types'  => array( 'wpov-voting', ), // Post type
             'context'       => 'normal',
             'priority'      => 'high',
@@ -137,12 +169,11 @@ class wpov_admin_post_type_voting extends wpov_admin_post_type {
         $group_field_id = $fields->add_field( array(
             'id'         => $this->prefix . 'parties',
             'type'        => 'group',
-            'description' => __( 'Generates reusable form entries', 'wpov' ),
             // 'repeatable'  => false, // use false if you want non-repeatable group
             'options'     => array(
-                'group_title'       => __( 'Party {#}', 'wpov' ), // since version 1.1.4, {#} gets replaced by row number
-                'add_button'        => __( 'Add Another Party', 'wpov' ),
-                'remove_button'     => __( 'Remove Party', 'wpov' ),
+                'group_title'       => __( 'Party {#}', WPOV__PLUGIN_NAME_SLUG ), // since version 1.1.4, {#} gets replaced by row number
+                'add_button'        => __( 'Add Another Party', WPOV__PLUGIN_NAME_SLUG ),
+                'remove_button'     => __( 'Remove Party', WPOV__PLUGIN_NAME_SLUG ),
                 'sortable'          => true, // beta
                 // 'closed'         => true, // true to have the groups closed by default
                 // 'remove_confirm' => esc_html__( 'Are you sure you want to remove?', 'cmb2' ), // Performs confirmation before removing group.
@@ -155,7 +186,7 @@ class wpov_admin_post_type_voting extends wpov_admin_post_type {
         
 
         $fields->add_group_field( $group_field_id, array(
-            'name' => __('Party', 'wpov'),
+            'name' => __('Party', WPOV__PLUGIN_NAME_SLUG),
             'id'   => 'party',
             'type' => 'select',
             'options' => $this->make_post_array_select_options($parties),
@@ -166,7 +197,7 @@ class wpov_admin_post_type_voting extends wpov_admin_post_type {
     function fields_core_questions() {
         $fields = wpov_fields( array(
             'id'            => 'voting_questions',
-            'title'         => __( 'Questions', 'wpov' ),
+            'title'         => __( 'Questions', WPOV__PLUGIN_NAME_SLUG ),
             'object_types'  => array( 'wpov-voting', ), // Post type
             'context'       => 'normal',
             'priority'      => 'high',
@@ -187,12 +218,12 @@ class wpov_admin_post_type_voting extends wpov_admin_post_type {
         $group_field_id = $fields->add_field( array(
             'id'         => $this->prefix . 'questions',
             'type'        => 'group',
-            'description' => __( 'Generates reusable form questions', 'wpov' ),
+            'description' => __( 'Generates reusable form questions', WPOV__PLUGIN_NAME_SLUG ),
             // 'repeatable'  => false, // use false if you want non-repeatable group
             'options'     => array(
-                'group_title'       => __( 'Question {#}', 'wpov' ), // since version 1.1.4, {#} gets replaced by row number
-                'add_button'        => __( 'Add Another Question', 'wpov' ),
-                'remove_button'     => __( 'Remove Question', 'wpov' ),
+                'group_title'       => __( 'Question {#}', WPOV__PLUGIN_NAME_SLUG ), // since version 1.1.4, {#} gets replaced by row number
+                'add_button'        => __( 'Add Another Question', WPOV__PLUGIN_NAME_SLUG ),
+                'remove_button'     => __( 'Remove Question', WPOV__PLUGIN_NAME_SLUG ),
                 'sortable'          => true, // beta
                 // 'closed'         => true, // true to have the groups closed by default
                 // 'remove_confirm' => esc_html__( 'Are you sure you want to remove?', 'cmb2' ), // Performs confirmation before removing group.
@@ -205,7 +236,7 @@ class wpov_admin_post_type_voting extends wpov_admin_post_type {
         
 
         $fields->add_group_field( $group_field_id, array(
-            'name' => __('Question', 'wpov'),
+            'name' => __('Question', WPOV__PLUGIN_NAME_SLUG),
             'id'   => 'question',
             'type' => 'select',
             'options' => $this->make_post_array_select_options($questions),
@@ -224,7 +255,7 @@ class wpov_admin_post_type_voting extends wpov_admin_post_type {
     function fields_side_settings() {
         $fields = wpov_fields( array(
             'id'            => 'voting_settings_description_metabox',
-            'title'         => __( 'Settings', 'wpov' ),
+            'title'         => __( 'Settings', WPOV__PLUGIN_NAME_SLUG ),
             'object_types'  => array( 'wpov-voting'), // Post type
             'context'       => 'side',
             'priority'      => 'high',
@@ -232,18 +263,23 @@ class wpov_admin_post_type_voting extends wpov_admin_post_type {
         ) );        
         
         $fields->add_field( array(
-            'name' => __('From', 'wpov'),
+            'name' => __('From', WPOV__PLUGIN_NAME_SLUG),
             'id'   => $this->prefix . 'period_from',
             'type' => 'text_datetime_timestamp',
         ) );        
         
         $fields->add_field( array(
-            'name' => __('to', 'wpov'),
+            'name' => __('to', WPOV__PLUGIN_NAME_SLUG),
             'id'   => $this->prefix . 'period_to',
             'type' => 'text_datetime_timestamp',
         ) );            
         
-        
+        $fields->add_field( array(
+            'name' => __('Keep online after expiration', WPOV__PLUGIN_NAME_SLUG),
+            'id'   => $this->prefix . 'keep_online',
+            'type' => 'checkbox',
+        ) );
+                     
     }
     
 

@@ -1,0 +1,74 @@
+{% extends "base.twig" %}
+
+{% block content %}
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <h3 class="card-title">{{ __('The result', WPOV__PLUGIN_NAME_SLUG) }}</h3>
+            <table class="table card-text sortable">
+                <thead>
+                    <tr>
+                        <th class="text-right">{{ __('Party', WPOV__PLUGIN_NAME_SLUG) }}</th>
+                        <th>{{ __('Accordance', WPOV__PLUGIN_NAME_SLUG) }}</th>
+                        <th>{{ __('in %', WPOV__PLUGIN_NAME_SLUG) }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {% for party in post_voting.parties() %}
+                    {% set party_user_consensus = party.party_user_consensus(post_voting.get_id()) %}
+                    {% set count_questions = current_voter().count_votes(post_voting.get_id()) %}
+
+
+                    {% set party_user_consensus_percentage = (party_user_consensus and count_questions ? ((party_user_consensus/count_questions)*100) : 0) %}
+
+                    <tr>
+                        <td width="25%" class="text-right"> 
+                            {% set party_logo %}
+                            {% if party.url() %}
+                            <a href="{{ party.url() }}" target="_blank">
+                            {% endif %}
+                                {% if party.logo() %}
+                                <img src="{{ party.logo() }}" alt="{{ party.title() }}" style="height: 40px; width: auto;"/>
+                                {% else %}
+                                    {{ party.title() }}
+                                {% endif %}
+                            {% if party.url() %}
+                            </a>
+                            {% endif %}
+                            {% endset %}                        
+                            {% if party.description() %}
+                            <span data-toggle="tooltip" data-html="true" title="{{ fn('htmlentities2', party.description()) }}">
+                                {{ party_logo }}
+                            </span> 
+                            {% else %}
+                                {{ party_logo }}
+                            {% endif %}
+                        </td>
+                        <td width="60%" data-value="{{ party_user_consensus_percentage }}"> 
+                            <div class="progress"> 
+                                <div class="progress-bar" role="progressbar" style="width: {{ party_user_consensus_percentage }}%" aria-valuenow="{{ party_user_consensus_percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div> 
+                        </td>
+                        <td width="15%">{{ fn('round', party_user_consensus_percentage) }} </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <a class="btn btn-primary btn-sm" href="{{ post_voting.compare_link() }}">Deine Antworten im direkten Vergleich mit den Parteien</a>
+    <div class="mt-3 text-center">
+        <p>
+            {{ __('By clicking on the logos you come to the websites of the parties.<br />With the following link you can share your result with others:', WPOV__PLUGIN_NAME_SLUG) }}
+        </p>   
+        <div class="input-group mb-3">
+            <input id="wpov_direct_link" readonly value="{{ current_voter().result_public_link() }}" type="text" class="form-control" />
+            <div class="input-group-append">
+                <button data-copytoclipboard="#wpov_direct_link" class="btn btn-outline-secondary" type="button" id="button-addon2">
+                    <img src="{{ fn('wpov_plugin_theme_dir_url') }}/node_modules/octicons/build/svg/clippy.svg" />          
+                </button>
+            </div>
+        </div>        
+    </div>
+{% endblock %}

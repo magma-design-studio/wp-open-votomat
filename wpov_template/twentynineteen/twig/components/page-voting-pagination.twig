@@ -1,0 +1,23 @@
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        <li class="page-item">
+            <a class="page-link" href="{{ prev_question.link() }}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        {% for question in fn('wpov_crop_pagination', post_voting.questions(), post_voting) %}
+        {% if question.is_placeholder %}
+        <li class="page-item disabled"><span class="page-link">…</span></li>
+        {% else %}
+        <li class="page-item{% if post_voting.question_index() == question.question_index() %} active{% endif %}">
+            <a class="page-link" href="{{ question.link() }}">{{ question.question_index_readable() }}</a>
+        </li>
+        {% endif %}
+        {% endfor %}
+        <li class="page-item">
+            <a class="page-link" href="{{ (next_question ? next_question.link() : post_voting.result_link()) }}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</nav>

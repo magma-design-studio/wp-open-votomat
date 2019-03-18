@@ -18,10 +18,15 @@ class wpov_admin_post_type_party extends wpov_admin_post_type {
         add_action('manage_edit-wpov-party_columns', array($this, 'admin_column_header'));
         add_action('manage_wpov-party_posts_custom_column', array($this, 'admin_column_content'));
         
+        add_action('wp_insert_post', array($this, 'clear_party_answers_cache'), 10, 3);
+    }
+    
+    function clear_party_answers_cache($post_id, $post, $update) {
+        delete_transient("wpov_party_{$post_id}_answers");
     }
     
     function admin_column_header($columns) {
-        $columns['votings'] = __('In Voting', 'wpov');
+        $columns['votings'] = __('In Voting', WPOV__PLUGIN_NAME_SLUG);
         return $columns;
     }
     
@@ -37,7 +42,7 @@ class wpov_admin_post_type_party extends wpov_admin_post_type {
                 <?php
                 foreach($party->votings('object') as $voting) :
                     ?>
-                    <li><a href="<?php echo $voting->edit_link(); ?>"><?php echo $voting->title(); ?></a> (<?php echo $party_count_answers; ?> / <?php echo $voting->count_questions(); ?> <?php _e('questions answered', 'wpav'); ?>)</li>
+                    <li><a href="<?php echo $voting->edit_link(); ?>"><?php echo $voting->title(); ?></a> (<?php echo $party_count_answers; ?> / <?php echo $voting->count_questions(); ?> <?php _e('questions answered', WPOV__PLUGIN_NAME_SLUG); ?>)</li>
                     <?php
                 endforeach;
                 ?>
@@ -48,7 +53,7 @@ class wpov_admin_post_type_party extends wpov_admin_post_type {
     }
     
     function enter_title_here($title) {
-        return __( 'Enter party name here', 'wpov' );
+        return __( 'Enter party name here', WPOV__PLUGIN_NAME_SLUG );
     }
     
     function fields() {
@@ -58,7 +63,7 @@ class wpov_admin_post_type_party extends wpov_admin_post_type {
         
         $fields = wpov_fields( array(
             'id'            => 'party_description_metabox',
-            'title'         => __( 'Party Description', 'wpov' ),
+            'title'         => __( 'Party Description', WPOV__PLUGIN_NAME_SLUG ),
             'object_types'  => array( 'wpov-party', ), // Post type
             'context'       => 'normal',
             'priority'      => 'high',
@@ -66,31 +71,21 @@ class wpov_admin_post_type_party extends wpov_admin_post_type {
         ) );       
         
         do_action('wpov_admin_party_before_fields', $fields);
-        
-        $fields->add_field( array(
-            'name'         => __( 'Party Description', 'wpov' ),
-            'id'         => $prefix . 'description',
-            'type'       => 'wysiwyg',
-            // 'sanitization_cb' => 'my_custom_sanitization', // custom sanitization callback parameter
-            // 'escape_cb'       => 'my_custom_escaping',  // custom escaping callback parameter
-            'on_front'        => true, // Optionally designate a field to wp-admin only
-            // 'repeatable'      => true,
-        ) ); 
             
         /*$fields->add_field( array(
-            'name'         => __( 'Party Logo', 'wpov' ),
+            'name'         => __( 'Party Logo', WPOV__PLUGIN_NAME_SLUG ),
             'id'         => $prefix . 'logo',
             'type'       => 'file',
             'on_front'        => true, // Optionally designate a field to wp-admin only
         ) );*/
         
         $fields->add_field( array(
-            'name'         => __( 'Party Website', 'wpov' ),
+            'name'         => __( 'Party Website', WPOV__PLUGIN_NAME_SLUG ),
             'id'         => $prefix . 'url',
             'type'       => 'text_url',
             'on_front'        => true, // Optionally designate a field to wp-admin only
             'attributes'  => array(
-                'placeholder' => __('e.g. https://example.com', 'wpov'),
+                'placeholder' => __('e.g. https://example.com', WPOV__PLUGIN_NAME_SLUG),
             ),            
             
         ) );    
@@ -114,7 +109,7 @@ class wpov_admin_post_type_party extends wpov_admin_post_type {
             
             $fields = wpov_fields( array(
                 'id'            => 'party_voting_'.$voting->get_id().'_metabox',
-                'title'         => sprintf(__( 'Voting “%s”', 'wpov' ), $voting->title()),
+                'title'         => sprintf(__( 'Voting “%s”', WPOV__PLUGIN_NAME_SLUG ), $voting->title()),
                 'object_types'  => array( 'wpov-party', ), // Post type
                 'context'       => 'normal',
                 'priority'      => 'low',
@@ -133,17 +128,17 @@ class wpov_admin_post_type_party extends wpov_admin_post_type {
                     'type'    => 'radio_inline',
                     'before_field' => apply_filters('the_content', $question->content()),
                     'options' => array(
-                        '' => __( 'None', 'wpov' ),
-                        'approve' => __( 'Approve', 'wpov' ),
-                        'neutral'   => __( 'Neutral', 'wpov' ),
-                        'disapprove' => __( 'Disapprove', 'wpov' ),
+                        '' => __( 'None', WPOV__PLUGIN_NAME_SLUG ),
+                        'approve' => __( 'Approve', WPOV__PLUGIN_NAME_SLUG ),
+                        'neutral'   => __( 'Neutral', WPOV__PLUGIN_NAME_SLUG ),
+                        'disapprove' => __( 'Disapprove', WPOV__PLUGIN_NAME_SLUG ),
                     ),
                     'default' => '',        
                 ) );     
                 
                 $fields->add_field( array(
                     'name'    => ' ',
-                    'before_field' => sprintf('<p><strong>%s</strong></p>', __('Explanation', 'wpov')),
+                    'before_field' => sprintf('<p><strong>%s</strong></p>', __('Explanation', WPOV__PLUGIN_NAME_SLUG)),
                     'id'      => $prefix . 'answers_voting_'.$voting->get_id().'_question_' . $question->get_id().'_explanation',
                     'type'    => 'textarea_small',
                 ) );                   

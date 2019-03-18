@@ -1,0 +1,37 @@
+{% block html_head_container %}
+
+{% include 'head.twig' %}
+	{% block head %}
+	{% endblock %}
+	</head>
+{% endblock %}
+
+	<body class="{{body_class}}">
+        
+        <!-- User is {% if not is_current_voter() %}NOT {% endif %}logged in! ID:{% if is_current_voter() %}{{ current_voter().get_user_db_id() }}{% endif %} -->
+        {% include 'header.twig' %}
+        
+        <main class="d-flex w-100 h-100 p-3 mx-auto flex-column container">
+            <div class="mb-3 text-center">
+                {% block header %}
+                <a href="{{ wpov_home_url() }}">
+                    {% if admin_settings.logo %}
+                        {{ fn('wp_get_attachment_image', admin_settings.logo_id, 'large', false, {
+                            alt : admin_settings.app_name,
+                            class : 'img-fluid'
+                        }) }}                    
+                    {% else %}
+                    {{ admin_settings.app_name }}
+                    {% endif %}
+                </a>
+                {% endblock %}
+            </div>
+        {% block content %}
+            Sorry, no content
+        {% endblock %}
+        </main>
+		{% block footer %}
+			{{ function('wp_footer') }}
+		{% endblock %}
+	</body>
+</html>

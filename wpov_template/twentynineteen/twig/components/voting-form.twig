@@ -1,0 +1,39 @@
+{% set current_user_vote = current_voter().get_vote(this.voting().get_id(), this.get_id()) %}
+{% set next_question = this.next_question() %}
+
+<form name="form" method="post" action="{{ this.link() }}">
+    <div class="form-row">
+        <div class="form-group">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="form_count_double" name="count_twice" value="1"{% if current_user_vote.count_twice %} checked{% endif %} /> 
+                <label class="form-check-label" for="form_count_double">
+                    {{ __('weight twice?', WPOV__PLUGIN_NAME_SLUG) }}
+                </label>                
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group">
+            <div class="btn-group" role="group">                
+                <button type="submit" name="vote" value="approve" class="btn btn-{% if current_user_vote.vote == 'approve' %}outline-{% endif %}success">{{ __('Approve', WPOV__PLUGIN_NAME_SLUG) }}</button>
+                <button type="submit" name="vote" value="neutral" class="btn btn-{% if current_user_vote.vote == 'neutral' %}outline-{% endif %}warning">{{ __('Neutral', WPOV__PLUGIN_NAME_SLUG) }}</button>
+                <button type="submit" name="vote" value="disapprove" class="btn btn-{% if current_user_vote.vote == 'disapprove' %}outline-{% endif %}danger">{{ __('Disapprove', WPOV__PLUGIN_NAME_SLUG) }}</button>
+            </div>    
+        </div>
+    </div>  
+    <div class="form-row">
+        <div class="form-group">
+            {{ fn(
+                'sprintf', 
+                __('<a href="%s">Skip</a> question, go to <a href="%s">result</a>.', WPOV__PLUGIN_NAME_SLUG),
+                (next_question ? next_question.link() : this.voting().result_link()),
+                this.voting().result_link()
+            ) }}
+
+            <input type="hidden" id="form_question" name="voting" value="{{ this.voting().get_id() }}" />
+            <input type="hidden" id="form_question" name="question" value="{{ this.get_id() }}" />
+            <input type="hidden" name="action" value="store_user_vote" />
+            <input type="hidden" id="form__token" name="nonce" value="{{ this.nonce_store_user_vote() }}" />
+        </div>
+    </div>
+</form>

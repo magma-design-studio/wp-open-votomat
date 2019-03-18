@@ -5,19 +5,24 @@ if( ! class_exists('wpov_voter') ) :
 
 class wpov_voter {
     protected $_tmp_voting_votes = array();
+    protected $wpov_voter_votes_transient_key = false;
     
     function __construct($args) {
+
         if($args instanceof wpov_voter) {
             return $args;
         }
         
+        global $wpdb;
+
         if(is_numeric($args)) {
+            $_args = $args;
             $args = array();
-            $args['post__in'] = array($args);
+            $args['post__in'] = array($_args);
         }
         
         $post_type = 'wpov-user-vote';
-        $post_status = 'internal';
+        $post_status = 'processing';
         
         $args = wp_parse_args( $args, array(
             'post_type' => $post_type,
@@ -33,11 +38,49 @@ class wpov_voter {
         if(empty($post->post)) {
             return $this;
         }
+        
+        
                 
         $post = $post->post;
-        $this->set('_post', maybe_unserialize($post->post_content));
+        $this->set('_post', $post);
         $this->set('votes', maybe_unserialize($post->post_content));
-        $this->set_user_db_id($post->post_title);
+        $this->set_user_db_id($post->ID);
+        
+        $this->get_db_votes();
+    }
+        
+    function get_db_votes() {
+        if(!$this->get_user_db_id()) {
+            return;
+        }
+        
+        $this->wpov_voter_votes_transient_key = sprintf('wpov_voter_%d_votes', $this->get_user_db_id());
+        
+        global $wpdb;
+        
+        if( false === ( $out = get_transient( $this->wpov_voter_votes_transient_key ))) {
+
+            $votes = $wpdb->get_results("SELECT * FROM $wpdb->postmeta WHERE meta_key REGEXP '^_wpov_voting_[0-9]+_question_[0-9]+$' AND post_id = {$this->get_user_db_id()}");
+
+
+            $out = array();
+            foreach($votes as $vote) {
+                preg_match('/_wpov_voting_(?<voting_id>\d+)_question_(?<question_id>\d+)/', $vote->meta_key, $match);
+                if(!isset($out[$match['voting_id']])) { $out[$match['voting_id']] = array(); }
+
+                list($vote, $count_twice) = explode(':', $vote->meta_value);
+
+                $out[$match['voting_id']][$match['question_id']] = array(
+                    'vote' => $vote,
+                    'count_twice' => !empty($count_twice)
+                );
+
+            }
+
+            set_transient( $this->wpov_voter_votes_transient_key, $out );
+        }
+        
+        $this->set('votes', $out);
     }
     
     function set($key, $value) {
@@ -110,22 +153,18 @@ class wpov_voter {
     }
     
     function set_voting_completed($voting = false) {
-        $votes = $this->get_votes();
-        
-        $votes[$voting]['completed'] = $voting.'_completed';
-        
         wp_update_post(array(
             'ID' => $this->get_user_db_id(),
-            'post_content' => maybe_serialize($votes)
+            'post_status' => 'completed'
         ));
     }
         
     function result_public_link($voting = false) {        
         $post = wpov_get_voter($this->get_user_db_id());
-        
+
         global $wpov_post_voting;
                 
-        return sprintf('%sresult/%s', $wpov_post_voting->link(), $post->post_name);
+        return sprintf('%sresult/%s', $wpov_post_voting->link(), $post->_post->post_name);
     }    
     
 }

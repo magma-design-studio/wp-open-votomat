@@ -72,9 +72,9 @@ class wpov_question extends wpov_api {
     
     public function next_question($raw = false) {
         $questions = $this->siblings($raw);
-                
+
         $nextIndex = $this->question_index() + 1;
-        
+
         if(isset($questions[$nextIndex])) {
             return $questions[$nextIndex];
         } 

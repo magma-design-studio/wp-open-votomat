@@ -31,18 +31,19 @@ class wpov_party_answer {
     }    
     
     function question() {
-        return $this->get('question');
+        return wpov_get_post($this->get('question'));
     }    
     
     function voting() {
-        return $this->get('voting');
+        return wpov_get_post($this->get('voting'));
     }    
     
     function party() {
-        return $this->get('party');
+        return wpov_get_post($this->get('party'));
     }    
     
     function party_user_consensus() {
+        
         $user = wpov_get_current_voter();
         
         $user_vote = $user->get_vote($this->voting()->get_id(), $this->question()->get_id());

@@ -1,0 +1,11 @@
+{% extends "base.twig" %}
+
+{% block content %}
+    <div class="row" style="margin-bottom: 20px; clear: both;">
+        <div class="medium-8 medium-offset-2 columns">
+            <h1>{{ post.title }}</h1>
+            {{ post.content }}
+            <a href="{{ wpov_home_url() }}" class="button alert">{{ __('go to homepage', WPOV__PLUGIN_NAME_SLUG) }}</a>
+        </div>
+    </div>
+{% endblock %}

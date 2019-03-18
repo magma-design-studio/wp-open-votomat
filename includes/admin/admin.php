@@ -32,6 +32,7 @@ class wpov_admin {
         
         add_action('init',        array($this, 'admin_post_type_filters'));
         add_action('init',        array($this, 'admin_settings_filters'));
+        
         //$this->admin_post_type_filters();
                 
 		add_action('admin_enqueue_scripts',	array($this, 'admin_enqueue_scripts'), 0);
@@ -47,8 +48,30 @@ class wpov_admin {
         add_action('posts_join', array($this, 'admin_column_filters_query_join'));
         add_action('posts_where', array($this, 'admin_column_filters_query_where'));
         
-
+        add_filter( 'admin_menu', array( $this, 'submenu_order' ) );
 	}
+    
+    function submenu_order($menu_order) {
+        global $submenu;
+        
+        $order = array(
+            'wpov-dashboard',
+            'edit.php?post_type=wpov-party',
+            'edit.php?post_type=wpov-question',
+            'edit.php?post_type=wpov-voting',
+            'wpov-settings'
+        );
+        
+        $wpov_submenu = $submenu['wpov-dashboard'];
+        $_wpov_submenu = array();
+        foreach($wpov_submenu as $item) {
+            $_wpov_submenu[array_search($item[2], $order)] = $item;
+        }
+        ksort( $_wpov_submenu );
+        $submenu['wpov-dashboard'] = $_wpov_submenu;
+        
+        return $menu_order;        
+    }
     
     function admin_column_filters() {
         if(
@@ -60,7 +83,7 @@ class wpov_admin {
         $votings = wpov_get_votings();
         ?>
         <select name="wpov-voting">
-            <option value=""><?php _e('All Votings', 'wpov'); ?></option>
+            <option value=""><?php _e('All Votings', WPOV__PLUGIN_NAME_SLUG); ?></option>
             <?php foreach($votings as $voting) : ?>
             <option <?php selected( $this->admin_column_filters_query_permission(), $voting->get_id()) ?> value="<?php echo $voting->get_id(); ?>"><?php echo $voting->title(); ?></option>
             <?php endforeach; ?>
@@ -132,7 +155,7 @@ class wpov_admin {
     function metabox_rename_thumbnail($wp_meta_boxes) {
         global $wp_meta_boxes; 
                 
-        $wp_meta_boxes['wpov-party']['side']['low']['postimagediv']['title'] = __('Party Logo', 'app');
+        $wp_meta_boxes['wpov-party']['side']['low']['postimagediv']['title'] = __('Party Logo', WPOV__PLUGIN_NAME_SLUG);
     }
     
     function set_current_menu( $parent_file ) {
@@ -232,8 +255,8 @@ class wpov_admin {
 		
 		// add parent
 		add_menu_page(
-            __("Open Votomat",'wpov'), 
-            __("Open Votomat",'wpov'), 
+            __("Open Votomat",WPOV__PLUGIN_NAME_SLUG), 
+            __("Open Votomat",WPOV__PLUGIN_NAME_SLUG), 
             $cap, 
             $slug, 
             array('wpov_admin_options_dashboard', 'add_page'), 
@@ -250,17 +273,17 @@ class wpov_admin {
         */
 		// add children
         
-		add_submenu_page($slug, __('Dashboard','wpov'), __('Dashboard','wpov'), $cap, $slug );
-		//add_submenu_page($slug, __('Questions','wpov'), __('Questions','wpov'), $cap, 'edit.php?post_type=wpov-question' );
-		//add_submenu_page($slug, __('Parties','wpov'), __('Parties','wpov'), $cap, 'edit.php?post_type=wpov-party' );
+		add_submenu_page($slug, __('Dashboard',WPOV__PLUGIN_NAME_SLUG), __('Dashboard',WPOV__PLUGIN_NAME_SLUG), $cap, $slug );
+		//add_submenu_page($slug, __('Questions',WPOV__PLUGIN_NAME_SLUG), __('Questions',WPOV__PLUGIN_NAME_SLUG), $cap, 'edit.php?post_type=wpov-question' );
+		//add_submenu_page($slug, __('Parties',WPOV__PLUGIN_NAME_SLUG), __('Parties',WPOV__PLUGIN_NAME_SLUG), $cap, 'edit.php?post_type=wpov-party' );
                 
-		//add_submenu_page($slug, __('Issues','wpov'), __('Issues','wpov'), $cap, 'edit.php?post_type=wpov-issue' );
-		//add_submenu_page($slug, __('Settings','wpov'), __('Settings','wpov'), $cap, 'wpov-settings', array($this, 'option_page') ); //array($this, 'option_page')
-        //add_options_page( __('Settings','wpov'), __('Settings','wpov'), $cap, 'wpov-settings', array($this, 'option_page'));
+		//add_submenu_page($slug, __('Issues',WPOV__PLUGIN_NAME_SLUG), __('Issues',WPOV__PLUGIN_NAME_SLUG), $cap, 'edit.php?post_type=wpov-issue' );
+		//add_submenu_page($slug, __('Settings',WPOV__PLUGIN_NAME_SLUG), __('Settings',WPOV__PLUGIN_NAME_SLUG), $cap, 'wpov-settings', array($this, 'option_page') ); //array($this, 'option_page')
+        //add_options_page( __('Settings',WPOV__PLUGIN_NAME_SLUG), __('Settings',WPOV__PLUGIN_NAME_SLUG), $cap, 'wpov-settings', array($this, 'option_page'));
 
-        //add_options_page( __('Settings','wpov'), __('Settings','wpov'), $cap, 'wpov-settings', array('wpov_admin_options_settings', 'add_page'));
+        //add_options_page( __('Settings',WPOV__PLUGIN_NAME_SLUG), __('Settings',WPOV__PLUGIN_NAME_SLUG), $cap, 'wpov-settings', array('wpov_admin_options_settings', 'add_page'));
         
-		//add_submenu_page($slug, __('Add New','wpov'), __('Add New','wpov'), $cap, 'post-new.php?post_type=acf-field-group' );
+		//add_submenu_page($slug, __('Add New',WPOV__PLUGIN_NAME_SLUG), __('Add New',WPOV__PLUGIN_NAME_SLUG), $cap, 'post-new.php?post_type=acf-field-group' );
 		
         
 	}
@@ -331,6 +354,8 @@ class wpov_admin {
         wp_register_script( 'wpov_admin', WPOV__PLUGIN_DIR_URL . '/backend_assets/js/wpov-admin.js', array(), false, true );
         wp_register_script( 'wpov_admin_dashboard', WPOV__PLUGIN_DIR_URL . '/backend_assets/js/wpov-admin-dashboard.js', array( 'wpov_admin_chart-js' ), false, true );
                 
+        wp_enqueue_style( 'wpov-admin', WPOV__PLUGIN_DIR_URL . '/backend_assets/css/wpov-admin.css' );
+        
         wp_enqueue_script( 'wpov_admin' );
         
         if(isset($_GET['page']) and $_GET['page'] == 'wpov-dashboard') {

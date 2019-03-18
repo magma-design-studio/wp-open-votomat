@@ -1,0 +1,11 @@
+{% extends "base.twig" %}
+
+{% block content %}
+    <div class="row">
+        <div class="col">
+            <h1>{{ post.title }}</h1>
+            {{ post.content }}
+            <a href="{{ wpov_home_url() }}" class="btn btn-outline-primary">{{ __('go to homepage', WPOV__PLUGIN_NAME_SLUG) }}</a>
+        </div>
+    </div>
+{% endblock %}

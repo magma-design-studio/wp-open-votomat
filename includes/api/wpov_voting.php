@@ -5,7 +5,37 @@ if( ! class_exists('wpov_voting') ) :
 
 class wpov_voting extends wpov_api {
     protected $question_index = false;
+      
+    function content() {
+        $publication_status_array = $this->publication_status_array();
         
+        //print_r($publication_status_array);
+        
+        if(
+            $publication_status_array['is_started'] and 
+            !$publication_status_array['is_not_ended'] and 
+            $after_live_description = $this->after_live_description()
+        ) {
+            return $after_live_description;
+        } elseif(
+            !$publication_status_array['is_started'] and 
+            $publication_status_array['is_not_ended'] and 
+            $before_live_description = $this->before_live_description()
+        ) {
+            return $before_live_description;
+        }
+        
+        return $this->atts['post_content'];
+    } 
+    
+    function before_live_description() {
+        return $this->_get_meta('before_live_description');
+    }
+    
+    function after_live_description() {
+        return $this->_get_meta('after_live_description');
+    }
+    
     function result_link() {
         return sprintf('%sresult', $this->link());
     }
@@ -74,43 +104,106 @@ class wpov_voting extends wpov_api {
         return $daterange;
     }    
     
+    function get_timezone() {
+        return new DateTimeZone(get_option( 'timezone_string' ));
+    }
+    
     function publication_period_from($date_format = false) {
         $date = $this->_get_meta('_voting_period_from');
+        if(empty($date)) {
+            return false;
+        }
         
-        return ($date_format ? date($date_format, $date) : date_create("@$date"));
+        $tz = $this->get_timezone();
+        $time = new DateTime('now', $tz);
+        $offset = $tz->getOffset( $time );     
+        
+        $_date = new DateTime();
+        $_date->setTimezone($tz);
+        $_date->setTimestamp($date-$offset);
+                
+        
+        return ($date_format ? $_date->format($date_format) : $_date);
     }
     
     function publication_period_to($date_format = false) {
         $date = $this->_get_meta('_voting_period_to');
+        if(empty($date)) {
+            return false;
+        }        
         
-        return ($date_format ? date($date_format, $date) : date_create("@$date"));
+        $tz = $this->get_timezone();
+        $time = new DateTime('now', $tz);
+        $offset = $tz->getOffset( $time );             
+        
+        $_date = new DateTime();
+        $_date->setTimezone($tz);
+        $_date->setTimestamp($date-$offset);
+        
+        return ($date_format ? $_date->format($date_format) : $_date);
     }    
     
+    protected $publication_status_array = array();
     function publication_status_array($current_time = 'now') {
+        if(!empty($this->publication_status_array)) {
+            return $this->publication_status_array;
+        }
         
-        $current_time = date_create($current_time);
+        $current_time = date_create($current_time, $this->get_timezone());
+        
+        $from = $this->publication_period_from();
+        $to = $this->publication_period_to();
+        
+        //exit;
+        //var_dump();
+                
+        $is_started = ($this->publication_period_from('U') <= $current_time->format('U'));
+        $is_not_ended = ($this->publication_period_to('U') > $current_time->format('U'));
+        $keep_online = !empty($this->_get_meta('_voting_keep_online'));
         
         $is_live = (
-            $this->publication_period_from('U') <= $current_time->format('U') and
-            $this->publication_period_to('U') > $current_time->format('U')
+            $is_started and $is_not_ended
         );
+        
+        $is_active = (
+            $is_live or (
+                $is_started and 
+                $keep_online
+            ) or (
+                !$is_started and 
+                $this->before_live_description()
+            ) or (
+                !$is_not_ended and 
+                $this->after_live_description()                
+            )
+        );        
                 
         $u = "@{$current_time->format('U')}";
                 
-        return array(
+        return $this->publication_status_array = array(
             'is_live' => $is_live,
+            'is_active' => $is_active, // active but not live
+            'is_started' => $is_started,
+            'is_not_ended' => $is_not_ended,
+            'keep_online' => $keep_online,
             
-            'start_formated' => ($this->publication_period_from()->format('Y-m-d H:i:s')),
-            'end_formated' => ($this->publication_period_to()->format('Y-m-d H:i:s')),
+            'current_date_formated' => $current_time->format('Y-m-d H:i:s'),
+            'start_formated' => ($from ? $from->format('Y-m-d H:i:s') : false),
+            'end_formated' => ($to ? $to->format('Y-m-d H:i:s') : false),
             
-            'time_to_start' => ($this->publication_period_from()->format('U') - $current_time->format('U')),
-            'time_to_end' => ($this->publication_period_to()->format('U') - $current_time->format('U')),
-            'time_to_start_formated' => wpov_ago($u, $this->publication_period_from()),
-            'time_to_end_formated' => wpov_ago($u, $this->publication_period_to())
+            'time_to_start' => ($from ? ($from->format('U') - $current_time->format('U')) : false),
+            'time_to_end' => ($to ? ($to->format('U') - $current_time->format('U')) : false),
+            'time_to_start_formated' => ($from ? wpov_ago($u, $from) : false),
+            'time_to_end_formated' => ($to ? wpov_ago($u, $to) : false),
+            
+            'before_live_description' => $before_live_description,
+            'after_live_description' => $after_live_description
         );
     }
     
     function question($_index = false) {
+        $index = null;
+        
         if($_index !== false and is_numeric($_index)) {
             $index = $_index;
         } elseif($_index = get_query_var( 'wpov-question' ) and is_numeric($_index)) {

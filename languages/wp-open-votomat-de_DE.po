@@ -1,0 +1,527 @@
+# Copyright (C) 2017 Fusion Engineering and community
+# This file is distributed under the GPL v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Shortcake (Shortcode UI) 0.7.3\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/shortcode-ui\n"
+"POT-Creation-Date: 2019-02-18 11:26+0100\n"
+"PO-Revision-Date: 2019-02-18 11:27+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: de_DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.1\n"
+"X-Poedit-KeywordsList: __;_e;_x:1,2c;_ex:1,2c;_n:1,2;_nx:1,2,4c;_n_noop:1,2;"
+"_nx_noop:1,2,3c;esc_attr__;esc_html__;esc_attr_e;esc_html_e;esc_attr_x:1,2c;"
+"esc_html_x:1,2c\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-Basepath: ..\n"
+"X-Textdomain-Support: yes\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: bower_components\n"
+"X-Poedit-SearchPathExcluded-1: vendor\n"
+
+#: wpov_template/twentyfourteen/twig/page.twig:8
+#: wpov_template/twentynineteen/twig/page.twig:8
+msgid "go to homepage"
+msgstr "zur Startseite"
+
+#: wpov_template/twentynineteen/twig/components/voting-form.twig:12
+msgid "weight twice?"
+msgstr "doppelt gewichten?"
+
+#: wpov_template/twentynineteen/twig/components/voting-form.twig:20
+#: includes/admin/post_type-party.php:132
+msgid "Approve"
+msgstr "Stimme zu"
+
+#: wpov_template/twentynineteen/twig/components/voting-form.twig:21
+#: includes/admin/post_type-party.php:133
+msgid "Neutral"
+msgstr "Neutral"
+
+#: wpov_template/twentynineteen/twig/components/voting-form.twig:22
+#: includes/admin/post_type-party.php:134
+msgid "Disapprove"
+msgstr "Stimme nicht zu"
+
+#: wpov_template/twentynineteen/twig/components/voting-form.twig:30
+#, python-format
+msgid "<a href=\"%s\">Skip</a> question, go to <a href=\"%s\">result</a>."
+msgstr ""
+"Frage <a href=\"%s\">überspringen</a>, direkt zum <a href=\"%s\">Ergebnis</"
+"a>."
+
+#: wpov_template/twentynineteen/twig/page-voting-compare.twig:9
+msgid "In direct comparison"
+msgstr "Im direkten Vergleich"
+
+#: wpov_template/twentynineteen/twig/page-voting-compare.twig:14
+#: includes/admin/post_type-question.php:75
+#: includes/admin/post_type-question.php:85
+#: includes/admin/post_type-voting.php:41
+#: includes/admin/post_type-voting.php:212 wp-open-votomat.php:296
+msgid "Question"
+msgstr "Frage"
+
+#: wpov_template/twentynineteen/twig/page-voting-compare.twig:15
+msgid "You"
+msgstr "Du"
+
+#: wpov_template/twentynineteen/twig/page-voting-compare.twig:75
+msgid "Back to overview"
+msgstr "Zurück zur Übersicht"
+
+#: wpov_template/twentynineteen/twig/page-voting-result.twig:7
+msgid "The result"
+msgstr "Das Ergebnis"
+
+#: wpov_template/twentynineteen/twig/page-voting-result.twig:11
+#: includes/admin/post_type-voting.php:45
+#: includes/admin/post_type-voting.php:162 wp-open-votomat.php:263
+msgid "Party"
+msgstr "Partei"
+
+#: wpov_template/twentynineteen/twig/page-voting-result.twig:12
+msgid "Accordance"
+msgstr "Übereinstimmung"
+
+#: wpov_template/twentynineteen/twig/page-voting-result.twig:13
+msgid "in %"
+msgstr "in %"
+
+#: wpov_template/twentynineteen/twig/page-voting-result.twig:63
+msgid ""
+"By clicking on the logos you come to the websites of the parties.<br />With "
+"the following link you can share your result with others:"
+msgstr ""
+"Durch Klick auf die Logos kommst du auf die Webseiten der Parteien.<br />Mit "
+"dem folgenden Link kannst du dein Ergebnis mit anderen teilen:"
+
+#: includes/admin/admin.php:86
+msgid "All Votings"
+msgstr "Alle Wahlen"
+
+#: includes/admin/admin.php:158
+msgid "Party Logo"
+msgstr "Partei-Logo"
+
+#: includes/admin/admin.php:258 includes/admin/admin.php:259
+msgid "Open Votomat"
+msgstr "Open Votomat"
+
+#: includes/admin/admin.php:276 includes/admin/options-dashboard.php:118
+msgid "Dashboard"
+msgstr "Dashboard"
+
+#: includes/admin/options-dashboard.php:128
+msgid "Select"
+msgstr "Auswählen"
+
+#: includes/admin/options-dashboard.php:179
+msgid "Too few data recorded!"
+msgstr "Es wurden zu wenig Daten erfasst!"
+
+#: includes/admin/options-dashboard.php:180
+msgid ""
+"Wait a few more days until enough data is collected for a meaningful survey."
+msgstr ""
+"Warte noch ein paar Tage, bis ausreichend Daten für eine aussagekräftige "
+"Erhebung erfasst wurden."
+
+#: includes/admin/options-dashboard.php:185
+msgid "You must first create elections, questions and parties."
+msgstr "Du musst zunächst Wahlen, Fragen und Parteien anlegen."
+
+#: includes/admin/options-settings.php:25
+#: includes/admin/post_type-voting.php:231
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: includes/admin/options-settings.php:400
+msgid "Please choose"
+msgstr "Bitte wählen"
+
+#: includes/admin/options-settings.php:407
+msgid "Theme"
+msgstr "Theme"
+
+#: includes/admin/options-settings.php:414
+msgid "Role"
+msgstr "Rolle"
+
+#: includes/admin/options-settings.php:418
+msgid "Standanlone"
+msgstr "Selbstständig"
+
+#: includes/admin/options-settings.php:441
+msgid "App name"
+msgstr "App-Name"
+
+#: includes/admin/options-settings.php:506
+msgid "Sponsor {#}"
+msgstr "Sponsor {#}"
+
+#: includes/admin/options-settings.php:507
+msgid "Add Another Sponsor"
+msgstr "Weiteren Sponsor hinzufügen"
+
+#: includes/admin/options-settings.php:508
+msgid "Remove Sponsor"
+msgstr "Sponsor entfernen"
+
+#: includes/admin/options-settings.php:514
+msgid "Headline before this sponsor"
+msgstr "Überschrift vor diesem Sponsor"
+
+#: includes/admin/options-settings.php:557
+msgid "1 column"
+msgstr "1 Spalte"
+
+#: includes/admin/options-settings.php:558
+msgid "2 columns"
+msgstr "2 Spalten"
+
+#: includes/admin/options-settings.php:559
+msgid "3 columns"
+msgstr "3 Spalten"
+
+#: includes/admin/options-settings.php:570
+msgid "Migration"
+msgstr "Migration"
+
+#: includes/admin/options.php:155
+msgid "Settings updated."
+msgstr "Einstellungen wurden aktualisiert."
+
+#: includes/admin/post_type-party.php:29
+#: includes/admin/post_type-question.php:40
+msgid "In Voting"
+msgstr "In Wahl"
+
+#: includes/admin/post_type-party.php:45
+msgid "questions answered"
+msgstr "Fragen beantwortet"
+
+#: includes/admin/post_type-party.php:56
+msgid "Enter party name here"
+msgstr "Gebe den Partei-Namen hier ein"
+
+#: includes/admin/post_type-party.php:66
+msgid "Party Description"
+msgstr "Partei-Beschreibung"
+
+#: includes/admin/post_type-party.php:83
+msgid "Party Website"
+msgstr "Partei-Website"
+
+#: includes/admin/post_type-party.php:88
+msgid "e.g. https://example.com"
+msgstr "z.B. https://example.com"
+
+#: includes/admin/post_type-party.php:112
+#, php-format
+msgid "Voting “%s”"
+msgstr "Wahl „%s“"
+
+#: includes/admin/post_type-party.php:126
+#, php-format
+msgid "Question #%d"
+msgstr "Frage #%d"
+
+#: includes/admin/post_type-party.php:131
+msgid "None"
+msgstr "Keine"
+
+#: includes/admin/post_type-party.php:141
+msgid "Explanation"
+msgstr "Erklärung"
+
+#: includes/admin/post_type-voting.php:25
+#: includes/admin/post_type-voting.php:46
+#: includes/admin/post_type-voting.php:122 wp-open-votomat.php:262
+msgid "Parties"
+msgstr "Parteien"
+
+#: includes/admin/post_type-voting.php:26
+#: includes/admin/post_type-voting.php:42
+#: includes/admin/post_type-voting.php:173 wp-open-votomat.php:295
+msgid "Questions"
+msgstr "Fragen"
+
+#: includes/admin/post_type-voting.php:27
+msgid "Period"
+msgstr "Zeitraum"
+
+#: includes/admin/post_type-voting.php:68
+msgid "Voting is live!"
+msgstr "Wahl ist live!"
+
+#: includes/admin/post_type-voting.php:69
+msgid "Voting has ended but is kept online!"
+msgstr "Wahl wurde beendet aber ist weiterhin online!"
+
+#: includes/admin/post_type-voting.php:76
+msgid "Voting is on hold!"
+msgstr "Wahl ist in Wartestellung!"
+
+#: includes/admin/post_type-voting.php:82
+msgid "Voting has ended!"
+msgstr "Wahl wurde beendet!"
+
+#: includes/admin/post_type-voting.php:88
+#: includes/admin/post_type-voting.php:239
+msgid "From"
+msgstr "Von"
+
+#: includes/admin/post_type-voting.php:89
+#: includes/admin/post_type-voting.php:94
+msgid "d.m.Y H:i:s"
+msgstr "d.m.Y H:i:s"
+
+#: includes/admin/post_type-voting.php:93
+msgid "To"
+msgstr "Bis"
+
+#: includes/admin/post_type-voting.php:102
+msgid "Enter voting title here"
+msgstr "Gebe den Wahl-Titel hier ein"
+
+#: includes/admin/post_type-voting.php:135
+msgid ""
+"No parties have been created so far. If you have created some, you can link "
+"them here!"
+msgstr ""
+"Bisher wurden keine Parteien angelegt. Wenn Du eine erstellt hast, kannst Du "
+"sie an dieser Stelle verlinken!"
+
+#: includes/admin/post_type-voting.php:147
+msgid "Party {#}"
+msgstr "Partei {#}"
+
+#: includes/admin/post_type-voting.php:148
+msgid "Add Another Party"
+msgstr "Weitere Partei hinzufügen"
+
+#: includes/admin/post_type-voting.php:149
+msgid "Remove Party"
+msgstr "Partei entfernen"
+
+#: includes/admin/post_type-voting.php:184
+msgid ""
+"No questions have been created so far. If you have created some, you can "
+"link them here!"
+msgstr ""
+"Es wurden bisher keine Fragen formuliert. Wenn Du welche anlegst, kannst Du "
+"sie hier verknüpfen!"
+
+#: includes/admin/post_type-voting.php:194
+msgid "Generates reusable form questions"
+msgstr ""
+
+#: includes/admin/post_type-voting.php:197
+msgid "Question {#}"
+msgstr "Frage {#}"
+
+#: includes/admin/post_type-voting.php:198
+msgid "Add Another Question"
+msgstr "Weitere Frage hinzufügen"
+
+#: includes/admin/post_type-voting.php:199
+msgid "Remove Question"
+msgstr "Frage entfernen"
+
+#: includes/admin/post_type-voting.php:245
+msgid "to"
+msgstr "bis"
+
+#: includes/admin/post_type-voting.php:251
+msgid "Keep online"
+msgstr "Online halten"
+
+#: includes/helpers/helpers.php:175
+#, php-format
+msgid "%s ago"
+msgstr "seit %s"
+
+#: includes/helpers/helpers.php:176
+msgid "year"
+msgid_plural "years"
+msgstr[0] "Jahr"
+msgstr[1] "Jahre"
+
+#: includes/helpers/helpers.php:177
+msgid "month"
+msgid_plural "months"
+msgstr[0] "Monat"
+msgstr[1] "Monate"
+
+#: includes/helpers/helpers.php:178
+msgid "day"
+msgid_plural "days"
+msgstr[0] "Tag"
+msgstr[1] "Tage"
+
+#: includes/helpers/helpers.php:179
+msgid "hour"
+msgid_plural "hours"
+msgstr[0] "Stunde"
+msgstr[1] "Stunden"
+
+#: includes/helpers/helpers.php:180
+msgid "minute"
+msgid_plural "minutes"
+msgstr[0] "Minute"
+msgstr[1] "Minuten"
+
+#: includes/helpers/helpers.php:181
+msgid "second"
+msgid_plural "seconds"
+msgstr[0] "Sekunde"
+msgstr[1] "Sekunden"
+
+#: wp-open-votomat.php:213
+msgid "WPOV Footer Menu"
+msgstr "WPOV Fußmenü"
+
+#: wp-open-votomat.php:264 wp-open-votomat.php:297 wp-open-votomat.php:328
+msgid "Add New"
+msgstr "Neue hinzufügen"
+
+#: wp-open-votomat.php:265
+msgid "Add New Party"
+msgstr "Neue Partei hinzufügen"
+
+#: wp-open-votomat.php:266
+msgid "Edit Party"
+msgstr "Partei bearbeiten"
+
+#: wp-open-votomat.php:267
+msgid "New Party"
+msgstr "Neue Partei"
+
+#: wp-open-votomat.php:268
+msgid "View Party"
+msgstr "Partei ansehen"
+
+#: wp-open-votomat.php:269
+msgid "Search Parties"
+msgstr "Nach Partei suchen"
+
+#: wp-open-votomat.php:270
+msgid "No Parties found"
+msgstr "Keine Partei gefunden"
+
+#: wp-open-votomat.php:271
+msgid "No Parties found in Trash"
+msgstr "Keine Partei im Papierkorb gefunden"
+
+#: wp-open-votomat.php:298
+msgid "Add New Question"
+msgstr "Neue Frage hinzufügen"
+
+#: wp-open-votomat.php:299
+msgid "Edit Question"
+msgstr "Frage bearbeiten"
+
+#: wp-open-votomat.php:300
+msgid "New Question"
+msgstr "Neue Frage"
+
+#: wp-open-votomat.php:301
+msgid "View Question"
+msgstr "Frage ansehen"
+
+#: wp-open-votomat.php:302
+msgid "Search Questions"
+msgstr "Nach Fragen suchen"
+
+#: wp-open-votomat.php:303
+msgid "No Questions found"
+msgstr "Keine Fragen gefunden"
+
+#: wp-open-votomat.php:304
+msgid "No Questions found in Trash"
+msgstr "Keine Fragen im Papierkorb gefunden"
+
+#: wp-open-votomat.php:326
+msgid "Votings"
+msgstr "Wahlen"
+
+#: wp-open-votomat.php:327
+msgid "Voting"
+msgstr "Wahl"
+
+#: wp-open-votomat.php:329
+msgid "Add New Voting"
+msgstr "Neue Wahl hinzufügen"
+
+#: wp-open-votomat.php:330
+msgid "Edit Voting"
+msgstr "Wahl bearbeiten"
+
+#: wp-open-votomat.php:331
+msgid "New Voting"
+msgstr "Neue Wahl"
+
+#: wp-open-votomat.php:332
+msgid "View Voting"
+msgstr "Wahl ansehen"
+
+#: wp-open-votomat.php:333
+msgid "Search Votings"
+msgstr "Wahlen suchen"
+
+#: wp-open-votomat.php:334
+msgid "No Votings found"
+msgstr "Keine Wahlen gefunden"
+
+#: wp-open-votomat.php:335
+msgid "No Votings found in Trash"
+msgstr "Keine Wahlen im Papierkorb gefunden"
+
+#: wp-open-votomat.php:381
+msgid "WP Open Votomat Sidebar"
+msgstr "WP Open Votomat Seitenspalte"
+
+#: wp-open-votomat.php:429
+#, php-format
+msgid "Class »%s« exists!"
+msgstr "Klasse »%s« existiert!"
+
+#: wpov_template/twentynineteen/bower_components/moment/min/locales.min.js:1
+msgid "s"
+msgstr ""
+
+#: wpov_template/twentynineteen/bower_components/moment/min/locales.min.js:1
+msgid "m"
+msgstr ""
+
+#: wpov_template/twentynineteen/bower_components/moment/min/locales.min.js:1
+msgid "h"
+msgstr ""
+
+#: wpov_template/twentynineteen/bower_components/moment/min/locales.min.js:1
+msgid "d"
+msgstr ""
+
+#: wpov_template/twentynineteen/bower_components/moment/min/locales.min.js:1
+msgid "M"
+msgstr ""
+
+#: wpov_template/twentynineteen/bower_components/moment/min/locales.min.js:1
+msgid "y"
+msgstr ""
+
+#: wpov_template/twentynineteen/bower_components/moment/min/moment.min.js:1
+msgid ": "
+msgstr ""
+
+#~ msgid "Shortcode"
+#~ msgstr "Shortcode"
+
+#~ msgid "Widget"
+#~ msgstr "Widget"

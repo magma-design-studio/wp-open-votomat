@@ -1,0 +1,85 @@
+{% extends "base.twig" %}
+
+{% block header %}
+    <div class="row">
+
+        <div class="github-fork-ribbon-wrapper right">
+            <div class="github-fork-ribbon">
+                <a href="https://github.com/Madways/KommunalomatBundle">Fork me on GitHub</a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="medium-9 large-7 large-offset-2 columns" style="padding: 0px 20px; text-align:center;">
+                {% if admin_settings.logo %}
+                <img src="{{admin_settings.logo}}" alt="{{ admin_settings.app_name }}"/>
+                {% else %}
+                {{ admin_settings.app_name }}
+                {% endif %}                    
+                
+            </div>
+            <div class="show-for-medium-up medium-3 columns" style="opacity: ;">
+                
+                
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+
+    <div class="row" style="margin-bottom: 20px; clear: both;">
+        <div class="medium-9 large-7 large-offset-2 columns">
+            {% for post in posts %}
+            <h3>{{ post.title() }}</h3>
+            {{ post.the_content() }}
+            <div class="text-center"><a href="{{ post.link() }}" class="button alert">Befragung starten</a></div>
+            {% endfor %}
+        </div>
+        {% if fn('is_active_sidebar', 'wpov_home_sidebar') %}
+        <div class="small-6 medium-3 columns">
+            {% set dynamic_sidebar = fn('dynamic_sidebar', 'wpov_home_sidebar' ) %}
+        </div>
+        {% endif %}
+    </div>
+    <div class="row ">
+    {% if admin_settings.sponsor %}
+        <hr/>
+        <div class="small-12 columns">
+            {% if admin_settings.sponsors_section_title %}
+                <h3>{{ admin_settings.sponsors_section_title }}</h3>
+            {% endif %}
+            {% set row_start %}
+            <div class="row">
+                <div class="columns small-12 medium-12">
+                    <div class="row">
+            {% endset %}
+
+            {% set row_end %}
+                    </div>  
+                </div>  
+            </div>                        
+            {% endset %}
+            {% for sponsor in admin_settings.sponsor %}
+            {% if sponsor.seperator %}
+                {% if not loop.first %}{{ row_end }}{% endif %}
+            <h4>{{ sponsor.seperator }}</h4>
+                {{ row_start }}
+            {% endif %}
+            
+            {% set columns = sponsor.column_width ? sponsor.column_width : 1 %}
+            {% set columns_medium = (columns*2) %}
+            {% set columns_small = (columns*4) %}
+            
+            <div class="columns small-{{ columns_small }} medium-{{ columns_medium }}">
+                <a href="{{ sponsor.url }}" target="_blank">
+                    <img src="{{ sponsor.logo }}" alt="{{ sponsor.title }}"/>
+                </a>
+            </div>
+            {% endfor %}
+            {{ row_end }}
+        </div>
+    {% endif %}
+    </div>  
+
+{% endblock %}

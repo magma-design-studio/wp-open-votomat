@@ -13,8 +13,12 @@ final class wpov_party extends wpov_api {
     }    
     
     public function description() {
-        return $this->_get_meta('_party_description');
-    }      
+        return $this->content();
+    }
+    
+    public function the_description() {
+        return $this->the_content();
+    }    
     
     public function votings($type = 'id') {
         global $wpdb;
@@ -64,6 +68,14 @@ final class wpov_party extends wpov_api {
         }        
         return $out;
     }
+    
+    function voting_answer_explanation($voting=false, $question=false) {
+        if(!$voting or !$question) {
+            return false;
+        }
+        
+        return get_post_meta($this->get_id(), sprintf('_party_answers_voting_'.$voting.'_question_' . $question.'_explanation') , true);
+    }    
     
     function voting_answer($voting=false, $question=false) {
         $voting_answers = $this->voting_answers($voting);

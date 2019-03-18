@@ -1,0 +1,79 @@
+{% extends "base.twig" %}
+
+{% block content %}
+{% set parties = post_voting.parties() %}
+{% set questions = post_voting.questions() %}
+
+<div class="row" style="margin-bottom: 20px; clear: both;">
+    <div class="row">
+        <h3>Im direkten Vergleich</h3>
+        <table class="small-12 columns">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Frage</th>
+                <th>Du</th>
+                {% for party in parties %}
+                <th>
+                    {% set party_logo %}
+                    <a href="{{ party.url() }}" target="_blank">
+                        {{ party.title() }}
+                    </a>
+                    {% endset %}                      
+                    
+                    {% if party.description() %}
+                    <span data-tooltip data-options="disable_for_touch:true" class="has-tip tip-bottom" 
+                        title="<div style='max-width: 50em; overflow: auto;'>{{ party.description() }}</div>">
+                        {{ party_logo }}
+                    </span>
+                    {% else %}
+                        {{ party_logo }}
+                    {% endif %}
+                </th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for question in questions %}
+            <tr>
+                <td>{{ question.question_index_readable() }}</td>
+                <td>{{ question.question() }}</td>
+                <td>
+                    {% set current_user_vote = current_voter().get_vote(post_voting.get_id(), question.get_id()) %}
+                    {% if current_user_vote.vote %}
+                    <a href="{{ question.link() }}" class="button small radius {{ fn('wpov_get_vote_class', current_user_vote.vote ) }}" style="margin:0; padding: 0.5em 1em;">
+                        {{ fn('wpov_get_vote_symbol', current_user_vote.vote ) }}
+                    </a>
+                    {% endif %}
+                </td>
+                {% for party in parties %}
+                {% set party_answer = party.voting_answer(post_voting.get_id(), question.get_id()) %}
+                {% set party_answer_explanation = party.voting_answer_explanation(post_voting.get_id(), question.get_id()) %}
+                
+                <td data-answer="{{party_answer.answer()}}">
+                    <a 
+                       href="{{ question.link() }}" 
+                       class="button small radius {{ fn('wpov_get_vote_class', party_answer.answer() ) }}" 
+                       style="margin:0; padding: 0.5em 1em;"
+                       {% if party_answer_explanation %}
+                            data-tooltip 
+                            data-options="disable_for_touch:true" class="has-tip tip-bottom" 
+                            title="<div style='max-width: 50em; overflow: auto;'>{{ party_answer_explanation }}</div>"
+                       {% endif %}
+                       >
+                        {{ fn('wpov_get_vote_symbol', party_answer.answer() ) }}
+                    </a>
+                </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+        <p class="text-center">
+        <a href="{{ post_voting.result_link() }}" class="">zurück zur Übersicht</a>
+        </p>
+    </div>
+</div>
+
+
+{% endblock %}

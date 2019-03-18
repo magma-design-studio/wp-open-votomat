@@ -2,7 +2,8 @@
     "name": "magma/wp-open-votomat",
     "require": {
         "webdevstudios/cmb2": "*",
-        "timber/timber": "*"
+        "timber/timber": "*",
+        "greenlion/php-sql-parser": "*"
     },
     "authors": [
         {
