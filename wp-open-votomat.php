@@ -122,7 +122,7 @@ if(!class_exists('wpov')) :
             wpov_include('/includes/helpers/twig_extensions.php');
             
             wpov_include('/vendor/autoload.php');
-            wpov_include('/vendor/webdevstudios/cmb2/init.php');
+            wpov_include('/vendor/cmb2/init.php');
             
             wpov_include('/includes/api/api.php');
             wpov_include('/includes/api/wpov_party.php');
