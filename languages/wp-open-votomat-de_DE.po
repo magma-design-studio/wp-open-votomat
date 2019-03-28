@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Shortcake (Shortcode UI) 0.7.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/shortcode-ui\n"
-"POT-Creation-Date: 2019-02-18 11:26+0100\n"
-"PO-Revision-Date: 2019-02-18 11:27+0100\n"
+"POT-Creation-Date: 2019-03-28 11:48+0100\n"
+"PO-Revision-Date: 2019-03-28 11:49+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -23,55 +23,62 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: bower_components\n"
 "X-Poedit-SearchPathExcluded-1: vendor\n"
+"X-Poedit-SearchPathExcluded-2: wpov_template/twentynineteen/"
+"bower_components\n"
 
 #: wpov_template/twentyfourteen/twig/page.twig:8
 #: wpov_template/twentynineteen/twig/page.twig:8
 msgid "go to homepage"
 msgstr "zur Startseite"
 
-#: wpov_template/twentynineteen/twig/components/voting-form.twig:12
+#: wpov_template/twentynineteen/twig/components/voting-form.twig:10
 msgid "weight twice?"
 msgstr "doppelt gewichten?"
 
-#: wpov_template/twentynineteen/twig/components/voting-form.twig:20
+#: wpov_template/twentynineteen/twig/components/voting-form.twig:18
 #: includes/admin/post_type-party.php:132
 msgid "Approve"
 msgstr "Stimme zu"
 
-#: wpov_template/twentynineteen/twig/components/voting-form.twig:21
+#: wpov_template/twentynineteen/twig/components/voting-form.twig:19
 #: includes/admin/post_type-party.php:133
 msgid "Neutral"
 msgstr "Neutral"
 
-#: wpov_template/twentynineteen/twig/components/voting-form.twig:22
+#: wpov_template/twentynineteen/twig/components/voting-form.twig:20
 #: includes/admin/post_type-party.php:134
 msgid "Disapprove"
 msgstr "Stimme nicht zu"
 
-#: wpov_template/twentynineteen/twig/components/voting-form.twig:30
+#: wpov_template/twentynineteen/twig/components/voting-form.twig:28
 #, python-format
 msgid "<a href=\"%s\">Skip</a> question, go to <a href=\"%s\">result</a>."
 msgstr ""
 "Frage <a href=\"%s\">überspringen</a>, direkt zum <a href=\"%s\">Ergebnis</"
 "a>."
 
+#: wpov_template/twentynineteen/twig/home.twig:35
+msgid "Visible for admins only!"
+msgstr "Nur für Admins sichtbar!"
+
 #: wpov_template/twentynineteen/twig/page-voting-compare.twig:9
 msgid "In direct comparison"
 msgstr "Im direkten Vergleich"
 
-#: wpov_template/twentynineteen/twig/page-voting-compare.twig:14
+#: wpov_template/twentynineteen/twig/page-voting-compare.twig:20
+#: wpov_template/twentynineteen/twig/page-voting.twig:11
 #: includes/admin/post_type-question.php:75
 #: includes/admin/post_type-question.php:85
 #: includes/admin/post_type-voting.php:41
-#: includes/admin/post_type-voting.php:212 wp-open-votomat.php:296
+#: includes/admin/post_type-voting.php:238 wp-open-votomat.php:322
 msgid "Question"
 msgstr "Frage"
 
-#: wpov_template/twentynineteen/twig/page-voting-compare.twig:15
+#: wpov_template/twentynineteen/twig/page-voting-compare.twig:21
 msgid "You"
 msgstr "Du"
 
-#: wpov_template/twentynineteen/twig/page-voting-compare.twig:75
+#: wpov_template/twentynineteen/twig/page-voting-compare.twig:82
 msgid "Back to overview"
 msgstr "Zurück zur Übersicht"
 
@@ -81,7 +88,7 @@ msgstr "Das Ergebnis"
 
 #: wpov_template/twentynineteen/twig/page-voting-result.twig:11
 #: includes/admin/post_type-voting.php:45
-#: includes/admin/post_type-voting.php:162 wp-open-votomat.php:263
+#: includes/admin/post_type-voting.php:189 wp-open-votomat.php:289
 msgid "Party"
 msgstr "Partei"
 
@@ -137,7 +144,7 @@ msgid "You must first create elections, questions and parties."
 msgstr "Du musst zunächst Wahlen, Fragen und Parteien anlegen."
 
 #: includes/admin/options-settings.php:25
-#: includes/admin/post_type-voting.php:231
+#: includes/admin/post_type-voting.php:257
 msgid "Settings"
 msgstr "Einstellungen"
 
@@ -189,7 +196,19 @@ msgstr "2 Spalten"
 msgid "3 columns"
 msgstr "3 Spalten"
 
-#: includes/admin/options-settings.php:570
+#: includes/admin/options-settings.php:571
+msgid "Custom style"
+msgstr "Benutzerdefinierte Gestaltung"
+
+#: includes/admin/options-settings.php:582
+msgid "External CSS"
+msgstr "Externer CSS"
+
+#: includes/admin/options-settings.php:588
+msgid "Custom CSS"
+msgstr "Benutzerdefinierter CSS"
+
+#: includes/admin/options-settings.php:608
 msgid "Migration"
 msgstr "Migration"
 
@@ -242,13 +261,13 @@ msgstr "Erklärung"
 
 #: includes/admin/post_type-voting.php:25
 #: includes/admin/post_type-voting.php:46
-#: includes/admin/post_type-voting.php:122 wp-open-votomat.php:262
+#: includes/admin/post_type-voting.php:149 wp-open-votomat.php:288
 msgid "Parties"
 msgstr "Parteien"
 
 #: includes/admin/post_type-voting.php:26
 #: includes/admin/post_type-voting.php:42
-#: includes/admin/post_type-voting.php:173 wp-open-votomat.php:295
+#: includes/admin/post_type-voting.php:200 wp-open-votomat.php:321
 msgid "Questions"
 msgstr "Fragen"
 
@@ -256,24 +275,24 @@ msgstr "Fragen"
 msgid "Period"
 msgstr "Zeitraum"
 
-#: includes/admin/post_type-voting.php:68
+#: includes/admin/post_type-voting.php:66
 msgid "Voting is live!"
 msgstr "Wahl ist live!"
 
-#: includes/admin/post_type-voting.php:69
-msgid "Voting has ended but is kept online!"
-msgstr "Wahl wurde beendet aber ist weiterhin online!"
-
-#: includes/admin/post_type-voting.php:76
+#: includes/admin/post_type-voting.php:72
 msgid "Voting is on hold!"
 msgstr "Wahl ist in Wartestellung!"
 
-#: includes/admin/post_type-voting.php:82
+#: includes/admin/post_type-voting.php:78
 msgid "Voting has ended!"
 msgstr "Wahl wurde beendet!"
 
+#: includes/admin/post_type-voting.php:83
+msgid "Voting has ended but is kept online!"
+msgstr "Wahl wurde beendet aber ist weiterhin online!"
+
 #: includes/admin/post_type-voting.php:88
-#: includes/admin/post_type-voting.php:239
+#: includes/admin/post_type-voting.php:265
 msgid "From"
 msgstr "Von"
 
@@ -290,7 +309,23 @@ msgstr "Bis"
 msgid "Enter voting title here"
 msgstr "Gebe den Wahl-Titel hier ein"
 
-#: includes/admin/post_type-voting.php:135
+#: includes/admin/post_type-voting.php:122
+msgid "Descriptions"
+msgstr "Beschreibung"
+
+#: includes/admin/post_type-voting.php:130
+msgid "Description before publication"
+msgstr "Beschreibung vor der Veröffentlichung"
+
+#: includes/admin/post_type-voting.php:137
+msgid "Description after expiry"
+msgstr "Beschreibung nach Ablauf"
+
+#: includes/admin/post_type-voting.php:138
+msgid "If this field is empty this voting will disappear after expiration!"
+msgstr "Wenn dieses Feld leer ist, verschwindet diese Wahl nach Ablauf!"
+
+#: includes/admin/post_type-voting.php:162
 msgid ""
 "No parties have been created so far. If you have created some, you can link "
 "them here!"
@@ -298,19 +333,19 @@ msgstr ""
 "Bisher wurden keine Parteien angelegt. Wenn Du eine erstellt hast, kannst Du "
 "sie an dieser Stelle verlinken!"
 
-#: includes/admin/post_type-voting.php:147
+#: includes/admin/post_type-voting.php:174
 msgid "Party {#}"
 msgstr "Partei {#}"
 
-#: includes/admin/post_type-voting.php:148
+#: includes/admin/post_type-voting.php:175
 msgid "Add Another Party"
 msgstr "Weitere Partei hinzufügen"
 
-#: includes/admin/post_type-voting.php:149
+#: includes/admin/post_type-voting.php:176
 msgid "Remove Party"
 msgstr "Partei entfernen"
 
-#: includes/admin/post_type-voting.php:184
+#: includes/admin/post_type-voting.php:211
 msgid ""
 "No questions have been created so far. If you have created some, you can "
 "link them here!"
@@ -318,29 +353,25 @@ msgstr ""
 "Es wurden bisher keine Fragen formuliert. Wenn Du welche anlegst, kannst Du "
 "sie hier verknüpfen!"
 
-#: includes/admin/post_type-voting.php:194
-msgid "Generates reusable form questions"
-msgstr ""
-
-#: includes/admin/post_type-voting.php:197
+#: includes/admin/post_type-voting.php:223
 msgid "Question {#}"
 msgstr "Frage {#}"
 
-#: includes/admin/post_type-voting.php:198
+#: includes/admin/post_type-voting.php:224
 msgid "Add Another Question"
 msgstr "Weitere Frage hinzufügen"
 
-#: includes/admin/post_type-voting.php:199
+#: includes/admin/post_type-voting.php:225
 msgid "Remove Question"
 msgstr "Frage entfernen"
 
-#: includes/admin/post_type-voting.php:245
+#: includes/admin/post_type-voting.php:271
 msgid "to"
 msgstr "bis"
 
-#: includes/admin/post_type-voting.php:251
-msgid "Keep online"
-msgstr "Online halten"
+#: includes/admin/post_type-voting.php:277
+msgid "Keep online after expiration"
+msgstr "Nach Ablauf online halten"
 
 #: includes/helpers/helpers.php:175
 #, php-format
@@ -383,111 +414,111 @@ msgid_plural "seconds"
 msgstr[0] "Sekunde"
 msgstr[1] "Sekunden"
 
-#: wp-open-votomat.php:213
+#: wp-open-votomat.php:237
 msgid "WPOV Footer Menu"
 msgstr "WPOV Fußmenü"
 
-#: wp-open-votomat.php:264 wp-open-votomat.php:297 wp-open-votomat.php:328
+#: wp-open-votomat.php:290 wp-open-votomat.php:323 wp-open-votomat.php:354
 msgid "Add New"
 msgstr "Neue hinzufügen"
 
-#: wp-open-votomat.php:265
+#: wp-open-votomat.php:291
 msgid "Add New Party"
 msgstr "Neue Partei hinzufügen"
 
-#: wp-open-votomat.php:266
+#: wp-open-votomat.php:292
 msgid "Edit Party"
 msgstr "Partei bearbeiten"
 
-#: wp-open-votomat.php:267
+#: wp-open-votomat.php:293
 msgid "New Party"
 msgstr "Neue Partei"
 
-#: wp-open-votomat.php:268
+#: wp-open-votomat.php:294
 msgid "View Party"
 msgstr "Partei ansehen"
 
-#: wp-open-votomat.php:269
+#: wp-open-votomat.php:295
 msgid "Search Parties"
 msgstr "Nach Partei suchen"
 
-#: wp-open-votomat.php:270
+#: wp-open-votomat.php:296
 msgid "No Parties found"
 msgstr "Keine Partei gefunden"
 
-#: wp-open-votomat.php:271
+#: wp-open-votomat.php:297
 msgid "No Parties found in Trash"
 msgstr "Keine Partei im Papierkorb gefunden"
 
-#: wp-open-votomat.php:298
+#: wp-open-votomat.php:324
 msgid "Add New Question"
 msgstr "Neue Frage hinzufügen"
 
-#: wp-open-votomat.php:299
+#: wp-open-votomat.php:325
 msgid "Edit Question"
 msgstr "Frage bearbeiten"
 
-#: wp-open-votomat.php:300
+#: wp-open-votomat.php:326
 msgid "New Question"
 msgstr "Neue Frage"
 
-#: wp-open-votomat.php:301
+#: wp-open-votomat.php:327
 msgid "View Question"
 msgstr "Frage ansehen"
 
-#: wp-open-votomat.php:302
+#: wp-open-votomat.php:328
 msgid "Search Questions"
 msgstr "Nach Fragen suchen"
 
-#: wp-open-votomat.php:303
+#: wp-open-votomat.php:329
 msgid "No Questions found"
 msgstr "Keine Fragen gefunden"
 
-#: wp-open-votomat.php:304
+#: wp-open-votomat.php:330
 msgid "No Questions found in Trash"
 msgstr "Keine Fragen im Papierkorb gefunden"
 
-#: wp-open-votomat.php:326
+#: wp-open-votomat.php:352
 msgid "Votings"
 msgstr "Wahlen"
 
-#: wp-open-votomat.php:327
+#: wp-open-votomat.php:353
 msgid "Voting"
 msgstr "Wahl"
 
-#: wp-open-votomat.php:329
+#: wp-open-votomat.php:355
 msgid "Add New Voting"
 msgstr "Neue Wahl hinzufügen"
 
-#: wp-open-votomat.php:330
+#: wp-open-votomat.php:356
 msgid "Edit Voting"
 msgstr "Wahl bearbeiten"
 
-#: wp-open-votomat.php:331
+#: wp-open-votomat.php:357
 msgid "New Voting"
 msgstr "Neue Wahl"
 
-#: wp-open-votomat.php:332
+#: wp-open-votomat.php:358
 msgid "View Voting"
 msgstr "Wahl ansehen"
 
-#: wp-open-votomat.php:333
+#: wp-open-votomat.php:359
 msgid "Search Votings"
 msgstr "Wahlen suchen"
 
-#: wp-open-votomat.php:334
+#: wp-open-votomat.php:360
 msgid "No Votings found"
 msgstr "Keine Wahlen gefunden"
 
-#: wp-open-votomat.php:335
+#: wp-open-votomat.php:361
 msgid "No Votings found in Trash"
 msgstr "Keine Wahlen im Papierkorb gefunden"
 
-#: wp-open-votomat.php:381
+#: wp-open-votomat.php:407
 msgid "WP Open Votomat Sidebar"
 msgstr "WP Open Votomat Seitenspalte"
 
-#: wp-open-votomat.php:429
+#: wp-open-votomat.php:455
 #, php-format
 msgid "Class »%s« exists!"
 msgstr "Klasse »%s« existiert!"
@@ -519,6 +550,13 @@ msgstr ""
 #: wpov_template/twentynineteen/bower_components/moment/min/moment.min.js:1
 msgid ": "
 msgstr ""
+
+#: wpov_template/twentynineteen/page.php:48
+msgid "Voting is not published yet!"
+msgstr "Wahl wurde bisher nicht veröffentlicht!"
+
+#~ msgid "Keep online"
+#~ msgstr "Online halten"
 
 #~ msgid "Shortcode"
 #~ msgstr "Shortcode"

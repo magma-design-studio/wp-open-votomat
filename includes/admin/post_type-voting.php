@@ -218,7 +218,6 @@ class wpov_admin_post_type_voting extends wpov_admin_post_type {
         $group_field_id = $fields->add_field( array(
             'id'         => $this->prefix . 'questions',
             'type'        => 'group',
-            'description' => __( 'Generates reusable form questions', WPOV__PLUGIN_NAME_SLUG ),
             // 'repeatable'  => false, // use false if you want non-repeatable group
             'options'     => array(
                 'group_title'       => __( 'Question {#}', WPOV__PLUGIN_NAME_SLUG ), // since version 1.1.4, {#} gets replaced by row number

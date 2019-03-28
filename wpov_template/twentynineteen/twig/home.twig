@@ -12,6 +12,10 @@
 {% endblock %}
 
 {% block content %}
+    {% if admin_settings.show_github %}
+    <a href="https://github.com/magma-design-studio/wp-open-votomat" style="position: fixed; top: 0; right: 0;"><img width="149" height="149" src="https://github.blog/wp-content/uploads/2008/12/forkme_right_white_ffffff.png?resize=149%2C149" class="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1"></a>   
+    {% endif %}
+
     {% if admin_settings.text_intro %}
     <div class="row mt-3">
         <div class="alert alert-light" role="alert">
@@ -55,6 +59,9 @@
             {% if sponsor.seperator %}
                 {% if not loop.first %}{{ row_end }}{% endif %}
             <h4 class="w-100">{{ sponsor.seperator }}</h4>
+                {{ row_start }}
+            {% elseif loop.first  %}
+                {% if not loop.first %}{{ row_end }}{% endif %}
                 {{ row_start }}
             {% endif %}
             

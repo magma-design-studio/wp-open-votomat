@@ -3,7 +3,7 @@
  * Plugin Name: WP Open Votomat
  * Description: This plugin allows you to use your website as a voting advice application.
  * Author: Sebastian Tiede @ magma
- * Version: 0.0.3
+ * Version: 0.0.4
  * Author URI: https://magmadesignstudio.de
  * Text Domain: wpov
  * License:     GPL2
@@ -27,7 +27,7 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
 define( 'WPOV__PLUGIN_NAME_SLUG', 'wp-open-votomat' );
 
-define( 'WPOV_VERSION', '0.0.3' );
+define( 'WPOV_VERSION', '0.0.4' );
 define( 'WPOV__MINIMUM_WP_VERSION', '4.0' );
 define( 'WPOV__PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WPOV__PLUGIN_DIR_URL', plugin_dir_url( __FILE__ ) );
@@ -36,7 +36,7 @@ define( 'WPOV__PLUGIN_THEMES_DIR', WPOV__PLUGIN_DIR . 'wpov_template' );
 define( 'WPOV__PLUGIN_THEMES_DIR_URL', WPOV__PLUGIN_DIR_URL . 'wpov_template' );
 
 $wpov_settings = get_option('wpov-settings', array());
-$theme_dir = ((isset($wpov_settings['wpov_theme']) and ($theme_dir = $wpov_settings['wpov_theme'])) ? $theme_dir : 'twentyfourteen');
+$theme_dir = ((isset($wpov_settings['wpov_theme']) and ($theme_dir = $wpov_settings['wpov_theme'])) ? $theme_dir : 'twentynineteen');
 
 define( 'WPOV__PLUGIN_THEME_DIR', WPOV__PLUGIN_THEMES_DIR . '/' . $theme_dir );
 define( 'WPOV__PLUGIN_THEME_DIR_URL', WPOV__PLUGIN_THEMES_DIR_URL . '/' . $theme_dir );
