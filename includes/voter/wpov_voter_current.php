@@ -9,7 +9,13 @@ class wpov_voter_current extends wpov_voter  {
             session_start();
         }
                 
+        
         $this->set('user_db_id', isset($_SESSION['user_db_id']) ? $_SESSION['user_db_id'] : false);
+        
+        if(get_post_status( $this->get('user_db_id' ) ) === false) {
+            $this->set('user_db_id', false);
+        }
+
         $this->get_db_votes();
         //if($this->count_votes())
         
@@ -91,31 +97,47 @@ class wpov_voter_current extends wpov_voter  {
             $meta_value .= ':twice';
         }
         
+        $prev_vote = get_post_meta( $post_id, $meta_key, true );
+        
         if ( ! add_post_meta( $post_id, $meta_key, $meta_value, true ) ) { 
            update_post_meta( $post_id, $meta_key, $meta_value );
         }        
         
         delete_transient( $this->wpov_voter_votes_transient_key );        
         
-        $meta_key = "_wpov_counter_question_{$question}_{$vote}";
-        $meta_value = intval(get_post_meta($voting, $meta_key));
-        $meta_value++;
+        $_voting = wpov_get_voting($voting);
+        $status = $_voting->publication_status_array();
         
-        if ( ! add_post_meta( $voting, $meta_key, $meta_value, true ) ) { 
-           update_post_meta( $voting, $meta_key, $meta_value );
-        }             
+        // count up if online
+        if($status['is_live']) {
+
+
+            $meta_key = "_wpov_counter_question_{$question}_{$vote}";
+            $meta_value = intval(get_post_meta($voting, $meta_key));
+            $meta_value++;
+
+            if ( ! add_post_meta( $voting, $meta_key, $meta_value, true ) ) { 
+               update_post_meta( $voting, $meta_key, $meta_value );
+            }    
+
+            // count down previous vote
+            if($prev_vote and $prev_vote != $meta_value) {
+                $prev_meta_key = "_wpov_counter_question_{$question}_{$prev_vote}";
+                $prev_meta_value = intval(get_post_meta($voting, $prev_meta_key));
+                if($prev_meta_value > 0) {
+                    if ( ! add_post_meta( $voting, $prev_meta_key, ($prev_meta_value-1), true ) ) { 
+                       update_post_meta( $voting, $prev_meta_key, ($prev_meta_value-1) );
+                    }                  
+                }
+            }        
+        }
         
         wp_update_post( array(
             'ID' => $post_id,
             'post_modified' => current_time( 'mysql' ),
             'post_modified_gmt' => current_time( 'mysql', 1 )
         ) );
-        /*
-        wp_update_post(array(
-            'ID' => $post_id,
-            'post_content' => maybe_serialize($votes)
-        ));
-        */
+
     }    
     
 }

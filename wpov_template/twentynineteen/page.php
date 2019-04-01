@@ -44,7 +44,7 @@ if(in_array(get_query_var( 'post_type' ), array('wpov-voting', 'wpov-question'))
             exit;
         } else {
             $status = $voting->publication_status_array();
-            if(!$status['is_live'] and !is_user_logged_in()) {
+            if(!$status['is_live'] and !$status['keep_online'] and !is_user_logged_in()) {
                 $label = __('Voting is not published yet!', WPOV__PLUGIN_NAME_SLUG);
                 wp_die($label, $label, array('response' => 403));
             }

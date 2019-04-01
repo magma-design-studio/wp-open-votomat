@@ -3,7 +3,7 @@
  * Plugin Name: WP Open Votomat
  * Description: This plugin allows you to use your website as a voting advice application.
  * Author: Sebastian Tiede @ magma
- * Version: 0.0.5
+ * Version: 0.0.6
  * Author URI: https://magmadesignstudio.de
  * Text Domain: wpov
  * License:     GPL2
@@ -27,7 +27,7 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
 define( 'WPOV__PLUGIN_NAME_SLUG', 'wp-open-votomat' );
 
-define( 'WPOV_VERSION', '0.0.5' );
+define( 'WPOV_VERSION', '0.0.6' );
 define( 'WPOV__MINIMUM_WP_VERSION', '4.0' );
 define( 'WPOV__PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WPOV__PLUGIN_DIR_URL', plugin_dir_url( __FILE__ ) );
@@ -192,7 +192,35 @@ if(!class_exists('wpov')) :
             add_action( 'init', array($this, 'rewrite_rules'));     
             
             add_action( 'wp_enqueue_scripts', array($this, 'custom_assets'), 1000); 
+            add_action( 'wp_ajax_wpov_reset_user_votings', array($this, 'ajax_reset_user_votings'));    
+
         }
+
+        function ajax_reset_user_votings() {
+                        
+            if(empty($_POST['post_id']) or !is_object($voting = wpov_get_voting($_POST['post_id']))) {
+                die(__('Post not found!', 'wpov'));
+            }
+            
+            if(!current_user_can(wpov_get_setting('capability'))) {
+                die(__('Not permitted!', 'wpov'));
+            }
+            
+            $status = $voting->publication_status_array();
+            
+            if($status['time_to_start'] <= 0) {
+                die(__('Not allowed!', 'wpov'));
+            }
+            
+            if($post_ids = $voting->reset_user_votings()) {
+                die(__(sprintf('%d user votings have been deleted!', count($post_ids)), 'wpov'));
+            } else {
+                die(__(sprintf('No user voting was deleted!', count($post_ids)), 'wpov'));
+            }
+                        
+            wp_die();
+        }        
+        
         
         function custom_assets() {
 

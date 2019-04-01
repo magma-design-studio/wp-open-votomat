@@ -240,6 +240,37 @@ class wpov_voting extends wpov_api {
         return ($this->question_index()+1);
     }
     
+    function reset_user_votings() {
+        global $wpdb;
+        
+        $query = "
+            SELECT p.ID  
+            FROM $wpdb->posts as p
+            JOIN $wpdb->postmeta as m ON (p.ID = m.post_id)
+            WHERE 
+                p.post_type = 'wpov-user-vote' AND
+                m.meta_key REGEXP '^_wpov_voting_{$this->get_id()}'
+            GROUP BY p.ID
+        ";
+        
+        $post_ids = (array) $wpdb->get_col($query);
+        
+        $delete_query = array();
+        $delete_query[] = "DELETE FROM $wpdb->postmeta WHERE post_id = {$this->get_id()} AND meta_key REGEXP '^_wpov_counter_question_'";        
+        
+        foreach($post_ids as $post_id) {
+            $delete_query[] = "DELETE FROM $wpdb->postmeta WHERE post_id = {$post_id}";
+            $delete_query[] = "DELETE FROM $wpdb->posts WHERE ID = {$post_id}";
+            delete_transient(sprintf('wpov_voter_%d_votes', $post_id));
+        }
+        
+        foreach($delete_query as $query) {
+            $wpdb->query($query);
+        }
+
+        return $post_ids;
+    }
+    
         
 }
 

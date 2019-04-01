@@ -35,7 +35,7 @@
                     <h6 class="card-subtitle mb-2 text-muted">{{ __('Visible for admins only!', WPOV__PLUGIN_NAME_SLUG) }}</h6>
                 {% endif %}
                 <p class="card-text">{{ post.the_content() }}</p>
-                {% if status.is_live or fn('is_user_logged_in') %}
+                {% if status.is_live or status.keep_online or fn('is_user_logged_in') %}
                 <a href="{{ post.link() }}" class="btn btn-primary">Befragung starten</a>
                 {% endif %}
             </div>
@@ -45,40 +45,42 @@
     {% endfor %}
 
     {% if admin_settings.sponsor %}
-            {% if admin_settings.sponsors_section_title %}
-                <h3>{{ admin_settings.sponsors_section_title }}</h3>
-            {% endif %}
-            {% set row_start %}
-            <div class="row">
-            {% endset %}
+    <div class="mt-5 mb-3">
+        {% if admin_settings.sponsors_section_title %}
+            <h3>{{ admin_settings.sponsors_section_title }}</h3>
+        {% endif %}
+        {% set row_start %}
+        <div class="row">
+        {% endset %}
 
-            {% set row_end %}
-            </div>                        
-            {% endset %}
-            {% for sponsor in admin_settings.sponsor %}
-            {% if sponsor.seperator %}
-                {% if not loop.first %}{{ row_end }}{% endif %}
-            <h4 class="w-100">{{ sponsor.seperator }}</h4>
-                {{ row_start }}
-            {% elseif loop.first  %}
-                {% if not loop.first %}{{ row_end }}{% endif %}
-                {{ row_start }}
-            {% endif %}
-            
-            {% set columns = sponsor.column_width ? sponsor.column_width : 1 %}
-            {% set columns_medium = (columns*2) %}
-            {% set columns_small = (columns*4) %}
-            
-            <div class="col-{{ columns_small }} col-sm-{{ columns_medium }}">
-                <a href="{{ sponsor.url }}" target="_blank">
-                    {{ fn('wp_get_attachment_image', sponsor.logo_id, 'large', false, {
-                        alt : sponsor.title,
-                        class : 'img-fluid'
-                    }) }}                    
-                </a>
-            </div>
-            {% endfor %}
-            {{ row_end }}
+        {% set row_end %}
+        </div>                        
+        {% endset %}
+        {% for sponsor in admin_settings.sponsor %}
+        {% if sponsor.seperator %}
+            {% if not loop.first %}{{ row_end }}{% endif %}
+        <h4 class="w-100">{{ sponsor.seperator }}</h4>
+            {{ row_start }}
+        {% elseif loop.first  %}
+            {% if not loop.first %}{{ row_end }}{% endif %}
+            {{ row_start }}
+        {% endif %}
+
+        {% set columns = sponsor.column_width ? sponsor.column_width : 1 %}
+        {% set columns_medium = (columns*2) %}
+        {% set columns_small = (columns*4) %}
+
+        <div class="col-{{ columns_small }} col-sm-{{ columns_medium }}">
+            <a href="{{ sponsor.url }}" target="_blank">
+                {{ fn('wp_get_attachment_image', sponsor.logo_id, 'large', false, {
+                    alt : sponsor.title,
+                    class : 'img-fluid'
+                }) }}                    
+            </a>
+        </div>
+        {% endfor %}
+        {{ row_end }}
+    </div>
     {% endif %}
 
 {% endblock %}
