@@ -26,7 +26,7 @@ class wpov_admin_post_type_voting extends wpov_admin_post_type {
     
     function set_datetime_placeholder($args, $type_defaults, $field, $types) {
         if(in_array($args['name'], array($this->prefix.'period_from[time]', $this->prefix.'period_to[time]'))) {
-            $args['placeholder'] = sprintf(__('Time (e.g. %s)', 'wpov'), date('H:i'));
+            $args['placeholder'] = sprintf(__('Time (e.g. %s)', WPOV__PLUGIN_NAME_SLUG), date('H:i'));
         }
         return $args;
     }
@@ -84,7 +84,7 @@ class wpov_admin_post_type_voting extends wpov_admin_post_type {
                     );
                     
                     printf(
-                        '<button data-wpov-js-click-action="reset_user_votings" data-post_id="%d" class="button-secondary">%s</button></form>', 
+                        '<p><button data-wpov-js-click-action="reset_user_votings" data-post_id="%d" class="button-secondary">%s</button></p>', 
                         $post->ID,
                         __('Reset user voting', WPOV__PLUGIN_NAME_SLUG)
                     );                    
@@ -97,8 +97,11 @@ class wpov_admin_post_type_voting extends wpov_admin_post_type {
                     );
                 }
                 
-                if(!$status['is_live'] and $status['keep_online']) {
-                    _e('Voting has ended but is kept online!', WPOV__PLUGIN_NAME_SLUG);
+                if($status['time_to_end'] < 0 and $status['keep_online']) {
+                    printf(
+                        '<p>%s</p>',
+                        __('Voting has ended but is kept online!', WPOV__PLUGIN_NAME_SLUG)
+                    );                    
                 }
                 
                 printf(
@@ -285,7 +288,7 @@ class wpov_admin_post_type_voting extends wpov_admin_post_type {
             'date_format' => 'd.m.Y',
             'time_format' => 'H:i',
             'attributes'  => array(
-                'placeholder' => sprintf(__('Date (e.g. %s)', 'wpov'), date('d.m.Y')),
+                'placeholder' => sprintf(__('Date (e.g. %s)', WPOV__PLUGIN_NAME_SLUG), date('d.m.Y')),
                 'autocomplete' => 'off',
                 'required'    => 'required',
             )            
@@ -298,7 +301,7 @@ class wpov_admin_post_type_voting extends wpov_admin_post_type {
             'date_format' => 'd.m.Y',
             'time_format' => 'H:i',
             'attributes'  => array(
-                'placeholder' => sprintf(__('Date (e.g. %s)', 'wpov'), date('d.m.Y')),
+                'placeholder' => sprintf(__('Date (e.g. %s)', WPOV__PLUGIN_NAME_SLUG), date('d.m.Y')),
                 'autocomplete' => 'off',
                 'required'    => 'required',
             )               
@@ -307,7 +310,7 @@ class wpov_admin_post_type_voting extends wpov_admin_post_type {
         $fields->add_field( array(
             'name' => __('Keep online after expiration', WPOV__PLUGIN_NAME_SLUG),
             'id'   => $this->prefix . 'keep_online',
-            'after_row' => sprintf('<p>%s</p>', __('If this checkbox is selected, the voting doesn’t disappear after expiration. You can still vote. Votes are not included in the statistics after expiration.', 'wpov')),
+            'after_row' => sprintf('<p>%s</p>', __('If this checkbox is selected, the voting doesn’t disappear after expiration. You can still vote. Votes are not included in the statistics after expiration.', WPOV__PLUGIN_NAME_SLUG)),
             'type' => 'checkbox',
         ) );
                              
