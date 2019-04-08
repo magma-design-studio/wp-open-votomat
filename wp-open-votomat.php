@@ -2,7 +2,7 @@
 /*
  * Plugin Name: WP Open Votomat
  * Description: This plugin allows you to use your website as a voting advice application.
- * Author: Sebastian Tiede @ magma
+ * Author: magma design studio
  * Version: 0.0.7
  * Author URI: https://magmadesignstudio.de
  * Text Domain: wpov

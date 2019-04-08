@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Shortcake (Shortcode UI) 0.7.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/shortcode-ui\n"
-"POT-Creation-Date: 2019-03-29 17:23+0100\n"
-"PO-Revision-Date: 2019-03-29 17:24+0100\n"
+"POT-Creation-Date: 2019-04-02 09:45+0200\n"
+"PO-Revision-Date: 2019-04-05 09:17+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -70,7 +70,7 @@ msgstr "Im direkten Vergleich"
 #: includes/admin/post_type-question.php:75
 #: includes/admin/post_type-question.php:85
 #: includes/admin/post_type-voting.php:52
-#: includes/admin/post_type-voting.php:255 wp-open-votomat.php:350
+#: includes/admin/post_type-voting.php:258 wp-open-votomat.php:350
 msgid "Question"
 msgstr "Frage"
 
@@ -88,7 +88,7 @@ msgstr "Das Ergebnis"
 
 #: wpov_template/twentynineteen/twig/page-voting-result.twig:11
 #: includes/admin/post_type-voting.php:56
-#: includes/admin/post_type-voting.php:206 wp-open-votomat.php:317
+#: includes/admin/post_type-voting.php:209 wp-open-votomat.php:317
 msgid "Party"
 msgstr "Partei"
 
@@ -144,7 +144,7 @@ msgid "You must first create elections, questions and parties."
 msgstr "Du musst zunächst Wahlen, Fragen und Parteien anlegen."
 
 #: includes/admin/options-settings.php:25
-#: includes/admin/post_type-voting.php:274
+#: includes/admin/post_type-voting.php:277
 msgid "Settings"
 msgstr "Einstellungen"
 
@@ -266,13 +266,13 @@ msgstr "Zeit (z.B. %s)"
 
 #: includes/admin/post_type-voting.php:36
 #: includes/admin/post_type-voting.php:57
-#: includes/admin/post_type-voting.php:166 wp-open-votomat.php:316
+#: includes/admin/post_type-voting.php:169 wp-open-votomat.php:316
 msgid "Parties"
 msgstr "Parteien"
 
 #: includes/admin/post_type-voting.php:37
 #: includes/admin/post_type-voting.php:53
-#: includes/admin/post_type-voting.php:217 wp-open-votomat.php:349
+#: includes/admin/post_type-voting.php:220 wp-open-votomat.php:349
 msgid "Questions"
 msgstr "Fragen"
 
@@ -296,45 +296,45 @@ msgstr "Benutzerstimmen zurücksetzen"
 msgid "Voting has ended!"
 msgstr "Wahl wurde beendet!"
 
-#: includes/admin/post_type-voting.php:101
+#: includes/admin/post_type-voting.php:103
 msgid "Voting has ended but is kept online!"
 msgstr "Wahl wurde beendet aber ist weiterhin online!"
 
-#: includes/admin/post_type-voting.php:106
-#: includes/admin/post_type-voting.php:282
+#: includes/admin/post_type-voting.php:109
+#: includes/admin/post_type-voting.php:285
 msgid "From"
 msgstr "Von"
 
-#: includes/admin/post_type-voting.php:107
-#: includes/admin/post_type-voting.php:112
+#: includes/admin/post_type-voting.php:110
+#: includes/admin/post_type-voting.php:115
 msgid "d.m.Y H:i:s"
 msgstr "d.m.Y H:i:s"
 
-#: includes/admin/post_type-voting.php:111
+#: includes/admin/post_type-voting.php:114
 msgid "To"
 msgstr "Bis"
 
-#: includes/admin/post_type-voting.php:119
+#: includes/admin/post_type-voting.php:122
 msgid "Enter voting title here"
 msgstr "Gebe den Wahl-Titel hier ein"
 
-#: includes/admin/post_type-voting.php:139
+#: includes/admin/post_type-voting.php:142
 msgid "Descriptions"
 msgstr "Beschreibung"
 
-#: includes/admin/post_type-voting.php:147
+#: includes/admin/post_type-voting.php:150
 msgid "Description before publication"
 msgstr "Beschreibung vor der Veröffentlichung"
 
-#: includes/admin/post_type-voting.php:154
+#: includes/admin/post_type-voting.php:157
 msgid "Description after expiry"
 msgstr "Beschreibung nach Ablauf"
 
-#: includes/admin/post_type-voting.php:155
+#: includes/admin/post_type-voting.php:158
 msgid "If this field is empty this voting will disappear after expiration!"
 msgstr "Wenn dieses Feld leer ist, verschwindet diese Wahl nach Ablauf!"
 
-#: includes/admin/post_type-voting.php:179
+#: includes/admin/post_type-voting.php:182
 msgid ""
 "No parties have been created so far. If you have created some, you can link "
 "them here!"
@@ -342,19 +342,19 @@ msgstr ""
 "Bisher wurden keine Parteien angelegt. Wenn Du eine erstellt hast, kannst Du "
 "sie an dieser Stelle verlinken!"
 
-#: includes/admin/post_type-voting.php:191
+#: includes/admin/post_type-voting.php:194
 msgid "Party {#}"
 msgstr "Partei {#}"
 
-#: includes/admin/post_type-voting.php:192
+#: includes/admin/post_type-voting.php:195
 msgid "Add Another Party"
 msgstr "Weitere Partei hinzufügen"
 
-#: includes/admin/post_type-voting.php:193
+#: includes/admin/post_type-voting.php:196
 msgid "Remove Party"
 msgstr "Partei entfernen"
 
-#: includes/admin/post_type-voting.php:228
+#: includes/admin/post_type-voting.php:231
 msgid ""
 "No questions have been created so far. If you have created some, you can "
 "link them here!"
@@ -362,33 +362,33 @@ msgstr ""
 "Es wurden bisher keine Fragen formuliert. Wenn Du welche anlegst, kannst Du "
 "sie hier verknüpfen!"
 
-#: includes/admin/post_type-voting.php:240
+#: includes/admin/post_type-voting.php:243
 msgid "Question {#}"
 msgstr "Frage {#}"
 
-#: includes/admin/post_type-voting.php:241
+#: includes/admin/post_type-voting.php:244
 msgid "Add Another Question"
 msgstr "Weitere Frage hinzufügen"
 
-#: includes/admin/post_type-voting.php:242
+#: includes/admin/post_type-voting.php:245
 msgid "Remove Question"
 msgstr "Frage entfernen"
 
-#: includes/admin/post_type-voting.php:288
-#: includes/admin/post_type-voting.php:301
+#: includes/admin/post_type-voting.php:291
+#: includes/admin/post_type-voting.php:304
 #, php-format
 msgid "Date (e.g. %s)"
 msgstr "Datum (z.B. %s)"
 
-#: includes/admin/post_type-voting.php:295
+#: includes/admin/post_type-voting.php:298
 msgid "to"
 msgstr "bis"
 
-#: includes/admin/post_type-voting.php:308
+#: includes/admin/post_type-voting.php:311
 msgid "Keep online after expiration"
 msgstr "Nach Ablauf online halten"
 
-#: includes/admin/post_type-voting.php:310
+#: includes/admin/post_type-voting.php:313
 msgid ""
 "If this checkbox is selected, the voting doesn’t disappear after expiration. "
 "You can still vote. Votes are not included in the statistics after "

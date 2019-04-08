@@ -11,7 +11,9 @@ This plugin allows you to use your website as a voting advice application.
 
 == Description ==
 
-This plugin allows you to use your website as a [https://en.wikipedia.org/wiki/Voting_advice_application](voting advice application).
+This plugin allows you to use your website as a [voting advice application](https://en.wikipedia.org/wiki/Voting_advice_application).
+
+It was once developed for the “[Kommunal-O-Mat](http://kommunalomat-ka.de)” for the local elections 2014 Karlsruhe for the [Stadtjugendausschuss Karlsruhe (stja)](https://stja.de).
 
 Such as:
 * [Wahl-O-Mat (Germany)](https://www.wahl-o-mat.de/)
