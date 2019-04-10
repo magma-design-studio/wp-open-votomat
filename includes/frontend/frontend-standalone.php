@@ -103,7 +103,6 @@ class wpov_frontend_standalone extends wpov_frontend {
     
     function get_posts($query) {
         $query->set('_wpov_is_frontpage', false);
-        
         if($query->is_main_query() and is_home()) {
             $query->set('post_type', 'wpov-voting');
             //$query->set('no_found_rows', true);

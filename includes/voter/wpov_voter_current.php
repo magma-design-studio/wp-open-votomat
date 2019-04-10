@@ -4,12 +4,7 @@ if( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 if( ! class_exists('wpov_voter_current') ) :
 
 class wpov_voter_current extends wpov_voter  {
-    function __construct() {
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start();
-        }
-                
-        
+    function __construct() {   
         $this->set('user_db_id', isset($_SESSION['user_db_id']) ? $_SESSION['user_db_id'] : false);
         
         if(get_post_status( $this->get('user_db_id' ) ) === false) {

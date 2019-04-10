@@ -397,6 +397,12 @@ class wpov_admin_options_settings extends wpov_admin_options {
             ),
         ) );
         
+        $this->cmb[0]->add_field( array(
+            'id'      => '_wp_http_referer',
+            'type'    => 'hidden',
+            'default' => esc_attr( wp_unslash( $_SERVER['REQUEST_URI'] ) )
+        ) );          
+        
         $themes = array(__('Please choose', WPOV__PLUGIN_NAME_SLUG));        
         foreach(scandir(WPOV__PLUGIN_THEMES_DIR) as $dir) {
             if(!is_dir(WPOV__PLUGIN_THEMES_DIR.'/'.$dir) or in_array($dir, array('.', '..'))) { continue; }
@@ -511,8 +517,14 @@ class wpov_admin_options_settings extends wpov_admin_options {
         ) );
         
         $this->cmb[2]->add_group_field( $group_field_id, array(
-            'name' => __('Headline before this sponsor', WPOV__PLUGIN_NAME_SLUG),
+            'name' => __('Line break before this sponsor', WPOV__PLUGIN_NAME_SLUG),
             'id'   => 'seperator',
+            'type' => 'checkbox',
+        ) );         
+        
+        $this->cmb[2]->add_group_field( $group_field_id, array(
+            'name' => __('Headline before this sponsor', WPOV__PLUGIN_NAME_SLUG),
+            'id'   => 'column_headline',
             'type' => 'text',
         ) );         
         

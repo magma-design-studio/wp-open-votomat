@@ -113,8 +113,8 @@ function wpov_get_party_answers($party, $votings = array(), $questions = array()
     }        
     
     $out = array();
-    foreach($answers as &$answer) {
-        if(preg_match('/_party_answers_voting_(?<voting_id>\d+)_question_(?<question_id>\d+)/', $answer->meta_key, $matches)) {
+    foreach($answers as &$answer) {        
+        if(preg_match('/_party_answers_voting_(?<voting_id>\d+)_question_(?<question_id>\d+)/', $answer->meta_key, $matches) and get_post_status($matches['question_id']) == 'publish') {
             $out[] = new wpov_party_answer(
                 $answer->meta_value, 
                 $answer->post_id,
@@ -123,7 +123,7 @@ function wpov_get_party_answers($party, $votings = array(), $questions = array()
             );
         }
     }
-
+    
     return $out;
 }
 

@@ -104,8 +104,15 @@ class wpov_voting extends wpov_api {
         return $daterange;
     }    
     
-    function get_timezone() {
-        return new DateTimeZone(get_option( 'timezone_string' ));
+    function get_timezone() {    
+        $timezone = get_option( 'timezone_string', date_default_timezone_get() );
+        
+        if(!$timezone) {
+            $date = new DateTime();
+            $timezone = $date->getTimezone()->getName();
+        }
+
+        return new DateTimeZone($timezone);
     }
     
     function publication_period_from($date_format = false) {

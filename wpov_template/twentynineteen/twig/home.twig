@@ -59,7 +59,7 @@
         {% for sponsor in admin_settings.sponsor %}
         {% if sponsor.seperator %}
             {% if not loop.first %}{{ row_end }}{% endif %}
-        <h4 class="w-100">{{ sponsor.seperator }}</h4>
+        <div class="w-100 mt-4 mb-4"></div>
             {{ row_start }}
         {% elseif loop.first  %}
             {% if not loop.first %}{{ row_end }}{% endif %}
@@ -71,6 +71,9 @@
         {% set columns_small = (columns*4) %}
 
         <div class="col-{{ columns_small }} col-sm-{{ columns_medium }}">
+            {% if sponsor.column_headline %}
+            <h4 class="mb-4">{{ sponsor.column_headline }}</h4>
+            {% endif %}   
             <a href="{{ sponsor.url }}" target="_blank">
                 {{ fn('wp_get_attachment_image', sponsor.logo_id, 'large', false, {
                     alt : sponsor.title,

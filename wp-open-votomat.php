@@ -3,7 +3,7 @@
  * Plugin Name: WP Open Votomat
  * Description: This plugin allows you to use your website as a voting advice application.
  * Author: magma design studio
- * Version: 0.0.7
+ * Version: 0.0.8
  * Author URI: https://magmadesignstudio.de
  * Text Domain: wpov
  * License:     GPL2
@@ -27,7 +27,7 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
 define( 'WPOV__PLUGIN_NAME_SLUG', 'wp-open-votomat' );
 
-define( 'WPOV_VERSION', '0.0.7' );
+define( 'WPOV_VERSION', '0.0.8' );
 define( 'WPOV__MINIMUM_WP_VERSION', '4.0' );
 define( 'WPOV__PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WPOV__PLUGIN_DIR_URL', plugin_dir_url( __FILE__ ) );
@@ -105,7 +105,7 @@ if(!class_exists('wpov')) :
         function __construct() {
             //add_action('wp_loaded', array($this, 'migrate'));
             global $wpov_settings;
-            $this->set_setting('admin_settings', $wpov_settings);
+            $this->set_setting('admin_settings', wp_parse_args( $wpov_settings, $this->get_setting('admin_settings')));
         }
         
         function detect_plugin_activation_process() {
@@ -154,6 +154,10 @@ if(!class_exists('wpov')) :
                 }                    
                 
             } else {
+                if (session_status() == PHP_SESSION_NONE) {
+                    session_start();
+                }                
+                
                 wpov_include('/includes/voter/wpov_voter.php');
                 wpov_include('/includes/voter/wpov_voter_current.php');
                 
@@ -272,10 +276,11 @@ if(!class_exists('wpov')) :
                     add_rewrite_rule('^voting/([^/]+)/result/([^/]+)/?', 'index.php?post_type=wpov-voting&pagename=$matches[1]&wpov-result=true&wpov-voter-result=$matches[2]', 'top');
                     add_rewrite_rule('^voting/([^/]+)/result/?', 'index.php?post_type=wpov-voting&pagename=$matches[1]&wpov-result=true', 'top');
                     add_rewrite_rule('^voting/([^/]+)/compare/?', 'index.php?post_type=wpov-voting&pagename=$matches[1]&wpov-compare=true', 'top');
-                    //add_rewrite_rule('^voting/([^/]+)/?', 'index.php?wpov-voting=$matches[1]', 'top');
+                    add_rewrite_rule('voting/(.+?)(?:/([0-9]+))?/?$', 'index.php?post_type=wpov-voting&pagename=$matches[1]&page=$matches[2]', 'top');
                     //add_rewrite_rule('^voting/?', 'index.php?wpov-voting=true', 'top');
 
                     //add_rewrite_tag('%wpov-voting%', '([^&]+)');
+                    add_rewrite_tag('%wpov-voting%', '([^&]+)');  
                     add_rewrite_tag('%wpov-question%', '([^&]+)');  
                     add_rewrite_tag('%wpov-result%', '([^&]+)'); 
                     add_rewrite_tag('%wpov-voter-result%', '([^&]+)');  
@@ -408,7 +413,8 @@ if(!class_exists('wpov')) :
             
             if($this->get_setting('admin_settings')['wpov_type'] == 'standalone') {
                 $wpov_voting['public'] = true;
-                $wpov_voting['rewrite'] = array('slug' => 'voting');
+                $wpov_voting['rewrite'] = array('slug' => 'voting' );
+                $wpov_voting['query_var'] = '/?wpov-voting={single_post_slug}';
             }
             
             $this->post_types[] = register_post_type('wpov-voting', $wpov_voting);            

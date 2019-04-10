@@ -72,7 +72,7 @@ abstract class wpov_admin_options {
         if ( empty( $_POST ) ) {
             return;
         }
-        $url = wp_get_referer();
+        $url = wp_get_raw_referer();
 
         // Check if our screen id is in the referrer url.
         if ( false === strpos( $url, $this->page_slug ) ) {
