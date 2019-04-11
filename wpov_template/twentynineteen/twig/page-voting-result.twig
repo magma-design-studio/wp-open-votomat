@@ -4,7 +4,13 @@
 
     <div class="card mb-3">
         <div class="card-body">
-            <h3 class="card-title">{{ __('The result', WPOV__PLUGIN_NAME_SLUG) }}</h3>
+            <h3 class="card-title">
+                {% if not override_current_voter %}
+                    {{ __('The result', WPOV__PLUGIN_NAME_SLUG) }}
+                {% else %}
+                    {{ __('The result someone send you', WPOV__PLUGIN_NAME_SLUG) }}
+                {% endif %}
+            </h3>
             <table class="table card-text sortable">
                 <thead>
                     <tr>
@@ -14,10 +20,15 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% if override_current_voter %}
+                        {% set current_voter = override_current_voter %}
+                    {% else %}
+                        {% set current_voter = current_voter() %}
+                    {% endif %}
 
                     {% for party in post_voting.parties() %}
-                    {% set party_user_consensus = party.party_user_consensus(post_voting.get_id()) %}
-                    {% set count_questions = current_voter().count_votes(post_voting.get_id()) %}
+                    {% set party_user_consensus = party.party_user_consensus(post_voting.get_id(), override_current_voter) %}
+                    {% set count_questions = current_voter.count_votes(post_voting.get_id()) %}
 
 
                     {% set party_user_consensus_percentage = (party_user_consensus and count_questions ? ((party_user_consensus/count_questions)*100) : 0) %}
@@ -57,11 +68,19 @@
             </table>
         </div>
     </div>
-    <a class="btn btn-primary btn-sm" href="{{ post_voting.compare_link() }}">{{ __('Your answers compared to those of the parties', WPOV__PLUGIN_NAME_SLUG) }}</a>
+    {% if not override_current_voter %}
+    <a class="btn btn-primary btn-sm" href="{{ post_voting.compare_link() }}">
+            {{ __('Your answers compared to those of the parties', WPOV__PLUGIN_NAME_SLUG) }}
+    </a>
+    {% endif %}
     <div class="mt-3 text-center">
         <p>
-            {{ __('By clicking on the logos you come to the websites of the parties.<br />With the following link you can share your result with others:', WPOV__PLUGIN_NAME_SLUG) }}
+            {{ __('By clicking on the logos you come to the websites of the parties.', WPOV__PLUGIN_NAME_SLUG) }}
         </p>   
+        {% if not override_current_voter %}
+        <p>
+            {{ __('With the following link you can share your result with others:', WPOV__PLUGIN_NAME_SLUG) }}
+        </p>           
         <div class="input-group mb-3">
             <input id="wpov_direct_link" readonly value="{{ current_voter().result_public_link() }}" type="text" class="form-control" />
             <div class="input-group-append">
@@ -69,6 +88,7 @@
                     <img src="{{ fn('wpov_plugin_theme_dir_url') }}/node_modules/octicons/build/svg/clippy.svg" />          
                 </button>
             </div>
-        </div>        
+        </div>  
+        {% endif %}
     </div>
 {% endblock %}

@@ -90,12 +90,12 @@ final class wpov_party extends wpov_api {
         return false;
     }
     
-    function party_user_consensus($voting = false) {
+    function party_user_consensus($voting = false, $user = false) {
         $voting_answers = $this->voting_answers($voting);
         //$user = wpov_get_current_voter();
         $rate = 0;
         foreach($voting_answers as $answer) {
-            $rate += $answer->party_user_consensus();
+            $rate += $answer->party_user_consensus($user);
         }
         
         return $rate;

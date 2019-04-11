@@ -42,10 +42,11 @@ class wpov_party_answer {
         return wpov_get_post($this->get('party'));
     }    
     
-    function party_user_consensus() {
-        
-        $user = wpov_get_current_voter();
-        
+    function party_user_consensus($user = false) {
+        if(!$user) {
+            $user = wpov_get_current_voter();
+        }
+                
         $user_vote = $user->get_vote($this->voting()->get_id(), $this->question()->get_id());
         
         $value = 1;

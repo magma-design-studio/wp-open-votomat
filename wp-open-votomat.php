@@ -235,9 +235,35 @@ if(!class_exists('wpov')) :
             }
             if($wpov_css = $this->get_setting('admin_settings')['wpov_css']) {
                 wp_add_inline_style( 'wpov-custom-css', $wpov_css );
-            }            
+            }      
             
+            wp_enqueue_script( 'wpov-base', WPOV__PLUGIN_DIR_URL . 'assets/js/wpov.js', array(  ), WPOV_VERSION, true );    
             
+            $this->register_js_translation('The link was copied!');
+            
+            wp_add_inline_script( 'wpov-base', sprintf('var wpov = %s', json_encode(array(
+                'wp' => array(
+                    'WPLANG' => get_option('WPLANG'),
+                ),
+                'translations' => $this->get_js_translations()
+            ))), 'before');  
+            
+        }
+        
+        function register_js_translation($text) {
+            global $wpov_string_translations;
+            
+            if(empty($wpov_string_translations)) {
+                $wpov_string_translations = array();
+            }
+            
+            $wpov_string_translations[$text] = __($text, WPOV__PLUGIN_NAME_SLUG);
+        }
+        
+        function get_js_translations() {
+            global $wpov_string_translations;
+            
+            return $wpov_string_translations;
         }
         
         function initial_plugin_setup() {

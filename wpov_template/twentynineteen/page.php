@@ -16,22 +16,22 @@
 $context = Timber::get_context();
 $templates = array( 'page.twig' );
 
+$context['override_current_voter'] = false;
+
 if(in_array(get_query_var( 'post_type' ), array('wpov-voting', 'wpov-question'))) {
     global $wpov_post_voting;
     global $wpov_post_question;    
-    
-    
+        
     $wpov_post_voting = $voting = $context['post_voting'] = $context['post'] = wpov_get_post($post);    
     
-    if(get_query_var( 'wpov-result' )) {
+    if(get_query_var( 'wpov-result' )) {        
         if($wpov_voter_result = get_query_var( 'wpov-voter-result' )) {
+
             if($voter = new wpov_voter(array(
                 'post_name__in' => array($wpov_voter_result)
             ))) {
-                $context['current_voter'] = $voter;
+                $context['override_current_voter'] = $voter;
             }
-            
-            //$context['current_voter'] = 
         }
         
         array_unshift( $templates, 'page-voting-result.twig' );

@@ -27,6 +27,7 @@ var wpov_twentynineteen = function() {
             $t.on('click', function() {
                 $input.trigger(triggerSelect);
                 document.execCommand("copy");
+                alert(wpov_translate('The link was copied!'));
             })
         });
     }

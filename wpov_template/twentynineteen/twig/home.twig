@@ -72,7 +72,7 @@
 
         <div class="col-{{ columns_small }} col-sm-{{ columns_medium }}">
             {% if sponsor.column_headline %}
-            <h4 class="mb-4">{{ sponsor.column_headline }}</h4>
+            <p class="mb-4 h6">{{ sponsor.column_headline }}</p>
             {% endif %}   
             <a href="{{ sponsor.url }}" target="_blank">
                 {{ fn('wp_get_attachment_image', sponsor.logo_id, 'large', false, {

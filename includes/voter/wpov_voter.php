@@ -167,6 +167,14 @@ class wpov_voter {
         return sprintf('%sresult/%s', $wpov_post_voting->link(), $post->_post->post_name);
     }    
     
+    function compare_public_link($voting = false) {        
+        $post = wpov_get_voter($this->get_user_db_id());
+
+        global $wpov_post_voting;
+                
+        return sprintf('%scompare/%s', $wpov_post_voting->link(), $post->_post->post_name);
+    }     
+    
 }
 
 
