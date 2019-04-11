@@ -133,8 +133,8 @@ class wpov_admin_options_dashboard {
                 <?php if($total_results['count_voters']) : ?>
                 <div id="welcome-panel" class="welcome-panel">
                     <div class="welcome-panel-content">
-                        <h2>Sonntagsfrage</h2>
-                        <p class="about-description">Wenn am nächsten Sonntag wirklich Wahl wäre, würden <?php echo $total_results['count_voters'] ?> Wähler*innen folgendes wählen …</p>
+                        <h2><?php _e('Opinion poll', WPOV__PLUGIN_NAME_SLUG); ?></h2>
+                        <p class="about-description"><?php printf(__('If next Sunday really was election, %s voters would choose the following…', WPOV__PLUGIN_NAME_SLUG), $total_results['count_voters'] ); ?></p>
                         <canvas id="wpov_opinion_poll_chart" data-chart="opinion_poll" data-set="#wpov_opinion_poll_chart_data"></canvas>
                         <script id="wpov_opinion_poll_chart_data" type="text/template">
                             <?php
@@ -148,9 +148,9 @@ class wpov_admin_options_dashboard {
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Frage</th>
-                                <th>Umfrage</th>
-                                <th>Teilnehmer*innen</th>
+                                <th><?php _e('Question', WPOV__PLUGIN_NAME_SLUG); ?></th>
+                                <th><?php _e('Poll', WPOV__PLUGIN_NAME_SLUG); ?></th>
+                                <th><?php _e('Participants', WPOV__PLUGIN_NAME_SLUG); ?></th>
                             </tr>
                         </thead>
                         <?php foreach($current_voting->questions() as $i => $question) : ?>
@@ -183,7 +183,7 @@ class wpov_admin_options_dashboard {
             <?php else: ?>
             <div class="welcome-panel">
                 <h2><?php _e('You must first create elections, questions and parties.', WPOV__PLUGIN_NAME_SLUG) ?></h2>
-                <p class="about-description">The following page types are available.</p>
+                <p class="about-description"><?php _e('The following page types are available.', WPOV__PLUGIN_NAME_SLUG); ?></p>
                 <ul>
                     <?php foreach(wpov()->post_types as $post_type) : ?>
                     <li><a href="<?php echo admin_url(sprintf('edit.php?post_type=%s', $post_type->name)); ?>"><?php echo $post_type->labels->name ?></a></li>

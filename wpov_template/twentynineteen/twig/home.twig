@@ -31,7 +31,7 @@
         <div class="card w-100">
             <div class="card-body">
                 <h5 class="card-title">{{ post.title() }}</h5>
-                {% if status.is_live and fn('is_user_logged_in') %}
+                {% if not status.is_live and fn('is_user_logged_in') %}
                     <h6 class="card-subtitle mb-2 text-muted">{{ __('Visible for admins only!', WPOV__PLUGIN_NAME_SLUG) }}</h6>
                 {% endif %}
                 <p class="card-text">{{ post.the_content() }}</p>
