@@ -13,7 +13,7 @@
 
 {% block content %}
     {% if admin_settings.show_github %}
-    <a href="https://github.com/magma-design-studio/wp-open-votomat" style="position: fixed; top: 0; right: 0;"><img width="149" height="149" src="https://github.blog/wp-content/uploads/2008/12/forkme_right_white_ffffff.png?resize=149%2C149" class="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1"></a>   
+    <a class="d-none d-lg-block" href="https://github.com/magma-design-studio/wp-open-votomat" target="_blank" style="position: fixed; top: 0; right: 0;"><img width="149" height="149" src="https://github.blog/wp-content/uploads/2008/12/forkme_right_white_ffffff.png?resize=149%2C149" class="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1"></a>   
     {% endif %}
 
     {% if admin_settings.text_intro %}
@@ -31,7 +31,7 @@
         <div class="card w-100">
             <div class="card-body">
                 <h5 class="card-title">{{ post.title() }}</h5>
-                {% if not status.is_live and fn('is_user_logged_in') %}
+                {% if (not status.is_live and fn('is_user_logged_in')) and not status.after_live_description %}
                     <h6 class="card-subtitle mb-2 text-muted">{{ __('Visible for admins only!', WPOV__PLUGIN_NAME_SLUG) }}</h6>
                 {% endif %}
                 <p class="card-text">{{ post.the_content() }}</p>
@@ -74,12 +74,19 @@
             {% if sponsor.column_headline %}
             <p class="mb-4 h6">{{ sponsor.column_headline }}</p>
             {% endif %}   
-            <a href="{{ sponsor.url }}" target="_blank">
+            {% set _sponsor %}
                 {{ fn('wp_get_attachment_image', sponsor.logo_id, 'large', false, {
                     alt : sponsor.title,
                     class : 'img-fluid'
-                }) }}                    
+                }) }}              
+            {% endset %}
+            {% if sponsor.url %}
+            <a href="{{ sponsor.url }}" target="_blank">
+                  {{ _sponsor }}
             </a>
+            {% else %}
+                  {{ _sponsor }}
+            {% endif %}
         </div>
         {% endfor %}
         {{ row_end }}

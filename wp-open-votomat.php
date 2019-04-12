@@ -3,7 +3,7 @@
  * Plugin Name: WP Open Votomat
  * Description: This plugin allows you to use your website as a voting advice application.
  * Author: magma design studio
- * Version: 0.0.9
+ * Version: 0.0.11
  * Author URI: https://magmadesignstudio.de
  * Text Domain: wpov
  * License:     GPL2
@@ -27,7 +27,7 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
 define( 'WPOV__PLUGIN_NAME_SLUG', 'wp-open-votomat' );
 
-define( 'WPOV_VERSION', '0.0.9' );
+define( 'WPOV_VERSION', '0.0.11' );
 define( 'WPOV__MINIMUM_WP_VERSION', '4.0' );
 define( 'WPOV__PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WPOV__PLUGIN_DIR_URL', plugin_dir_url( __FILE__ ) );
@@ -329,7 +329,8 @@ if(!class_exists('wpov')) :
             $context['admin_settings'] = $this->get_setting('admin_settings');   
             
             $context['WPOV__PLUGIN_NAME_SLUG'] = WPOV__PLUGIN_NAME_SLUG;
-                        
+            $context['site'] = new Timber\Site;
+                           
             return $context;
         }
         

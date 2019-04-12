@@ -44,6 +44,32 @@ class wpov_frontend_standalone extends wpov_frontend {
         add_action('wpov_post_query_store_user_vote', array($this, 'post_store_user_vote'));
 
         add_filter( 'timber_context', array( $this, 'add_to_context' ) );
+        
+        add_filter( 'wp_title', array( $this, 'wp_title' ), 10, 3 );
+    }
+    
+    function wp_title($title, $sep, $seplocation) {
+        
+        if(in_array(get_query_var( 'post_type' ), array('wpov-voting', 'wpov-question')) and !is_home()) {
+            
+            if(get_query_var( 'wpov-compare' )) {
+                $_title = __('Compare', WPOV__PLUGIN_NAME_SLUG); 
+            } elseif(get_query_var( 'wpov-result' )) {
+                $_title = __('Results', WPOV__PLUGIN_NAME_SLUG); 
+            } elseif(is_page()) {
+                global $post;    
+                
+                $voting = wpov_get_post($post);
+                $question = $voting->question();
+                
+                $_title = sprintf('%s %d', __('Question', WPOV__PLUGIN_NAME_SLUG), $question->question_index_readable());
+            }
+            
+            
+            $title = sprintf('%s › %s', $_title, trim($title)); 
+        }
+        
+        return $title;            
     }
     
     function add_to_context($context) {

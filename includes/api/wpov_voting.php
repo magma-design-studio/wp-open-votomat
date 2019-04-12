@@ -106,12 +106,12 @@ class wpov_voting extends wpov_api {
     
     function get_timezone() {    
         $timezone = get_option( 'timezone_string', date_default_timezone_get() );
-        
+                
         if(!$timezone) {
             $date = new DateTime();
             $timezone = $date->getTimezone()->getName();
         }
-
+        
         return new DateTimeZone($timezone);
     }
     
@@ -128,7 +128,8 @@ class wpov_voting extends wpov_api {
         $_date = new DateTime();
         $_date->setTimezone($tz);
         $_date->setTimestamp($date-$offset);
-                
+
+        
         
         return ($date_format ? $_date->format($date_format) : $_date);
     }
@@ -156,13 +157,10 @@ class wpov_voting extends wpov_api {
             return $this->publication_status_array;
         }
         
-        $current_time = date_create($current_time, $this->get_timezone());
+        $current_time = new DateTime($current_time, $this->get_timezone());
         
         $from = $this->publication_period_from();
         $to = $this->publication_period_to();
-        
-        //exit;
-        //var_dump();
                 
         $is_started = ($this->publication_period_from('U') <= $current_time->format('U'));
         $is_not_ended = ($this->publication_period_to('U') > $current_time->format('U'));
@@ -203,8 +201,8 @@ class wpov_voting extends wpov_api {
             'time_to_start_formated' => ($from ? wpov_ago($u, $from) : false),
             'time_to_end_formated' => ($to ? wpov_ago($u, $to) : false),
             
-            'before_live_description' => $before_live_description,
-            'after_live_description' => $after_live_description
+            'before_live_description' => $this->before_live_description(),
+            'after_live_description' => $this->after_live_description()
         );
     }
     

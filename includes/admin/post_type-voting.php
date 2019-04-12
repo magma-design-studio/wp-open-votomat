@@ -107,12 +107,12 @@ class wpov_admin_post_type_voting extends wpov_admin_post_type {
                 printf(
                     '<p>%s: <code>%s</code></p>',
                     __('From', WPOV__PLUGIN_NAME_SLUG),
-                    date(__('d.m.Y H:i:s', WPOV__PLUGIN_NAME_SLUG), $voting->publication_period_from('U'))
+                    $voting->publication_period_from(__('d.m.Y H:i:s', WPOV__PLUGIN_NAME_SLUG))
                 );
                 printf(
                     '<p>%s: <code>%s</code></p>',
                     __('To', WPOV__PLUGIN_NAME_SLUG),
-                    date(__('d.m.Y H:i:s', WPOV__PLUGIN_NAME_SLUG), $voting->publication_period_to('U'))
+                    $voting->publication_period_to(__('d.m.Y H:i:s', WPOV__PLUGIN_NAME_SLUG))
                 );                
             break;
         }        

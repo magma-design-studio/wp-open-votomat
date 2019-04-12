@@ -11,4 +11,13 @@
     <link rel="author" href="{{ site.theme.link }}/humans.txt" />
     <link rel="pingback" href="{{ site.pingback_url }}" />
     <link rel="profile" href="http://gmpg.org/xfn/11">
+    
+    <title>   
+        {% if wp_title %}
+            {{ wp_title }} — {{ site.name }}
+        {% else %}
+            {{ site.name }}
+        {% endif %}
+    </title>    
+    
     {{function('wp_head')}}
