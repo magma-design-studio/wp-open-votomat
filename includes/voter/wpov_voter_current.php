@@ -93,10 +93,11 @@ class wpov_voter_current extends wpov_voter  {
         }
         
         $prev_vote = get_post_meta( $post_id, $meta_key, true );
+
         
         if ( ! add_post_meta( $post_id, $meta_key, $meta_value, true ) ) { 
            update_post_meta( $post_id, $meta_key, $meta_value );
-        }        
+        }       
         
         delete_transient( $this->wpov_voter_votes_transient_key );        
         
@@ -108,25 +109,27 @@ class wpov_voter_current extends wpov_voter  {
 
 
             $meta_key = "_wpov_counter_question_{$question}_{$vote}";
-            $meta_value = intval(get_post_meta($voting, $meta_key));
+            $meta_value = intval(get_post_meta($voting, $meta_key, true));
             $meta_value++;
 
+        
             if ( ! add_post_meta( $voting, $meta_key, $meta_value, true ) ) { 
                update_post_meta( $voting, $meta_key, $meta_value );
-            }    
+            } 
 
             // count down previous vote
             if($prev_vote and $prev_vote != $meta_value) {
                 $prev_meta_key = "_wpov_counter_question_{$question}_{$prev_vote}";
-                $prev_meta_value = intval(get_post_meta($voting, $prev_meta_key));
+                $prev_meta_value = intval(get_post_meta($voting, $prev_meta_key, true));
                 if($prev_meta_value > 0) {
+                    
                     if ( ! add_post_meta( $voting, $prev_meta_key, ($prev_meta_value-1), true ) ) { 
                        update_post_meta( $voting, $prev_meta_key, ($prev_meta_value-1) );
-                    }                  
+                    }  
                 }
             }        
         }
-        
+
         wp_update_post( array(
             'ID' => $post_id,
             'post_modified' => current_time( 'mysql' ),

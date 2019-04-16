@@ -3,6 +3,7 @@
 {% block content %}
 {% set parties = post_voting.parties() %}
 {% set questions = post_voting.questions() %}
+{% set modals = [] %}
 
     <div class="card mb-3">
         <div class="card-body">
@@ -10,6 +11,7 @@
         </div>
     </div>
 </main>
+
 <main class="d-flex mw-100 h-100 p-3 flex-column container">
     <div class="card mb-3">
         <div class="card-body table-responsive">
@@ -21,20 +23,26 @@
                         <th scope="col">{{ __('You', WPOV__PLUGIN_NAME_SLUG) }}</th>
                         {% for party in parties %}
                         <th scope="col">
+                            {% set modal_id = 'party_' ~ party.get_id() %}
+                            
                             {% set party_logo %}
-                            <a href="{{ party.url() }}" target="_blank">
+                            <a href data-toggle="modal" data-target="#{{ modal_id }}">
                                 {{ party.title() }}
                             </a>
                             {% endset %}                      
 
-                            {% if party.description() %}
-                            <span data-toggle="tooltip" data-html="true" class="has-tip tip-bottom" 
-                                title="{{ fn('htmlentities2', party.description()) }}">
-                                {{ party_logo }}
-                            </span>
-                            {% else %}
-                                {{ party_logo }}
-                            {% endif %}
+                            {{ party_logo }}
+                            
+                            {% set modal %}
+                            {% include 'components/modal.twig' with {
+                                modal_id : modal_id,
+                                modal_title : party.title(),
+                                modal_body : (party.description() ? fn('apply_filters', 'the_content', party.description()) : ''),
+                                modal_footer : '<a href="' ~ party.url() ~ '" target="_blank" class="btn btn-secondary">' ~ __('Open Website', WPOV__PLUGIN_NAME_SLUG) ~ '</a>'
+                            } %} 
+                            {% endset %}
+                            
+                            {% set modals = modals|merge([modal]) %}
                         </th>
                         {% endfor %}
                     </tr>
@@ -61,13 +69,29 @@
                                href="{{ question.link() }}" 
                                class="btn {{ fn('wpov_get_vote_class', party_answer.answer() ) }}" 
                                style="margin:0; padding: 0.5em 1em;"
+                               {% set modal_id = 'modal' ~ party.get_id() ~ '_' ~ post_voting.get_id() ~ '_' ~ question.get_id()  %}
                                {% if party_answer_explanation %}
+                                    data-toggle="modal" 
+                                    data-target="#{{ modal_id }}"
+                               {#
                                     data-toggle="tooltip" data-html="true" 
                                     title="{{ fn('htmlentities2', party_answer_explanation) }}"
+                               #}
                                {% endif %}
                                >
                                 {{ fn('wpov_get_vote_symbol', party_answer.answer() ) }}
                             </a>
+                            {% set modal %}
+                            {% if party_answer_explanation %}
+                                {% include 'components/modal.twig' with {
+                                    modal_id : modal_id,
+                                    modal_title : __('Explanation', WPOV__PLUGIN_NAME_SLUG),
+                                    modal_body : fn('apply_filters', 'the_content', party_answer_explanation)
+                                } %}
+                            {% endif %}   
+                            {% endset %}
+                            
+                            {% set modals = modals|merge([modal]) %}
                         </td>
                         {% endfor %}
                     </tr>
@@ -76,9 +100,13 @@
             </table>
         </div>
     </div>
+    
+{{ modals|join }}
+    
 </main>
 <main class="d-flex w-100 h-100 p-3 mx-auto flex-column container">
 
-    <a class="btn btn-primary btn-sm" href="{{ post_voting.result_link() }}">{{ __('Back to overview', WPOV__PLUGIN_NAME_SLUG) }}</a>
+<a class="btn btn-primary btn-sm" href="{{ post_voting.result_link() }}">{{ __('Back to overview', WPOV__PLUGIN_NAME_SLUG) }}</a>
 
+    
 {% endblock %}

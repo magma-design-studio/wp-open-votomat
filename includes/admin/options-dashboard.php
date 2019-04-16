@@ -62,9 +62,12 @@ class wpov_admin_options_dashboard {
             $party_voter_score = 0;
             
             foreach($party_answers as $answer) {
-                
-                $total_question_votes += array_sum($votings_per_question[$answer->get('question')]);
-                $party_voter_score += $votings_per_question[$answer->get('question')][$answer->value()];
+                if(!empty($votings_per_question[$answer->get('question')])) {
+                    $total_question_votes += array_sum($votings_per_question[$answer->get('question')]);
+                }
+                if(!empty($votings_per_question[$answer->get('question')][$answer->value()])) {
+                    $party_voter_score += $votings_per_question[$answer->get('question')][$answer->value()];
+                }
                 
             }
                         

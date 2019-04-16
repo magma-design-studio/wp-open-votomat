@@ -1,9 +1,9 @@
 {% extends "base.twig" %}
 
 {% block content %}
-
+{% set modals = [] %}
     <div class="card mb-3">
-        <div class="card-body">
+        <div class="card-body table-responsive">
             <h3 class="card-title">
                 {% if not override_current_voter %}
                     {{ __('The result', WPOV__PLUGIN_NAME_SLUG) }}
@@ -35,9 +35,11 @@
 
                     <tr>
                         <td width="25%" class="text-right"> 
+                            {% set modal_id = 'party_' ~ party.get_id() %}
+                            
                             {% set party_logo %}
                             {% if party.url() %}
-                            <a href="{{ party.url() }}" target="_blank">
+                            <a href data-toggle="modal" data-target="#{{ modal_id }}">
                             {% endif %}
                                 {% if party.logo() %}
                                 <img src="{{ party.logo() }}" alt="{{ party.title() }}" style="height: 40px; width: auto;"/>
@@ -49,12 +51,23 @@
                             {% endif %}
                             {% endset %}                        
                             {% if party.description() %}
-                            <span data-toggle="tooltip" data-html="true" title="{{ fn('htmlentities2', party.description()) }}">
                                 {{ party_logo }}
-                            </span> 
                             {% else %}
                                 {{ party_logo }}
                             {% endif %}
+                            
+                            {% set modal %}
+                            {% include 'components/modal.twig' with {
+                                modal_id : modal_id,
+                                modal_title : party.title(),
+                                modal_body : (party.description() ? fn('apply_filters', 'the_content', party.description()) : ''),
+                                modal_footer : '<a href="' ~ party.url() ~ '" target="_blank" class="btn btn-secondary">' ~ __('Open Website', WPOV__PLUGIN_NAME_SLUG) ~ '</a>'
+                            } %} 
+                            {% endset %}
+                            
+                            {% set modals = modals|merge([modal]) %}                            
+                            
+                            
                         </td>
                         <td width="60%" data-value="{{ party_user_consensus_percentage }}"> 
                             <div class="progress"> 
@@ -91,4 +104,5 @@
         </div>  
         {% endif %}
     </div>
+{{ modals|join }}
 {% endblock %}
