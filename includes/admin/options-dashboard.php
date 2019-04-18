@@ -50,11 +50,15 @@ class wpov_admin_options_dashboard {
             $votings_per_question[$question_id][$vote] += $voter->meta_value;
         }
         
+        $total_votings_per_question = count($votings_per_question);
+        
         foreach($votings_per_question as $voting_per_question) {
             $voting_per_question_sum = array_sum($voting_per_question);
             
-            $total_voters = $voting_per_question_sum > $total_voters ? $voting_per_question_sum : $total_voters;
+            $total_voters += $voting_per_question_sum;
         }
+        
+        $total_voters = round($total_voters / count($votings_per_question));
         
         foreach($voting->parties() as $party) {
             $party_answers = $party->answers();
