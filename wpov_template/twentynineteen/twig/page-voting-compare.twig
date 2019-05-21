@@ -14,9 +14,9 @@
 
 <main class="d-flex mw-100 h-100 p-3 flex-column container">
     <div class="card mb-3">
-        <div class="card-body table-responsive">
-            <table class="table cart-text sortable">
-                <thead>
+        <div id="wpov-compare-table" class="card-body table-responsive position-relative">
+            <table class="table cart-text sortable bg-white">
+                <thead class="wpov-sticky">
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col" data-defaultsort="disabled">{{ __('Question', WPOV__PLUGIN_NAME_SLUG) }}</th>

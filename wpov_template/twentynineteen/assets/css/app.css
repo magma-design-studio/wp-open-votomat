@@ -1,3 +1,7 @@
 main, header nav {
     max-width: 800px !important;
 }
+
+#wpov-compare-table {
+    max-height: calc( 100vh - 32px );
+}
