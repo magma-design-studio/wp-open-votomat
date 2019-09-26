@@ -270,6 +270,7 @@ if(!class_exists('wpov')) :
             if(get_option( 'wpov_detect_plugin_activation_process')) {
                 delete_option( 'wpov_detect_plugin_activation_process' );
                 
+                flush_rewrite_rules();
                 //$this->register_voter_db_tables();
             }
         }
@@ -298,6 +299,9 @@ if(!class_exists('wpov')) :
         function rewrite_rules() {
             switch($this->get_setting('admin_settings')['wpov_type']) {
                 case 'standalone':
+                    global $wp_rewrite;
+                    $wp_rewrite->set_permalink_structure( '/%post_id%/' );
+                    
                     add_rewrite_rule('^voting/([^/]+)/question/([^/]+)/?', 'index.php?post_type=wpov-voting&pagename=$matches[1]&wpov-question=$matches[2]', 'top');
                     add_rewrite_rule('^voting/([^/]+)/result/([^/]+)/?', 'index.php?post_type=wpov-voting&pagename=$matches[1]&wpov-result=true&wpov-voter-result=$matches[2]', 'top');
                     add_rewrite_rule('^voting/([^/]+)/result/?', 'index.php?post_type=wpov-voting&pagename=$matches[1]&wpov-result=true', 'top');
@@ -461,7 +465,11 @@ if(!class_exists('wpov')) :
         
         function set_setting($key, $value) {
             $this->settings[$key] = $value;
-        }        
+        }       
+        
+        function get_settings() {
+            return $this->settings;
+        }
         
         function wpov_widget_home_sidebar() {
             register_sidebar( array(

@@ -69,11 +69,13 @@ class wpov_voting extends wpov_api {
     }
     
     function count_questions() {
-        return count($this->_get_meta('_voting_questions'));
+        $questions = $this->_get_meta('_voting_questions');
+        return is_array($questions) ? count($questions) : 0;
     }    
     
     function parties() {
         $parties = $this->_get_meta('_voting_parties');
+        $parties = is_array($parties) ? $parties : array();
         foreach($parties as &$party) {
             $party = wpov_get_party($party['party']);
         }
@@ -82,7 +84,8 @@ class wpov_voting extends wpov_api {
     } 
     
     function count_parties() {
-        return count($this->_get_meta('_voting_parties'));
+        $parties = $this->_get_meta('_voting_parties');
+        return is_array($parties) ? count($parties) : 0;
     }
     
     function publication_period() {

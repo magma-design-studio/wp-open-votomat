@@ -49,7 +49,29 @@ class wpov_admin {
         add_action('posts_where', array($this, 'admin_column_filters_query_where'));
         
         add_filter( 'admin_menu', array( $this, 'submenu_order' ) );
+        
+        if(wpov_get_setting('admin_settings')['wpov_type'] == 'standalone') {
+            add_action( 'admin_notices', array($this, 'show_override_notes') );
+        }
+
 	}
+    
+    function show_override_notes() {
+        $screen = get_current_screen();
+        $message = false;
+        switch($screen->base) {
+            case 'options-reading':
+                $message = __('Your homepage display settings will be overriden by the WP-Open-Votomat Settings!', WPOV__PLUGIN_NAME_SLUG);
+                break;
+            case 'options-permalink':
+                $message = __('Your Permalink Settings will be overriden by the WP-Open-Votomat Settings!', WPOV__PLUGIN_NAME_SLUG);
+                break;                
+        }
+        
+        if($message) {
+            printf( '<div class="%1$s"><p><strong>WP-Open-Votomat:</strong> <code>%2$s</code></p></div>', esc_attr( 'notice notice-warning' ), esc_html( $message ) ); 
+        }
+    }
     
     function submenu_order($menu_order) {
         global $submenu;

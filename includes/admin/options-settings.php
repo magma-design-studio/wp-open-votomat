@@ -29,6 +29,18 @@ class wpov_admin_options_settings extends wpov_admin_options {
         if(isset($_GET['wpov-migration'])) {
             add_action('admin_init', array($this, 'migrate_symfony_sql_dump'));
         }
+        
+        
+        add_action( 'admin_print_scripts', array($this, 'admin_js_print_wpov_settings') );
+
+    }
+    
+    function admin_js_print_wpov_settings() {
+        ?>
+        <script type="text/javascript">
+            var wpov_settings = <?php echo json_encode(wpov_get_settings()); ?>;
+        </script>
+        <?php
     }
     
     function migrate_symfony_translate_table_fields($dataset = array(), $translations = array()) {

@@ -58,7 +58,7 @@ class wpov_admin_options_dashboard {
             $total_voters += $voting_per_question_sum;
         }
         
-        $total_voters = round($total_voters / count($votings_per_question));
+        $total_voters = $total_voters ? round($total_voters / count($votings_per_question)) : 0;
         
         foreach($voting->parties() as $party) {
             $party_answers = $party->answers();
@@ -82,7 +82,7 @@ class wpov_admin_options_dashboard {
         $total_party_scores = array_sum($party_scores);
         
         foreach($party_scores as &$party_score) {
-            $party_score = (($party_score/$total_party_scores)*100);
+            $party_score = $total_party_scores ? (($party_score/$total_party_scores)*100) : 0;
         }
         
         return array(

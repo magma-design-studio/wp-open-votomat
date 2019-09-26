@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Shortcake (Shortcode UI) 0.7.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/shortcode-ui\n"
-"POT-Creation-Date: 2019-04-12 10:26+0200\n"
-"PO-Revision-Date: 2019-04-12 10:26+0200\n"
+"POT-Creation-Date: 2019-09-26 10:33+0200\n"
+"PO-Revision-Date: 2019-09-26 10:33+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -61,26 +61,36 @@ msgstr ""
 msgid "Visible for admins only!"
 msgstr "Nur für Admins sichtbar!"
 
-#: wpov_template/twentynineteen/twig/page-voting-compare.twig:9
+#: wpov_template/twentynineteen/twig/page-voting-compare.twig:10
 msgid "In direct comparison"
 msgstr "Im direkten Vergleich"
 
-#: wpov_template/twentynineteen/twig/page-voting-compare.twig:20
+#: wpov_template/twentynineteen/twig/page-voting-compare.twig:22
 #: wpov_template/twentynineteen/twig/page-voting.twig:11
-#: includes/admin/options-dashboard.php:151
+#: includes/admin/options-dashboard.php:158
 #: includes/admin/post_type-question.php:75
 #: includes/admin/post_type-question.php:85
 #: includes/admin/post_type-voting.php:52
 #: includes/admin/post_type-voting.php:258
-#: includes/frontend/frontend-standalone.php:65 wp-open-votomat.php:382
+#: includes/frontend/frontend-standalone.php:71 wp-open-votomat.php:385
 msgid "Question"
 msgstr "Frage"
 
-#: wpov_template/twentynineteen/twig/page-voting-compare.twig:21
+#: wpov_template/twentynineteen/twig/page-voting-compare.twig:23
 msgid "You"
 msgstr "Du"
 
-#: wpov_template/twentynineteen/twig/page-voting-compare.twig:82
+#: wpov_template/twentynineteen/twig/page-voting-compare.twig:41
+#: wpov_template/twentynineteen/twig/page-voting-result.twig:64
+msgid "Open Website"
+msgstr "Öffne Website"
+
+#: wpov_template/twentynineteen/twig/page-voting-compare.twig:88
+#: includes/admin/post_type-party.php:141
+msgid "Explanation"
+msgstr "Erklärung"
+
+#: wpov_template/twentynineteen/twig/page-voting-compare.twig:109
 msgid "Back to overview"
 msgstr "Zurück zur Übersicht"
 
@@ -94,7 +104,7 @@ msgstr "Das Ergebnis, das dir jemand gesendet hat"
 
 #: wpov_template/twentynineteen/twig/page-voting-result.twig:17
 #: includes/admin/post_type-voting.php:56
-#: includes/admin/post_type-voting.php:209 wp-open-votomat.php:349
+#: includes/admin/post_type-voting.php:209 wp-open-votomat.php:352
 msgid "Party"
 msgstr "Partei"
 
@@ -106,43 +116,58 @@ msgstr "Übereinstimmung"
 msgid "in %"
 msgstr "in %"
 
-#: wpov_template/twentynineteen/twig/page-voting-result.twig:73
+#: wpov_template/twentynineteen/twig/page-voting-result.twig:86
 msgid "Your answers compared to those of the parties"
 msgstr "Deine Antworten im direkten Vergleich mit den Parteien"
 
-#: wpov_template/twentynineteen/twig/page-voting-result.twig:78
+#: wpov_template/twentynineteen/twig/page-voting-result.twig:91
 msgid "By clicking on the logos you come to the websites of the parties."
 msgstr "Durch Klick auf die Logos kommst du auf die Webseiten der Parteien."
 
-#: wpov_template/twentynineteen/twig/page-voting-result.twig:82
+#: wpov_template/twentynineteen/twig/page-voting-result.twig:95
 msgid "With the following link you can share your result with others:"
 msgstr "Mit dem folgenden Link kannst du dein Ergebnis mit anderen teilen:"
 
-#: includes/admin/admin.php:86
+#: includes/admin/admin.php:64
+msgid ""
+"Your homepage display settings will be overriden by the WP-Open-Votomat "
+"Settings!"
+msgstr ""
+"Die Startseiten-Anzeige-Einstellungen werden durch die WP-Open-Votomat-"
+"Einstellungen überschrieben!"
+
+#: includes/admin/admin.php:67
+msgid ""
+"Your Permalink Settings will be overriden by the WP-Open-Votomat Settings!"
+msgstr ""
+"Die Permalink-Einstellungen werden durch die WP-Open-Votomat-Einstellungen "
+"überschrieben!"
+
+#: includes/admin/admin.php:108
 msgid "All Votings"
 msgstr "Alle Wahlen"
 
-#: includes/admin/admin.php:158
+#: includes/admin/admin.php:180
 msgid "Party Logo"
 msgstr "Partei-Logo"
 
-#: includes/admin/admin.php:258 includes/admin/admin.php:259
+#: includes/admin/admin.php:280 includes/admin/admin.php:281
 msgid "Open Votomat"
 msgstr "Open Votomat"
 
-#: includes/admin/admin.php:276 includes/admin/options-dashboard.php:118
+#: includes/admin/admin.php:298 includes/admin/options-dashboard.php:125
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: includes/admin/options-dashboard.php:128
+#: includes/admin/options-dashboard.php:135
 msgid "Select"
 msgstr "Auswählen"
 
-#: includes/admin/options-dashboard.php:136
+#: includes/admin/options-dashboard.php:143
 msgid "Opinion poll"
 msgstr "Sonntagsfrage"
 
-#: includes/admin/options-dashboard.php:137
+#: includes/admin/options-dashboard.php:144
 #, php-format
 msgid ""
 "If next Sunday really was election, %s voters would choose the following…"
@@ -150,30 +175,30 @@ msgstr ""
 "Wenn am nächsten Sonntag wirklich Wahl wäre, würden %s Wähler*innen "
 "folgendes wählen …"
 
-#: includes/admin/options-dashboard.php:152
+#: includes/admin/options-dashboard.php:159
 msgid "Poll"
 msgstr "Umfrage"
 
-#: includes/admin/options-dashboard.php:153
+#: includes/admin/options-dashboard.php:160
 msgid "Participants"
 msgstr "Teilnehmer*innen"
 
-#: includes/admin/options-dashboard.php:179
+#: includes/admin/options-dashboard.php:186
 msgid "Too few data recorded!"
 msgstr "Es wurden zu wenig Daten erfasst!"
 
-#: includes/admin/options-dashboard.php:180
+#: includes/admin/options-dashboard.php:187
 msgid ""
 "Wait a few more days until enough data is collected for a meaningful survey."
 msgstr ""
 "Warte noch ein paar Tage, bis ausreichend Daten für eine aussagekräftige "
 "Erhebung erfasst wurden."
 
-#: includes/admin/options-dashboard.php:185
+#: includes/admin/options-dashboard.php:192
 msgid "You must first create elections, questions and parties."
 msgstr "Du musst zunächst Wahlen, Fragen und Parteien anlegen."
 
-#: includes/admin/options-dashboard.php:186
+#: includes/admin/options-dashboard.php:193
 msgid "The following page types are available."
 msgstr "Folgende Seitentypen sind verfügbar."
 
@@ -182,71 +207,71 @@ msgstr "Folgende Seitentypen sind verfügbar."
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: includes/admin/options-settings.php:406
+#: includes/admin/options-settings.php:418
 msgid "Please choose"
 msgstr "Bitte wählen"
 
-#: includes/admin/options-settings.php:413
+#: includes/admin/options-settings.php:425
 msgid "Theme"
 msgstr "Theme"
 
-#: includes/admin/options-settings.php:420
+#: includes/admin/options-settings.php:432
 msgid "Role"
 msgstr "Rolle"
 
-#: includes/admin/options-settings.php:424
+#: includes/admin/options-settings.php:436
 msgid "Standanlone"
 msgstr "Selbstständig"
 
-#: includes/admin/options-settings.php:447
+#: includes/admin/options-settings.php:459
 msgid "App name"
 msgstr "App-Name"
 
-#: includes/admin/options-settings.php:512
+#: includes/admin/options-settings.php:524
 msgid "Sponsor {#}"
 msgstr "Sponsor {#}"
 
-#: includes/admin/options-settings.php:513
+#: includes/admin/options-settings.php:525
 msgid "Add Another Sponsor"
 msgstr "Weiteren Sponsor hinzufügen"
 
-#: includes/admin/options-settings.php:514
+#: includes/admin/options-settings.php:526
 msgid "Remove Sponsor"
 msgstr "Sponsor entfernen"
 
-#: includes/admin/options-settings.php:520
+#: includes/admin/options-settings.php:532
 msgid "Line break before this sponsor"
 msgstr "Umbruch vor diesem Sponsor"
 
-#: includes/admin/options-settings.php:526
+#: includes/admin/options-settings.php:538
 msgid "Headline before this sponsor"
 msgstr "Überschrift vor diesem Sponsor"
 
-#: includes/admin/options-settings.php:569
+#: includes/admin/options-settings.php:581
 msgid "1 column"
 msgstr "1 Spalte"
 
-#: includes/admin/options-settings.php:570
+#: includes/admin/options-settings.php:582
 msgid "2 columns"
 msgstr "2 Spalten"
 
-#: includes/admin/options-settings.php:571
+#: includes/admin/options-settings.php:583
 msgid "3 columns"
 msgstr "3 Spalten"
 
-#: includes/admin/options-settings.php:583
+#: includes/admin/options-settings.php:595
 msgid "Custom style"
 msgstr "Benutzerdefinierte Gestaltung"
 
-#: includes/admin/options-settings.php:594
+#: includes/admin/options-settings.php:606
 msgid "External CSS"
 msgstr "Externer CSS"
 
-#: includes/admin/options-settings.php:600
+#: includes/admin/options-settings.php:612
 msgid "Custom CSS"
 msgstr "Benutzerdefinierter CSS"
 
-#: includes/admin/options-settings.php:620
+#: includes/admin/options-settings.php:632
 msgid "Migration"
 msgstr "Migration"
 
@@ -293,10 +318,6 @@ msgstr "Frage #%d"
 msgid "None"
 msgstr "Keine"
 
-#: includes/admin/post_type-party.php:141
-msgid "Explanation"
-msgstr "Erklärung"
-
 #: includes/admin/post_type-voting.php:29
 #, php-format
 msgid "Time (e.g. %s)"
@@ -304,13 +325,13 @@ msgstr "Zeit (z.B. %s)"
 
 #: includes/admin/post_type-voting.php:36
 #: includes/admin/post_type-voting.php:57
-#: includes/admin/post_type-voting.php:169 wp-open-votomat.php:348
+#: includes/admin/post_type-voting.php:169 wp-open-votomat.php:351
 msgid "Parties"
 msgstr "Parteien"
 
 #: includes/admin/post_type-voting.php:37
 #: includes/admin/post_type-voting.php:53
-#: includes/admin/post_type-voting.php:220 wp-open-votomat.php:381
+#: includes/admin/post_type-voting.php:220 wp-open-votomat.php:384
 msgid "Questions"
 msgstr "Fragen"
 
@@ -436,50 +457,50 @@ msgstr ""
 "Ablauf. Es kann weiterhin abgestimmt werden. Abstimmungen nach Ablauf "
 "fließen nicht in die Statistik ein."
 
-#: includes/frontend/frontend-standalone.php:56
+#: includes/frontend/frontend-standalone.php:62
 msgid "Compare"
 msgstr "Vergleiche"
 
-#: includes/frontend/frontend-standalone.php:58
+#: includes/frontend/frontend-standalone.php:64
 msgid "Results"
 msgstr "Ergebnisse"
 
-#: includes/helpers/helpers.php:175
+#: includes/helpers/helpers.php:179
 #, php-format
 msgid "%s ago"
 msgstr "seit %s"
 
-#: includes/helpers/helpers.php:176
+#: includes/helpers/helpers.php:180
 msgid "year"
 msgid_plural "years"
 msgstr[0] "Jahr"
 msgstr[1] "Jahre"
 
-#: includes/helpers/helpers.php:177
+#: includes/helpers/helpers.php:181
 msgid "month"
 msgid_plural "months"
 msgstr[0] "Monat"
 msgstr[1] "Monate"
 
-#: includes/helpers/helpers.php:178
+#: includes/helpers/helpers.php:182
 msgid "day"
 msgid_plural "days"
 msgstr[0] "Tag"
 msgstr[1] "Tage"
 
-#: includes/helpers/helpers.php:179
+#: includes/helpers/helpers.php:183
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "Stunde"
 msgstr[1] "Stunden"
 
-#: includes/helpers/helpers.php:180
+#: includes/helpers/helpers.php:184
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "Minute"
 msgstr[1] "Minuten"
 
-#: includes/helpers/helpers.php:181
+#: includes/helpers/helpers.php:185
 msgid "second"
 msgid_plural "seconds"
 msgstr[0] "Sekunde"
@@ -505,107 +526,107 @@ msgstr "Der Link wurde kopiert!"
 msgid "WPOV Footer Menu"
 msgstr "WPOV Fußmenü"
 
-#: wp-open-votomat.php:350 wp-open-votomat.php:383 wp-open-votomat.php:414
+#: wp-open-votomat.php:353 wp-open-votomat.php:386 wp-open-votomat.php:417
 msgid "Add New"
 msgstr "Neue hinzufügen"
 
-#: wp-open-votomat.php:351
+#: wp-open-votomat.php:354
 msgid "Add New Party"
 msgstr "Neue Partei hinzufügen"
 
-#: wp-open-votomat.php:352
+#: wp-open-votomat.php:355
 msgid "Edit Party"
 msgstr "Partei bearbeiten"
 
-#: wp-open-votomat.php:353
+#: wp-open-votomat.php:356
 msgid "New Party"
 msgstr "Neue Partei"
 
-#: wp-open-votomat.php:354
+#: wp-open-votomat.php:357
 msgid "View Party"
 msgstr "Partei ansehen"
 
-#: wp-open-votomat.php:355
+#: wp-open-votomat.php:358
 msgid "Search Parties"
 msgstr "Nach Partei suchen"
 
-#: wp-open-votomat.php:356
+#: wp-open-votomat.php:359
 msgid "No Parties found"
 msgstr "Keine Partei gefunden"
 
-#: wp-open-votomat.php:357
+#: wp-open-votomat.php:360
 msgid "No Parties found in Trash"
 msgstr "Keine Partei im Papierkorb gefunden"
 
-#: wp-open-votomat.php:384
+#: wp-open-votomat.php:387
 msgid "Add New Question"
 msgstr "Neue Frage hinzufügen"
 
-#: wp-open-votomat.php:385
+#: wp-open-votomat.php:388
 msgid "Edit Question"
 msgstr "Frage bearbeiten"
 
-#: wp-open-votomat.php:386
+#: wp-open-votomat.php:389
 msgid "New Question"
 msgstr "Neue Frage"
 
-#: wp-open-votomat.php:387
+#: wp-open-votomat.php:390
 msgid "View Question"
 msgstr "Frage ansehen"
 
-#: wp-open-votomat.php:388
+#: wp-open-votomat.php:391
 msgid "Search Questions"
 msgstr "Nach Fragen suchen"
 
-#: wp-open-votomat.php:389
+#: wp-open-votomat.php:392
 msgid "No Questions found"
 msgstr "Keine Fragen gefunden"
 
-#: wp-open-votomat.php:390
+#: wp-open-votomat.php:393
 msgid "No Questions found in Trash"
 msgstr "Keine Fragen im Papierkorb gefunden"
 
-#: wp-open-votomat.php:412
+#: wp-open-votomat.php:415
 msgid "Votings"
 msgstr "Wahlen"
 
-#: wp-open-votomat.php:413
+#: wp-open-votomat.php:416
 msgid "Voting"
 msgstr "Wahl"
 
-#: wp-open-votomat.php:415
+#: wp-open-votomat.php:418
 msgid "Add New Voting"
 msgstr "Neue Wahl hinzufügen"
 
-#: wp-open-votomat.php:416
+#: wp-open-votomat.php:419
 msgid "Edit Voting"
 msgstr "Wahl bearbeiten"
 
-#: wp-open-votomat.php:417
+#: wp-open-votomat.php:420
 msgid "New Voting"
 msgstr "Neue Wahl"
 
-#: wp-open-votomat.php:418
+#: wp-open-votomat.php:421
 msgid "View Voting"
 msgstr "Wahl ansehen"
 
-#: wp-open-votomat.php:419
+#: wp-open-votomat.php:422
 msgid "Search Votings"
 msgstr "Wahlen suchen"
 
-#: wp-open-votomat.php:420
+#: wp-open-votomat.php:423
 msgid "No Votings found"
 msgstr "Keine Wahlen gefunden"
 
-#: wp-open-votomat.php:421
+#: wp-open-votomat.php:424
 msgid "No Votings found in Trash"
 msgstr "Keine Wahlen im Papierkorb gefunden"
 
-#: wp-open-votomat.php:468
+#: wp-open-votomat.php:475
 msgid "WP Open Votomat Sidebar"
 msgstr "WP Open Votomat Seitenspalte"
 
-#: wp-open-votomat.php:516
+#: wp-open-votomat.php:523
 #, php-format
 msgid "Class »%s« exists!"
 msgstr "Klasse »%s« existiert!"

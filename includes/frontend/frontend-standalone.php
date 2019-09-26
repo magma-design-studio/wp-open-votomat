@@ -46,6 +46,12 @@ class wpov_frontend_standalone extends wpov_frontend {
         add_filter( 'timber_context', array( $this, 'add_to_context' ) );
         
         add_filter( 'wp_title', array( $this, 'wp_title' ), 10, 3 );
+        
+        add_filter( 'pre_option_show_on_front', array( $this, 'override_option_show_on_front' ), 10, 3 );
+    }
+    
+    function override_option_show_on_front($pre_option, $option, $default) {
+        return 'posts';
     }
     
     function wp_title($title, $sep, $seplocation) {

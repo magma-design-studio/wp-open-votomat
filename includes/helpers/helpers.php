@@ -20,6 +20,10 @@ function wpov_get_setting( $key ) {
     return wpov()->get_setting($key);
 }
 
+function wpov_get_settings( ) {
+    return wpov()->get_settings();
+}
+
 function wpov_fields($attrs) {
     return new_cmb2_box($attrs);
 }

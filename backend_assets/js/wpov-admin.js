@@ -4,6 +4,7 @@ var wpov_admin = new (function() {
     var content = {
         init: function() {
             this.actions.init();
+            this.overrides_notes.init();
         },
         plugins: {
             register: function(key, fn) {
@@ -13,6 +14,32 @@ var wpov_admin = new (function() {
 
             }
         },
+        overrides_notes: {
+            init: function() {
+                var $b = jQuery('body');
+                try {
+                    var wpov_type = wpov_settings.admin_settings.wpov_type
+                } catch(e) {
+                    var wpov_type = false
+                }
+
+                console.log(wpov_type);
+
+                var hideSettings = {
+                    pointerEvents: 'none',
+                    opacity: .5
+                };
+                
+                if(wpov_type == 'standalone') {
+                    if($b.hasClass('options-permalink-php')) {
+                        jQuery('#wpbody-content .form-table').css(hideSettings)
+                    } else if($b.hasClass('options-reading-php')) {
+                        jQuery('#front-static-pages').css(hideSettings)
+                    }
+                    
+                }
+            }
+        },        
         actions: {
             init: function() {
                 var label = 'wpov-js-click-action';
