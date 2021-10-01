@@ -68,7 +68,7 @@ class wpov_voter {
                 preg_match('/_wpov_voting_(?<voting_id>\d+)_question_(?<question_id>\d+)/', $vote->meta_key, $match);
                 if(!isset($out[$match['voting_id']])) { $out[$match['voting_id']] = array(); }
 
-                list($vote, $count_twice) = explode(':', $vote->meta_value);
+                @list($vote, $count_twice) = explode(':', $vote->meta_value);
 
                 $out[$match['voting_id']][$match['question_id']] = array(
                     'vote' => $vote,

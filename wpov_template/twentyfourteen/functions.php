@@ -16,5 +16,5 @@ function wpov_twentyfourteen_assets() {
     wp_enqueue_script( 'foundation', '//cdnjs.cloudflare.com/ajax/libs/foundation/5.2.2/js/foundation.min.js', array(  ), '5.2.2', true );
     wp_enqueue_script( 'foundation-tooltip', '//cdnjs.cloudflare.com/ajax/libs/foundation/5.2.2/js/foundation/foundation.tooltip.js', array(  ), '5.2.2', true );
 
-    wp_add_inline_script( 'foundation-tooltip', '<script> $(document).foundation(); </script>' );
+    wp_add_inline_script( 'foundation-tooltip', '$(document).foundation();' );
 }

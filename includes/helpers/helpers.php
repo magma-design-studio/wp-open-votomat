@@ -1,7 +1,15 @@
 <?php
 
+function wpov_leadingslashit($path) {
+    return '/' . wpov_unleadingslashit($path);
+}
+
+function wpov_unleadingslashit($path) {
+    return ltrim( $path, '/\\' );
+}
+
 function wpov_get_path($path) {
-    return WPOV__PLUGIN_DIR . $path;
+    return trailingslashit(WPOV__PLUGIN_DIR) . wpov_unleadingslashit($path);
 }
 
 function wpov_include_exists( $path ) {
@@ -12,7 +20,7 @@ function wpov_include( $path ) {
     if( wpov_include_exists( $path ) ) {
         include_once( wpov_get_path( $path ) );
     } else {
-        die( 'Can’t find file: ' . $path);
+        die( 'Can’t find file: ' . wpov_get_path($path));
     }
 }
 
@@ -202,7 +210,7 @@ function wpov_get_vote_class($vote) {
         'disapprove' => 'alert',
     ));
     
-    return $translations[$vote];
+    return $translations[$vote] ?? '';
 }
 
 
@@ -303,4 +311,9 @@ function wpov_crop_pagination($questions, $current_question) {
 
     return $questions;
     
+}
+
+function wpov_admin_options_dashboard_add_menu_page() {
+    $dashboard = new wpov_admin_options_dashboard();
+    return $dashboard->add_page();
 }

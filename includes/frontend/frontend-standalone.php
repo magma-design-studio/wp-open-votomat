@@ -67,8 +67,8 @@ class wpov_frontend_standalone extends wpov_frontend {
                 
                 $voting = wpov_get_post($post);
                 $question = $voting->question();
-                
-                $_title = sprintf('%s %d', __('Question', WPOV__PLUGIN_NAME_SLUG), $question->question_index_readable());
+    
+                $_title = sprintf('%s %d', __('Question', WPOV__PLUGIN_NAME_SLUG), $question ? $question->question_index_readable() : null);
             }
             
             

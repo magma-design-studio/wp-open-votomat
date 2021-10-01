@@ -25,7 +25,7 @@ class wpov_admin_post_type_voting extends wpov_admin_post_type {
     }
     
     function set_datetime_placeholder($args, $type_defaults, $field, $types) {
-        if(in_array($args['name'], array($this->prefix.'period_from[time]', $this->prefix.'period_to[time]'))) {
+        if(in_array($args['name'] ?? null, array($this->prefix.'period_from[time]', $this->prefix.'period_to[time]'))) {
             $args['placeholder'] = sprintf(__('Time (e.g. %s)', WPOV__PLUGIN_NAME_SLUG), date('H:i'));
         }
         return $args;
@@ -125,14 +125,14 @@ class wpov_admin_post_type_voting extends wpov_admin_post_type {
     public $prefix = '_voting_';
     
     function fields() {
-        do_action('wpov_admin_voting_before_fields', $fields);
+        do_action('wpov_admin_voting_before_fields');
         
         $this->fields_core_descriptions();
         $this->fields_core_parties();
         $this->fields_core_questions();
         $this->fields_side_settings();
                 
-        do_action('wpov_admin_voting_after_fields', $fields);
+        do_action('wpov_admin_voting_after_fields');
         
     }
     
@@ -149,14 +149,14 @@ class wpov_admin_post_type_voting extends wpov_admin_post_type {
         $fields->add_field( array(
             'name' => __('Description before publication', WPOV__PLUGIN_NAME_SLUG),
             //'desc' => esc_html__( 'If this field is empty this voting will appear after expiration!', 'cmb2' ),
-            'id'   => $prefix . 'before_live_description',
+            'id'   => 'before_live_description',
             'type' => 'wysiwyg',
         ) );      
         
         $fields->add_field( array(
             'name' => __('Description after expiry', WPOV__PLUGIN_NAME_SLUG),
             'desc' => esc_html__( 'If this field is empty this voting will disappear after expiration!', 'cmb2' ),
-            'id'   => $prefix . 'after_live_description',
+            'id'   => 'after_live_description',
             'type' => 'wysiwyg',
         ) );           
         

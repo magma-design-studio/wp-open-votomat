@@ -273,7 +273,7 @@ class wpov_admin {
 		// vars
 		$slug = 'wpov-dashboard';
 		$cap = wpov_get_setting('capability');
-		        
+		
 		
 		// add parent
 		add_menu_page(
@@ -281,7 +281,7 @@ class wpov_admin {
             __("Open Votomat",WPOV__PLUGIN_NAME_SLUG), 
             $cap, 
             $slug, 
-            array('wpov_admin_options_dashboard', 'add_page'), 
+            'wpov_admin_options_dashboard_add_menu_page', 
             'dashicons-welcome-widgets-menus', 
             '80.025'
         );
@@ -311,9 +311,10 @@ class wpov_admin {
 	}
     
     function admin_post_type_filters() {
-        $post_type = $_REQUEST['post_type'];
+        $post_type = $_REQUEST['post_type'] ?? null;
+        $post = $_REQUEST['post'] ?? null;
         
-        if($_REQUEST['post'] and ($post = get_post($_REQUEST['post']))) {
+        if($post and ($post = get_post($post))) {
             $post_type = $post->post_type;
         }
         
@@ -332,7 +333,7 @@ class wpov_admin {
         global $pagenow;
         
         if($pagenow == 'admin.php' or $pagenow == 'options-general.php') {
-            if($page = $_REQUEST['page']) {
+            if($page = $_REQUEST['page'] ?? null) {
                 
                 $class = 'wpov_admin_options_'.preg_replace('/^wpov-/', null, $page);
                 if(class_exists($class)) {
@@ -345,7 +346,7 @@ class wpov_admin {
     
     function option_page() {
         return;
-        $page = $_REQUEST['page'];        
+        $page = $_REQUEST['page'] ?? null;        
         $class = 'wpov_admin_options_'.preg_replace('/^wpov-/', null, $page);
         if(class_exists($class)) {
             $page = new $class();

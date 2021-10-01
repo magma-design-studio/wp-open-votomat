@@ -1,8 +1,8 @@
 {
     "name": "magma/wp-open-votomat",
     "require": {
-        "cmb2/cmb2": "*",
-        "timber/timber": "*"
+        "cmb2/cmb2": "2.6.0",
+        "timber/timber": "^1.18"
     },
     "authors": [
         {

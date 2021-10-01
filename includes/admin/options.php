@@ -107,7 +107,6 @@ abstract class wpov_admin_options {
         $option_tabs = $this->add_options_page_metabox(); //get all option tabs
         $tab_forms = array(); 
 
-
         ?>
         <link rel='stylesheet' id='theme_options-css'  href='<?php echo get_stylesheet_directory_uri();  ?>/css/theme_options.css' type='text/css' media='all' />
 
@@ -117,7 +116,7 @@ abstract class wpov_admin_options {
         <?php foreach($option_tabs as $option_tab) { ?>
 
         <div class="panel">
-        <?php cmb2_metabox_form( $option_tab->meta_box['id'], $option_tab->meta_box['key'] ); ?>
+        <?php cmb2_metabox_form( $option_tab->meta_box['id'], 'option' ); ?>
         <div class="clear"></div>
         </div>
 
@@ -165,7 +164,7 @@ abstract class wpov_admin_options {
     public function __get( $field ) {
         // Allowed fields to retrieve
         if ( in_array( $field, array( 'key', 'metabox_id', 'title', 'options_page' ), true ) ) {
-            return $this->{$field};
+            return $this->{$field} ?? null;
         }
 
         throw new Exception( 'Invalid property: ' . $field );

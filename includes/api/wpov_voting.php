@@ -45,7 +45,7 @@ class wpov_voting extends wpov_api {
     }    
     
     function questions_raw() {
-        $questions = $this->_get_meta('_voting_questions');
+        $questions = $this->_get_meta('_voting_questions') ?: [];
         
         foreach($questions as &$question) {
             $question = (int) $question['question'];
@@ -56,7 +56,7 @@ class wpov_voting extends wpov_api {
     
     function questions($raw = false) {
         $questions = $this->questions_raw();
-        
+
         if($raw) {
             return $questions;
         }
