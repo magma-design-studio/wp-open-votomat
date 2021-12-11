@@ -30,3 +30,11 @@ function wpov_vote_button_class($classes) {
     );
     return $classes;
 }
+
+function wpov_party_term_singular() {
+    return apply_filters('wpov_party_term_singular', __('party', WPOV__PLUGIN_NAME_SLUG));
+}
+
+function wpov_party_term_plural() {
+    return apply_filters('wpov_party_term_plural', __('parties', WPOV__PLUGIN_NAME_SLUG));
+}

@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Shortcake (Shortcode UI) 0.7.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/shortcode-ui\n"
-"POT-Creation-Date: 2019-09-26 10:33+0200\n"
-"PO-Revision-Date: 2019-09-26 10:33+0200\n"
+"POT-Creation-Date: 2021-12-11 17:01+0100\n"
+"PO-Revision-Date: 2021-12-11 17:01+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -72,7 +72,7 @@ msgstr "Im direkten Vergleich"
 #: includes/admin/post_type-question.php:85
 #: includes/admin/post_type-voting.php:52
 #: includes/admin/post_type-voting.php:258
-#: includes/frontend/frontend-standalone.php:71 wp-open-votomat.php:385
+#: includes/frontend/frontend-standalone.php:71 wp-open-votomat.php:386
 msgid "Question"
 msgstr "Frage"
 
@@ -102,12 +102,6 @@ msgstr "Das Ergebnis"
 msgid "The result someone send you"
 msgstr "Das Ergebnis, das dir jemand gesendet hat"
 
-#: wpov_template/twentynineteen/twig/page-voting-result.twig:17
-#: includes/admin/post_type-voting.php:56
-#: includes/admin/post_type-voting.php:209 wp-open-votomat.php:352
-msgid "Party"
-msgstr "Partei"
-
 #: wpov_template/twentynineteen/twig/page-voting-result.twig:18
 msgid "Accordance"
 msgstr "Übereinstimmung"
@@ -117,12 +111,14 @@ msgid "in %"
 msgstr "in %"
 
 #: wpov_template/twentynineteen/twig/page-voting-result.twig:86
-msgid "Your answers compared to those of the parties"
-msgstr "Deine Antworten im direkten Vergleich mit den Parteien"
+#, python-format
+msgid "Your answers compared to those of the %s"
+msgstr "Deine Antworten im direkten Vergleich mit den %s"
 
 #: wpov_template/twentynineteen/twig/page-voting-result.twig:91
-msgid "By clicking on the logos you come to the websites of the parties."
-msgstr "Durch Klick auf die Logos kommst du auf die Webseiten der Parteien."
+#, python-format
+msgid "By clicking on the logos you come to the websites of the %s."
+msgstr "Durch Klick auf die Logos kommst du auf die Webseiten der %s."
 
 #: wpov_template/twentynineteen/twig/page-voting-result.twig:95
 msgid "With the following link you can share your result with others:"
@@ -275,7 +271,7 @@ msgstr "Benutzerdefinierter CSS"
 msgid "Migration"
 msgstr "Migration"
 
-#: includes/admin/options.php:155
+#: includes/admin/options.php:154
 msgid "Settings updated."
 msgstr "Einstellungen wurden aktualisiert."
 
@@ -325,19 +321,24 @@ msgstr "Zeit (z.B. %s)"
 
 #: includes/admin/post_type-voting.php:36
 #: includes/admin/post_type-voting.php:57
-#: includes/admin/post_type-voting.php:169 wp-open-votomat.php:351
+#: includes/admin/post_type-voting.php:169 wp-open-votomat.php:352
 msgid "Parties"
 msgstr "Parteien"
 
 #: includes/admin/post_type-voting.php:37
 #: includes/admin/post_type-voting.php:53
-#: includes/admin/post_type-voting.php:220 wp-open-votomat.php:384
+#: includes/admin/post_type-voting.php:220 wp-open-votomat.php:385
 msgid "Questions"
 msgstr "Fragen"
 
 #: includes/admin/post_type-voting.php:38
 msgid "Period"
 msgstr "Zeitraum"
+
+#: includes/admin/post_type-voting.php:56
+#: includes/admin/post_type-voting.php:209 wp-open-votomat.php:353
+msgid "Party"
+msgstr "Partei"
 
 #: includes/admin/post_type-voting.php:77
 msgid "Voting is live!"
@@ -465,42 +466,42 @@ msgstr "Vergleiche"
 msgid "Results"
 msgstr "Ergebnisse"
 
-#: includes/helpers/helpers.php:179
+#: includes/helpers/helpers.php:187
 #, php-format
 msgid "%s ago"
 msgstr "seit %s"
 
-#: includes/helpers/helpers.php:180
+#: includes/helpers/helpers.php:188
 msgid "year"
 msgid_plural "years"
 msgstr[0] "Jahr"
 msgstr[1] "Jahre"
 
-#: includes/helpers/helpers.php:181
+#: includes/helpers/helpers.php:189
 msgid "month"
 msgid_plural "months"
 msgstr[0] "Monat"
 msgstr[1] "Monate"
 
-#: includes/helpers/helpers.php:182
+#: includes/helpers/helpers.php:190
 msgid "day"
 msgid_plural "days"
 msgstr[0] "Tag"
 msgstr[1] "Tage"
 
-#: includes/helpers/helpers.php:183
+#: includes/helpers/helpers.php:191
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "Stunde"
 msgstr[1] "Stunden"
 
-#: includes/helpers/helpers.php:184
+#: includes/helpers/helpers.php:192
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "Minute"
 msgstr[1] "Minuten"
 
-#: includes/helpers/helpers.php:185
+#: includes/helpers/helpers.php:193
 msgid "second"
 msgid_plural "seconds"
 msgstr[0] "Sekunde"
@@ -522,114 +523,122 @@ msgstr "Nicht erlaubt!"
 msgid "The link was copied!"
 msgstr "Der Link wurde kopiert!"
 
-#: wp-open-votomat.php:295
+#: wp-open-votomat.php:296
 msgid "WPOV Footer Menu"
 msgstr "WPOV Fußmenü"
 
-#: wp-open-votomat.php:353 wp-open-votomat.php:386 wp-open-votomat.php:417
+#: wp-open-votomat.php:354 wp-open-votomat.php:387 wp-open-votomat.php:418
 msgid "Add New"
 msgstr "Neue hinzufügen"
 
-#: wp-open-votomat.php:354
+#: wp-open-votomat.php:355
 msgid "Add New Party"
 msgstr "Neue Partei hinzufügen"
 
-#: wp-open-votomat.php:355
+#: wp-open-votomat.php:356
 msgid "Edit Party"
 msgstr "Partei bearbeiten"
 
-#: wp-open-votomat.php:356
+#: wp-open-votomat.php:357
 msgid "New Party"
 msgstr "Neue Partei"
 
-#: wp-open-votomat.php:357
+#: wp-open-votomat.php:358
 msgid "View Party"
 msgstr "Partei ansehen"
 
-#: wp-open-votomat.php:358
+#: wp-open-votomat.php:359
 msgid "Search Parties"
 msgstr "Nach Partei suchen"
 
-#: wp-open-votomat.php:359
+#: wp-open-votomat.php:360
 msgid "No Parties found"
 msgstr "Keine Partei gefunden"
 
-#: wp-open-votomat.php:360
+#: wp-open-votomat.php:361
 msgid "No Parties found in Trash"
 msgstr "Keine Partei im Papierkorb gefunden"
 
-#: wp-open-votomat.php:387
+#: wp-open-votomat.php:388
 msgid "Add New Question"
 msgstr "Neue Frage hinzufügen"
 
-#: wp-open-votomat.php:388
+#: wp-open-votomat.php:389
 msgid "Edit Question"
 msgstr "Frage bearbeiten"
 
-#: wp-open-votomat.php:389
+#: wp-open-votomat.php:390
 msgid "New Question"
 msgstr "Neue Frage"
 
-#: wp-open-votomat.php:390
+#: wp-open-votomat.php:391
 msgid "View Question"
 msgstr "Frage ansehen"
 
-#: wp-open-votomat.php:391
+#: wp-open-votomat.php:392
 msgid "Search Questions"
 msgstr "Nach Fragen suchen"
 
-#: wp-open-votomat.php:392
+#: wp-open-votomat.php:393
 msgid "No Questions found"
 msgstr "Keine Fragen gefunden"
 
-#: wp-open-votomat.php:393
+#: wp-open-votomat.php:394
 msgid "No Questions found in Trash"
 msgstr "Keine Fragen im Papierkorb gefunden"
 
-#: wp-open-votomat.php:415
+#: wp-open-votomat.php:416
 msgid "Votings"
 msgstr "Wahlen"
 
-#: wp-open-votomat.php:416
+#: wp-open-votomat.php:417
 msgid "Voting"
 msgstr "Wahl"
 
-#: wp-open-votomat.php:418
+#: wp-open-votomat.php:419
 msgid "Add New Voting"
 msgstr "Neue Wahl hinzufügen"
 
-#: wp-open-votomat.php:419
+#: wp-open-votomat.php:420
 msgid "Edit Voting"
 msgstr "Wahl bearbeiten"
 
-#: wp-open-votomat.php:420
+#: wp-open-votomat.php:421
 msgid "New Voting"
 msgstr "Neue Wahl"
 
-#: wp-open-votomat.php:421
+#: wp-open-votomat.php:422
 msgid "View Voting"
 msgstr "Wahl ansehen"
 
-#: wp-open-votomat.php:422
+#: wp-open-votomat.php:423
 msgid "Search Votings"
 msgstr "Wahlen suchen"
 
-#: wp-open-votomat.php:423
+#: wp-open-votomat.php:424
 msgid "No Votings found"
 msgstr "Keine Wahlen gefunden"
 
-#: wp-open-votomat.php:424
+#: wp-open-votomat.php:425
 msgid "No Votings found in Trash"
 msgstr "Keine Wahlen im Papierkorb gefunden"
 
-#: wp-open-votomat.php:475
+#: wp-open-votomat.php:476
 msgid "WP Open Votomat Sidebar"
 msgstr "WP Open Votomat Seitenspalte"
 
-#: wp-open-votomat.php:523
+#: wp-open-votomat.php:524
 #, php-format
 msgid "Class »%s« exists!"
 msgstr "Klasse »%s« existiert!"
+
+#: wpov_template/twentynineteen/functions.php:35
+msgid "party"
+msgstr "Partei"
+
+#: wpov_template/twentynineteen/functions.php:39
+msgid "parties"
+msgstr "Parteien"
 
 #: wpov_template/twentynineteen/page.php:48
 msgid "Voting is not published yet!"

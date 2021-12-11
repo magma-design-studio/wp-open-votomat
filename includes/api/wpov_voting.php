@@ -76,6 +76,7 @@ class wpov_voting extends wpov_api {
     function parties() {
         $parties = $this->_get_meta('_voting_parties');
         $parties = is_array($parties) ? $parties : array();
+
         foreach($parties as &$party) {
             $party = wpov_get_party($party['party']);
         }

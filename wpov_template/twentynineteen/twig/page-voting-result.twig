@@ -14,7 +14,7 @@
             <table class="table card-text sortable">
                 <thead>
                     <tr>
-                        <th class="text-right">{{ __('Party', WPOV__PLUGIN_NAME_SLUG) }}</th>
+                        <th class="text-right">{{ fn('wpov_party_term_singular')|capitalize }}</th>
                         <th>{{ __('Accordance', WPOV__PLUGIN_NAME_SLUG) }}</th>
                         <th>{{ __('in %', WPOV__PLUGIN_NAME_SLUG) }}</th>
                     </tr>
@@ -26,7 +26,9 @@
                         {% set current_voter = current_voter() %}
                     {% endif %}
 
-                    {% for party in post_voting.parties() %}
+                    {% set parties = fn('apply_filters', 'wpov_voting_results', post_voting.parties(), post_voting, current_voter) %}
+
+                    {% for party in parties %}
                     {% set party_user_consensus = party.party_user_consensus(post_voting.get_id(), override_current_voter) %}
                     {% set count_questions = current_voter.count_votes(post_voting.get_id()) %}
 
@@ -83,12 +85,12 @@
     </div>
     {% if not override_current_voter %}
     <a class="btn btn-primary btn-sm" href="{{ post_voting.compare_link() }}">
-            {{ __('Your answers compared to those of the parties', WPOV__PLUGIN_NAME_SLUG) }}
+            {{ __('Your answers compared to those of the %s', WPOV__PLUGIN_NAME_SLUG)|format(fn('wpov_party_term_plural')) }}
     </a>
     {% endif %}
     <div class="mt-3 text-center">
         <p>
-            {{ __('By clicking on the logos you come to the websites of the parties.', WPOV__PLUGIN_NAME_SLUG) }}
+            {{ __('By clicking on the logos you come to the websites of the %s.', WPOV__PLUGIN_NAME_SLUG)|format(fn('wpov_party_term_plural')) }}
         </p>   
         {% if not override_current_voter %}
         <p>
