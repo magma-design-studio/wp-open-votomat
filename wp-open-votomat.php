@@ -27,8 +27,8 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
 define( 'WPOV__PLUGIN_NAME_SLUG', 'wp-open-votomat' );
 
-define( 'WPOV_VERSION', '1.0.5-3' );
-define( 'WPOV__MINIMUM_WP_VERSION', '4.0' );
+define( 'WPOV_VERSION', '1.0.5' );
+define( 'WPOV__MINIMUM_WP_VERSION', '5.8.2' );
 define( 'WPOV__PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WPOV__PLUGIN_DIR_URL', plugin_dir_url( __FILE__ ) );
 
