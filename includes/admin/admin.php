@@ -321,7 +321,7 @@ class wpov_admin {
         if(empty($post_type)) return;
 
         
-        $id = preg_replace('/^wpov-/', null, $post_type);
+        $id = preg_replace('/^wpov-/', '', $post_type);
         
         if(wpov_include_exists("/includes/admin/post_type-{$id}.php")) {
             wpov_include("/includes/admin/post_type-{$id}.php");
@@ -335,7 +335,7 @@ class wpov_admin {
         if($pagenow == 'admin.php' or $pagenow == 'options-general.php') {
             if($page = $_REQUEST['page'] ?? null) {
                 
-                $class = 'wpov_admin_options_'.preg_replace('/^wpov-/', null, $page);
+                $class = 'wpov_admin_options_'.preg_replace('/^wpov-/', '', $page);
                 if(class_exists($class)) {
                     new $class();
                 }
@@ -347,7 +347,7 @@ class wpov_admin {
     function option_page() {
         return;
         $page = $_REQUEST['page'] ?? null;        
-        $class = 'wpov_admin_options_'.preg_replace('/^wpov-/', null, $page);
+        $class = 'wpov_admin_options_'.preg_replace('/^wpov-/', '', $page);
         if(class_exists($class)) {
             $page = new $class();
             $page->add_page();

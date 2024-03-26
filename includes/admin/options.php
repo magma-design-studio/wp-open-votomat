@@ -113,7 +113,7 @@ abstract class wpov_admin_options {
         <div class="wrap cmb2-options-page <?php echo $this->key; ?>">
         <h2><?php echo esc_html( get_admin_page_title() ); ?></h2>          
         <!--Accordions-->
-        <?php foreach($option_tabs as $option_tab) { ?>
+        <?php foreach(($option_tabs ?: []) as $option_tab) { ?>
 
         <div class="panel">
         <?php cmb2_metabox_form( $option_tab->meta_box['id'], 'option' ); ?>

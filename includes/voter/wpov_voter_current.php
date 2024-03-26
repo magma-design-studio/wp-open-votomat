@@ -4,6 +4,9 @@ if( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 if( ! class_exists('wpov_voter_current') ) :
 
 class wpov_voter_current extends wpov_voter  {
+    public $user_db_id;
+    public $votes;
+
     function __construct() {   
         $this->set('user_db_id', isset($_SESSION['user_db_id']) ? $_SESSION['user_db_id'] : false);
         

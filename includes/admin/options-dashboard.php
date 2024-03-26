@@ -139,63 +139,73 @@ class wpov_admin_options_dashboard {
             <?php if(count($votings)) : ?>
                 <?php if($total_results['count_voters']) : ?>
                 <div id="welcome-panel" class="welcome-panel">
-                    <div class="welcome-panel-content">
-                        <h2><?php _e('Opinion poll', WPOV__PLUGIN_NAME_SLUG); ?></h2>
-                        <p class="about-description"><?php printf(__('If next Sunday really was election, %s voters would choose the following…', WPOV__PLUGIN_NAME_SLUG), $total_results['count_voters'] ); ?></p>
-                        <canvas id="wpov_opinion_poll_chart" data-chart="opinion_poll" data-set="#wpov_opinion_poll_chart_data"></canvas>
-                        <script id="wpov_opinion_poll_chart_data" type="text/template">
-                            <?php
-                            echo json_encode($total_results);
-                            ?>
-                        </script>
+                    <div class="welcome-panel-column-container">
+                        <div class="welcome-panel-content">
+                            <h2><?php _e('Opinion poll', WPOV__PLUGIN_NAME_SLUG); ?></h2>
+                            <p class="about-description"><?php printf(__('If next Sunday really was election, %s voters would choose the following…', WPOV__PLUGIN_NAME_SLUG), $total_results['count_voters'] ); ?></p>
+                            <canvas id="wpov_opinion_poll_chart" data-chart="opinion_poll" data-set="#wpov_opinion_poll_chart_data"></canvas>
+                            <script id="wpov_opinion_poll_chart_data" type="text/template">
+                                <?php
+                                echo json_encode($total_results);
+                                ?>
+                            </script>
+                        </div>
                     </div>
                 </div>
                 <div class="welcome-panel">
-                    <table>
-                        <thead>
+                    <div class="welcome-panel-column-container">
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th><?php _e('Question', WPOV__PLUGIN_NAME_SLUG); ?></th>
+                                    <th><?php _e('Poll', WPOV__PLUGIN_NAME_SLUG); ?></th>
+                                    <th><?php _e('Participants', WPOV__PLUGIN_NAME_SLUG); ?></th>
+                                </tr>
+                            </thead>
+                            <?php foreach($current_voting->questions() as $i => $question) : ?>
                             <tr>
-                                <th>ID</th>
-                                <th><?php _e('Question', WPOV__PLUGIN_NAME_SLUG); ?></th>
-                                <th><?php _e('Poll', WPOV__PLUGIN_NAME_SLUG); ?></th>
-                                <th><?php _e('Participants', WPOV__PLUGIN_NAME_SLUG); ?></th>
+                                <td>
+                                    #<?php echo ($i+1); //echo $question->question_index_readable(); ?>
+                                </td>
+                                <td>
+                                    <?php echo $question->question(); ?>
+                                </td>
+                                <td>
+                                    <canvas data-chart="opinion_poll_questions"></canvas>
+                                    <script type="text/template">
+                                        <?php
+                                        echo json_encode(array_values($total_results_per_question[$question->get_id()]));
+                                        ?>
+                                    </script>                            
+                                </td>
+                                <td><?php echo array_sum($total_results_per_question[$question->get_id()]); ?></td>
                             </tr>
-                        </thead>
-                        <?php foreach($current_voting->questions() as $i => $question) : ?>
-                        <tr>
-                            <td>
-                                #<?php echo ($i+1); //echo $question->question_index_readable(); ?>
-                            </td>
-                            <td>
-                                <?php echo $question->question(); ?>
-                            </td>
-                            <td>
-                                <canvas data-chart="opinion_poll_questions"></canvas>
-                                <script type="text/template">
-                                    <?php
-                                    echo json_encode(array_values($total_results_per_question[$question->get_id()]));
-                                    ?>
-                                </script>                            
-                            </td>
-                            <td><?php echo array_sum($total_results_per_question[$question->get_id()]); ?></td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </table>
+                            <?php endforeach; ?>
+                        </table>
+                    </div>
                 </div>
                 <?php else: ?>
                 <div class="welcome-panel">
-                    <h2><?php _e('Too few data recorded!', WPOV__PLUGIN_NAME_SLUG) ?></h2>
-                    <p class="about-description"><?php _e('Wait a few more days until enough data is collected for a meaningful survey.', WPOV__PLUGIN_NAME_SLUG) ?></p>              
+                    <div class="welcome-panel-column-container">
+                        <h2><?php _e('Too few data recorded!', WPOV__PLUGIN_NAME_SLUG) ?></h2>
+                        <p class="about-description"><?php _e('Wait a few more days until enough data is collected for a meaningful survey.', WPOV__PLUGIN_NAME_SLUG) ?></p>   
+                    </div>           
                 </div>            
                 <?php endif; ?>
             <?php else: ?>
             <div class="welcome-panel">
-                <h2><?php _e('You must first create elections, questions and parties.', WPOV__PLUGIN_NAME_SLUG) ?></h2>
-                <p class="about-description"><?php _e('The following page types are available.', WPOV__PLUGIN_NAME_SLUG); ?></p>
-                <ul>
-                    <?php foreach(wpov()->post_types as $post_type) : ?>
-                    <li><a href="<?php echo admin_url(sprintf('edit.php?post_type=%s', $post_type->name)); ?>"><?php echo $post_type->labels->name ?></a></li>
-                    <?php endforeach; ?>
-                </ul>                     
+                <div class="welcome-panel-column-container">
+
+                    <h2><?php _e('You must first create elections, questions and parties.', WPOV__PLUGIN_NAME_SLUG) ?></h2>
+                    <p class="about-description"><?php _e('The following page types are available.', WPOV__PLUGIN_NAME_SLUG); ?></p>
+                    <ul>
+                        <?php foreach(wpov()->post_types as $post_type) : ?>
+                        <li><a href="<?php echo admin_url(sprintf('edit.php?post_type=%s', $post_type->name)); ?>"><?php echo $post_type->labels->name ?></a></li>
+                        <?php endforeach; ?>
+                    </ul>      
+                </div>               
             </div>            
             <?php endif; ?>
             

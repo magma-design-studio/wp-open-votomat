@@ -4,6 +4,8 @@ if( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 if( ! class_exists('wpov_party_answer') ) :
 
 class wpov_party_answer {
+    public $data = [];
+
     function __construct($answer, $party, $voting, $question) {
         $this->set('value', $answer);
         
@@ -13,12 +15,13 @@ class wpov_party_answer {
     }
     
     function set($key, $value) {
-        $this->{$key} = $value;
+        $this->data[$key] = $value;
+        // $this->{$key} = $value;
     }
     
     function get($key, $default = null) {
-        if(isset($this->{$key})) {
-            return $this->{$key};
+        if(isset($this->data[$key])) {
+            return $this->data[$key];
         }
         return $default;
     }    

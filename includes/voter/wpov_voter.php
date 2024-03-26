@@ -4,6 +4,9 @@ if( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 if( ! class_exists('wpov_voter') ) :
 
 class wpov_voter {
+    public $_post;
+    public $votes;
+    public $user_db_id;
     protected $_tmp_voting_votes = array();
     protected $wpov_voter_votes_transient_key = false;
     

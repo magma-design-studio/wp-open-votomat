@@ -31,7 +31,7 @@ class wpov_frontend_standalone extends wpov_frontend {
         add_filter('stylesheet_directory_uri', array($this, 'provide_wpov_stylesheet_directory_uri'), 1000, 3);
         
         foreach($this->default_wpov_theme_files as $file) {
-            $file = preg_replace('/(\.[^\.]+)$/', null, $file);
+            $file = preg_replace('/(\.[^\.]+)$/', '', $file);
             add_filter(sprintf('%s_template', $file), array($this, 'provide_wpov_template_wptheme_directory'), 1000, 3);
         }
         

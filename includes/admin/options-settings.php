@@ -124,7 +124,7 @@ class wpov_admin_options_settings extends wpov_admin_options {
         $_path = sprintf('%s_%s%s', $path['basename'], $file, $path['suffix']);
         $sql = file_get_contents(sprintf('%s/%s', $wp_get_upload_dir['basedir'], $_path));
 
-        $table = preg_replace('/^table_/', null, $file);
+        $table = preg_replace('/^table_/', '', $file);
 
         echo "Crawl table $table"."\n\n";
 
@@ -396,17 +396,17 @@ class wpov_admin_options_settings extends wpov_admin_options {
         $key = 'wpov-settings';
         $metabox_id = 'wpov-setting_metabox';
         self::register_metabox($metabox_id, $key);
-        
+
         $this->cmb[0] = new_cmb2_box( array(
             'id'         => $metabox_id,
-            'title' =>'Number Counters',
+            'title' => 'Number Counters',
             'hookup'     => false,
             'cmb_styles' => false,
             'show_on'    => array(
-                // These are important, don't remove
                 'key'   => 'options-page',
                 'value' => array( $key, )
             ),
+
         ) );
         
         $this->cmb[0]->add_field( array(
@@ -442,7 +442,7 @@ class wpov_admin_options_settings extends wpov_admin_options {
         $key = 'wpov-settings';
         $metabox_id = 'wpov-setting_metabox_2';
         self::register_metabox($metabox_id, $key);        
-        
+
         $this->cmb[1] = new_cmb2_box( array(
             'id'         => $metabox_id,
             'title' =>'Number Counters',
@@ -497,7 +497,7 @@ class wpov_admin_options_settings extends wpov_admin_options {
              
         $key = 'wpov-settings';
         $metabox_id = 'wpov-setting_metabox_3';
-        self::register_metabox($metabox_id, $key);            
+        self::register_metabox($metabox_id, $key);         
         
         $this->cmb[2] = new_cmb2_box( array(
             'id'         => $metabox_id,
